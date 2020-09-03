@@ -1,0 +1,25 @@
+{
+  "name": "toadforstreams",
+  "version": "0.8.0",
+  "description": "",
+  "main": "entry.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darkstormgames/ToadForStreams.git"
+  },
+  "author": "darkstormgames",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/darkstormgames/ToadForStreams/issues"
+  },
+  "homepage": "https://github.com/darkstormgames/ToadForStreams#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "discord.js": "^12.2.0",
+    "mysql": "^2.18.1",
+    "puppeteer": "^3.3.0"
+  }
+}
