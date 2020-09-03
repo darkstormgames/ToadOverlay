@@ -31,7 +31,7 @@ const description = 'Delete your overlay from the server this command was execut
  */
 function execute(message, args) {
     // Searching for existing entries in the database
-    base.query.execute('DELETE FROM ' + base.query.dbName + '.user_data WHERE guild_id = ' + message.guild.id + ' AND user_id = ' + message.user.id + ';')
+    base.query.execute('DELETE FROM ' + base.query.dbName + '.user_data WHERE guild_id = ' + message.guild.id + ' AND user_id = ' + message.author.id + ' AND channel_id = ' + message.channel.id)
     .then((result) => {
         if (result.debug_error != null && result.error != null) {
             message.channel.send('There was an error deleting your data...\n\nPlease try again.');

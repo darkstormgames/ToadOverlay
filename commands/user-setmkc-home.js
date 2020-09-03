@@ -33,7 +33,7 @@ const description = 'Set the home team from the given mkc identifier.';
 function execute(message, args) {
     var isnum = /^\d+$/.test(args[0]);
     var home_url = isnum ? 'https://www.mariokartcentral.com/mkc/registry/teams/' + args[0] : args[0];
-    scraper.getPage(home_url, message.guild.id, true)
+    scraper.getPage(home_url, message.guild.id, message.channel.id, true)
     .then((result) => {
         if (result.error != null) {
             base.log.logMessage(result.debug_error, message.author, message.guild);
