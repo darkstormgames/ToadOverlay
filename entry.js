@@ -30,6 +30,13 @@ client.once('ready', () => {
 });
 
 /**
+ * Catch Unhandled promise rejection
+ */
+process.on('unhandledRejection', error => {
+	console.error('Unhandled promise rejection:', error);
+});
+
+/**
  * Message handling
  */
 client.on('message', (message) => {
