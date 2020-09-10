@@ -37,7 +37,7 @@ function execute(message, args) {
         if (result && result.result && result.result.length > 0) {
             base.log.logMessage('Executed command "setup-overlay" with existing entry.', message.author, message.guild, message.channel);
             message.channel.send(message.author.toString() + ' There already is an overlay for you on this channel!\nThe URL will be sent to you again.');
-            var text = instructions.get(result.result[0].internal_id, message.author.id, message.guild, message.channel);
+            var text = instructions.get(result.result[0].internal_id, message.author, message.guild, message.channel);
             message.author.send({embed: text.linkEmbed});
             return;
         }
@@ -82,7 +82,7 @@ function execute(message, args) {
                     if (result && result.result && result.result.length > 0) {
                         base.log.logMessage('Executed command "setup-overlay" with new entry.', message.author, message.guild, message.channel);
                         message.channel.send(message.author.toString() + ' Your overlay for this channel has been created successfully.\nFurther instructions should be in your DMs.');
-                        var text = instructions.get(result.result[0].internal_id, message.author.id, message.guild, message.channel);
+                        var text = instructions.get(result.result[0].internal_id, message.author, message.guild, message.channel);
                         
                         if (channelobj) {
                             base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = ' + channelobj.current_home + ', current_guest = ' + channelobj.current_guest + /*', ' +*/
@@ -109,6 +109,7 @@ function execute(message, args) {
                                     base.log.logMessage(result.debug_error, message.author, message.guild, message.channel);
                                     message.channel.send('Couldn´t copy overlay-data.\nExecute the steps to customize your overlay again to update the new overlay.');
                                 }
+
                             });
                         }
 
@@ -131,5 +132,6 @@ module.exports = {
     alt: alt,
     type: type,
     description: description,
-    execute: execute
+    execute: execute,
+    guildOnly: true
 };

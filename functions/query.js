@@ -8,24 +8,24 @@ const connection = mysql.createConnection({
 });
 
 function executeQuery(query) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         if (connection.state === 'disconnected') {
-            connection.connect(function(err) {
+            connection.connect((err) => {
                 if (err) {
                     resolve({
                         result: null,
-                        error: '[ERR201] There was an error connecting to the database...\n\nPlease try again later.',
+                        error: '[ERR201] There was an error connecting to the database...\nPlease try again later.',
                         debug_error: err
                     });
                     return;
                 }
             });
         }
-        connection.query(query, function(err, result) {
+        connection.query(query, (err, result) => {
             if (err) {
                 resolve({
                     result: null,
-                    error: '[ERR203] There was an error with the database...\n\nPlease try again later.',
+                    error: '[ERR203] There was an error with the database...\nPlease try again later.',
                     debug_error: err
                 });
                 return;
