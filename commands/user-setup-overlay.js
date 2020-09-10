@@ -85,9 +85,9 @@ function execute(message, args) {
                         var text = instructions.get(result.result[0].internal_id, message.author, message.guild, message.channel);
                         
                         if (channelobj) {
-                            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = ' + channelobj.current_home + ', current_guest = ' + channelobj.current_guest + /*', ' +*/
-                            // 'home_mkc_link = ' + channelobj.home_mkc_link + ', home_tag = ' + channelobj.home_tag + ', home_name = ' + channelobj.home_name + ', home_img = ' + channelobj.home_img + ', ' +
-                            // 'guest_mkc_link = ' + channelobj.guest_mkc_link + ', guest_tag = ' + channelobj.guest_tag + ', guest_name = ' + channelobj.guest_name + ', guest_img = ' + channelobj.guest_img + 
+                            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = ' + channelobj.current_home + ', current_guest = ' + channelobj.current_guest + ', ' +
+                            "home_mkc_link = '" + channelobj.home_mkc_link + "', home_tag = '" + channelobj.home_tag + "', home_name = '" + channelobj.home_name + "', home_img = '" + channelobj.home_img + "', " +
+                            "guest_mkc_link = '" + channelobj.guest_mkc_link + "', guest_tag = '" + channelobj.guest_tag + "', guest_name = '" + channelobj.guest_name + "', guest_img = '" + channelobj.guest_img + "' " +
                             ' WHERE guild_id = ' + message.guild.id + ' AND user_id = ' + message.author.id + ' AND channel_id = ' + message.channel.id)
                             .then((result) => {
                                 if (result.error != null && result.debug_error != null) {

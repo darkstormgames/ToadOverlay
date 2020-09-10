@@ -4,7 +4,8 @@ const { sql_data } = require('../config.json');
 const connection = mysql.createConnection({
     host: sql_data.host,
     user: sql_data.user,
-    password: sql_data.password
+    password: sql_data.password,
+    charset : 'utf8mb4'
 });
 
 function executeQuery(query) {
