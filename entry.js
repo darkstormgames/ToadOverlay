@@ -202,7 +202,7 @@ setInterval(() => {
 }, 5000)
 
 /**
- * Send a message, to keep the bot connected to the API
+ * Send a message, to keep the bot connected to the API at all times
  */
 setInterval(() => {
     var channel = client.channels.cache.find(channel => channel.id == 750752718267613205);
