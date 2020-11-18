@@ -26,7 +26,7 @@ function getInstructionsMessage(internalId, user, guild, channel) {
         fields: [
             {
                 name: 'URL',
-                value: '```http://toad.darkstormgames.de/?g=' + guild.id + '&u=' + user.id + '&auth=' + internalId + '```'
+                value: '```http://toad.darkstormgames.de/index.php?g=' + guild.id + '&u=' + user.id + '&auth=' + internalId + '```'
             }
         ],
         timestamp: new Date(),
@@ -56,7 +56,7 @@ function getInstructionsMessage(internalId, user, guild, channel) {
             },
             {
                 name: 'Full instructions and basic help',
-                value: 'Take a look at the readme/wiki in [the github repository](https://github.com/darkstormgames/ToadOverlay)' // at -- [this thread on MKCentral](https://www.mariokartcentral.com/forums/index.php?forums/game-discussion.6/) or .. the readme/wiki
+                value: 'Take a look at the readme/wiki in [the github repository](https://github.com/darkstormgames/ToadOverlay) (coming soon™)' // at -- [this thread on MKCentral](https://www.mariokartcentral.com/forums/index.php?forums/game-discussion.6/) or .. the readme/wiki
             },
             {
                 name: 'Support',

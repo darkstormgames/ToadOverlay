@@ -192,7 +192,6 @@ setInterval(() => {
     if (base.query.connection.state === 'disconnected') {
         base.query.connection.connect((err) => {
             if (err) {
-                message.channel.send('There was an error connecting to the database... Please try again later.');
                 base.log.logMessage(err);
                 return;
             }
