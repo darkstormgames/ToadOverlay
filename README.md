@@ -46,4 +46,5 @@ ToadOverlay is an extension bot to [Toad](https://www.mariokartcentral.com/forum
 ### Just use Toad bot, as you're used to 
 
 ## Additional help
+After setting up your overlay, you can just write `help` in the DMs with the bot, to get some basic help on commands.
 For more help on using the commands and editing the overlay, refer to the (still empty) [wiki of this repository](https://github.com/darkstormgames/ToadOverlay/wiki).
