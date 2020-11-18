@@ -41,6 +41,10 @@ function logMessage(message, user = null, guild = null, channel = null) {
         //fs.appendFile('all.log', datetime + '[USER: ' + user.toString() + '] [GUILD: ' + guild.name + ' (' + guild.id + ')] ' + message + '\n', () => {});
         //logger.info('[USER: ' + user.toString() + '] [GUILD: ' + guild.name + ' (' + guild.id + ')] ' + message);
     }
+
+    if (message.toString().includes('Cannot enqueue Handshake after fatal error')) {
+        process.exit(4313);
+    }
 }
 
 // --------------------------------------------------

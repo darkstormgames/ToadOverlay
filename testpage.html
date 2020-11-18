@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>MK CW Overlay</title>
+        <script async="" type="text/javascript">
+            function update() {
+                xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = () => {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        var splitresult = xmlhttp.responseText.split("&");
+                        if (document.getElementById("home-current") && splitresult[0].split("=")[1] != undefined) {
+                            document.getElementById("home-current").innerHTML=splitresult[0].split("=")[1];
+                        }
+                        if (document.getElementById("home-tag") && splitresult[1].split("=")[1] != undefined) {
+                            document.getElementById("home-tag").innerHTML=splitresult[1].split("=")[1];
+                        }
+                        if (document.getElementById("home-name") && splitresult[2].split("=")[1] != undefined) {
+                            document.getElementById("home-name").innerHTML=splitresult[2].split("=")[1];
+                        }
+                        if (document.getElementById("home-logo") && splitresult[3].split("=")[1] != undefined) {
+                            document.getElementById("home-logo").src=splitresult[3].split("=")[1];
+                        }
+                        if (document.getElementById("guest-current") && splitresult[4].split("=")[1] != undefined) {
+                            document.getElementById("guest-current").innerHTML=splitresult[4].split("=")[1];
+                        }
+                        if (document.getElementById("guest-tag") && splitresult[5].split("=")[1] != undefined) {
+                            document.getElementById("guest-tag").innerHTML=splitresult[5].split("=")[1];
+                        }
+                        if (document.getElementById("guest-name") && splitresult[6].split("=")[1] != undefined) {
+                            document.getElementById("guest-name").innerHTML=splitresult[6].split("=")[1];
+                        }
+                        if (document.getElementById("guest-logo") && splitresult[7].split("=")[1] != undefined) {
+                            document.getElementById("guest-logo").src=splitresult[7].split("=")[1];
+                        }
+                        if (document.getElementById("difference") && splitresult[8].split("=")[1] != undefined) {
+                            document.getElementById("difference").innerHTML=splitresult[8].split("=")[1];
+                        }
+                    };
+                };  
+                xmlhttp.open("GET", "http://toad.darkstormgames.de/test.php?g=0&u=0&auth=0", true);
+                xmlhttp.send();
+                return false;
+            }
+
+            setInterval(() => {
+                update();
+            }, 250);
+            update();
+        </script>
+        <style>
+            #container {
+                position:absolute;
+                top:0;
+                left:0;
+                right:0;
+                margin-left:auto;
+                margin-right:auto;
+                text-align:center;
+                color:white;
+                font-size:28px;
+                width: 962px;
+            } 
+            #difference {
+                position:absolute;
+                top:70%;
+                left:50.8%;
+                transform:translate(-50%,-50%);
+                opacity:0.75;
+            } 
+            #home-current {
+                position:absolute;
+                top:60px;
+                left:20%;
+                transform:translate(-50%,-50%);
+                opacity:0.9;
+            } 
+            #home-tag {
+                position:absolute;
+                top:20px;
+                left:20%;
+                transform:translate(-50%,-50%);
+                opacity:0.9;
+            } 
+            #home-name {
+                position:absolute;
+                top:20px;
+                left:20%;
+                transform:translate(-50%,-50%);
+                opacity:0.9;
+            } 
+            #home-logo {
+                position:absolute;
+                top:40px;
+                left:35%;
+                transform:translate(-50%,-50%);
+                opacity:0.85;
+                height:70px;
+            } 
+            #guest-current {
+                position:absolute;
+                top:60px;
+                left:80%;
+                transform:translate(-50%,-50%);
+                opacity:0.9;
+            } 
+            #guest-tag {
+                position:absolute;
+                top:20px;
+                left:80%;
+                transform:translate(-50%,-50%);
+                opacity:0.9;
+            } 
+            #guest-name {
+                position:absolute;
+                top:20px;
+                left:80%;
+                transform:translate(-50%,-50%);
+                opacity:0.9;
+            } 
+            #guest-logo {
+                position:absolute;
+                top:40px;
+                left:67.5%;
+                transform:translate(-50%,-50%);
+                height:70px;
+                opacity:0.85;
+            }
+            #bg {
+                opacity:0.75;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container">
+            <img id="bg" src="http://toad.darkstormgames.de/images/default.png">
+            <div id="difference"></div>
+            <div id="home-current"></div>
+            <img id="home-logo" src="">
+            <div id="home-tag"></div>
+            <div id="guest-current"></div>
+            <img id="guest-logo" src="">
+            <div id="guest-tag"></div>
+        </div>
+    </body>
+</html>

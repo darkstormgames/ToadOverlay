@@ -56,5 +56,6 @@ module.exports = {
     alt: alt,
     type: type,
     description: description,
-    execute: execute
+    execute: execute,
+    guildOnly: true
 };

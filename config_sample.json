@@ -9,6 +9,5 @@
         "db_name": "databaseName"
     },
     "db_name": "databaseName... why is this also here?...",
-	"meaning_of_life": 42,
-	"passwords_array": ["please", "dont", "hack", "me"]
+	"meaning_of_life": 42
 }

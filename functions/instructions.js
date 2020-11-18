@@ -12,27 +12,31 @@ function getColor(internalId, guild, channel) {
     return ((b & 0xFF) + ((g << 8) & 0xFF00) + ((r << 16) & 0xFF0000));
 }
 
-function getInstructionsMessage(internalId, userId, guild, channel) {
+function getInstructionsMessage(internalId, user, guild, channel) {
     var colorCode = getColor(internalId, guild, channel);
 
     var linkEmbed = {
         color: colorCode,
         title: 'Overlay-URL for the channel "' + channel.name + '" on "' + guild.name + '"',
+        // author: {
+        //     name: 'ToadOverlay',
+        //     icon_url: 'https://gamesites.nintendo.com.au/paper-mario-color-splash/assets/img/tip-toad1.png',
+        //     url: 'https://github.com/darkstormgames/ToadOverlay',
+        // },
         fields: [
             {
                 name: 'URL',
-                value: '```http://toad.darkstormgames.de/?g=' + guild.id + '&u=' + userId + '&auth=' + internalId + '```'
+                value: '```http://toad.darkstormgames.de/index.php?g=' + guild.id + '&u=' + user.id + '&auth=' + internalId + '```'
             }
         ],
         timestamp: new Date(),
         footer: {
             text: '© darkstormgames'
         }
-    }
+    };
     var instructEmbed = {
         color: 14540253,
-        title: 'Editing your overlay',
-        description: 'To edit your overlay, just write some html how you want it to look like and paste the result in this chat with the following commands.',
+        title: 'Using/Editing your overlay',
         fields: [
             {
                 name: 'Basic instructions',
@@ -40,11 +44,11 @@ function getInstructionsMessage(internalId, userId, guild, channel) {
             },
             {
                 name: 'Default settings for browser source in obs and slobs',
-                value: '- Width: 962\n- Make sure, the following boxes are checked:\n> "Shutdown source when not visible"\n> "Refresh browser when scene becomes active"'
+                value: '- Width: 1000\n- Make sure, the following boxes are checked:\n> "Shutdown source when not visible"\n> "Refresh browser when scene becomes active"'
             },
             {
                 name: 'Commands',
-                value: '```sethtml [Your HTML body]\nsetstyle [Your CSS styles]\nsetimage [Full URL to your background-image]\nkeepresults [{0|1}]```For more help regarding commands, just write "help" in this chat.'
+                value: 'Commands to edit your overlay are executed in this private channel```sethtml [Your HTML body]\nsetstyle [Your CSS styles]\nsetimage [Full URL to your background image]\nkeepresults [{0|1}]```For more help regarding commands, just write "help" in this chat.'
             },
             {
                 name: 'Important note',
@@ -52,7 +56,7 @@ function getInstructionsMessage(internalId, userId, guild, channel) {
             },
             {
                 name: 'Full instructions and basic help',
-                value: 'Take a look at [this thread on MKCentral](https://www.mariokartcentral.com/forums/index.php?forums/game-discussion.6/) or the help in [the github repository](https://github.com/darkstormgames/ToadOverlay)'
+                value: 'Take a look at the readme/wiki in [the github repository](https://github.com/darkstormgames/ToadOverlay) (coming soon™)' // at -- [this thread on MKCentral](https://www.mariokartcentral.com/forums/index.php?forums/game-discussion.6/) or .. the readme/wiki
             },
             {
                 name: 'Support',
@@ -63,119 +67,115 @@ function getInstructionsMessage(internalId, userId, guild, channel) {
         footer: {
             text: '© darkstormgames'
         }
-    };
-    // var htmlEmbed = {
-    //     color: 3447003,
-    //     title: 'Setting the body-content',
-    //     fields: [
-    //         {
-    //             name: 'Command',
-    //             value: '```sethtml [Your HTML]```'
-    //         },
-    //         {
-    //             name: 'Example and Default',
-    //             value: '```sethtml [<div id="container">\n  <img id="bg" src="" >\n  <div id="difference"></div>\n\n  <div id="home-current"></div>\n  <img id="home-logo" src="">\n  <div id="home-tag"></div>\n\n  <div id="guest-current"></div>\n  <img id="guest-logo" src="">\n  <div id="guest-tag"></div>\n</div>]```'
-    //         },
-    //         {
-    //             name: 'IDs for data',
-    //             value: '> difference\n> home-current\n> home-logo\n> home-tag\n> home-name\n> guest-current\n> guest-logo\n> guest-tag\n> guest-name'
-    //         },
-    //         {
-    //             name: 'Important note',
-    //             value: 'Make sure to have the empty img-element (<img id="bg" src="" >) in your html, as this will be where the background-image is loaded into.'
-    //         }
-    //     ]
-    // };
-    // var styleEmbed = {
-    //     color: 3447003,
-    //     title: 'Setting the styles (CSS)',
-    //     fields: [
-    //         {
-    //             name: 'Command',
-    //             value: '```setstyle [Your Styles]```'
-    //         },
-    //         {
-    //             name: 'Example and Default',
-    //             value: '```setstyle [body{ background-color:rgba(0,255,0,0); }\n#container{ position:relative; text-align:center; color:white; font-size:14px; }\n#difference{ position:absolute; top:70%; left:50.5%; transform:translate(-50%,-50%); font-size:28px; }\n\n#home-current{ position:absolute; top:60px; left:25%; transform:translate(-50%,-50%); font-size:28px; }\n#home-tag{ position:absolute; top:20px; left:25%; transform:translate(-50%,-50%); font-size:28px; }\n#home-logo{ position:absolute; top:40px; left:37%; transform:translate(-50%,-50%); height:70px; }\n\n#guest-current{ position:absolute; top:60px; left:75%; transform:translate(-50%,-50%); font-size:28px; }\n#guest-tag{ position:absolute; top:20px; left:75%; transform:translate(-50%,-50%); font-size:28px; }\n#guest-logo{ position:absolute; top:40px; left:65%; transform:translate(-50%,-50%); height:70px; }]```'
-    //         },
-    //         {
-    //             name: 'Dev notes',
-    //             value: 'Don´t expect this to be good CSS, because I really suck at HTML and CSS... It works so I am fine with it.'
-    //         }
-    //     ]
-    // }
-    // var imageEmbed = {
-    //     color: 3447003,
-    //     title: 'Setting the background image',
-    //     fields: [
-    //         {
-    //             name: 'Command',
-    //             value: '```setimage [Full URL to your background-image]```'
-    //         },
-    //         {
-    //             name: 'Example and Default',
-    //             value: '```setimage [http://toad.darkstormgames.de/images/default.png]```'
-    //         },
-    //         {
-    //             name: 'Important notes',
-    //             value: 'Make sure your background-image is publicly available (or at least from your IP) and has the wanted dimensions (as long as you don´t want to change it via CSS).'
-    //         }
-    //     ]
-    // }
-    // var keepEmbed = {
-    //     color: 3447003,
-    //     title: 'Resetting scores on "_stopwar"',
-    //     fields: [
-    //         {
-    //             name: 'Command',
-    //             value: '```keepresults [{0|1}]```'
-    //         },
-    //         {
-    //             name: 'Example and Default',
-    //             value: '```keepresults [0]```'
-    //         },
-    //         {
-    //             name: 'Explanation',
-    //             value: 'This setting determines, if scores should be kept after the "_stopwar" command was executed. A "1" keeps the result until the next "_startwar" and a "0" resets it to zero, when the war has been stopped.'
-    //         }
-    //     ]
-    // }
-    // var commandsEmbed = {
-    //     color: 3447003,
-    //     title: 'Commands per discord server',
-    //     fields: [
-    //         {
-    //             name: '_home {mkc-id}',
-    //             value: 'Sets the home team to the given team on mkc.\n```Example (eXodus): \n_home 139```'
-    //         },
-    //         {
-    //             name: '_guest {mkc-id}',
-    //             value: 'Sets the home team to the given team on mkc.\n```Example (Greed Island Coast): \n_home 889```'
-    //         },
-    //         {
-    //             name: '_setup-overlay',
-    //             value: 'Use this to setup your overlay. You can also use this command to resend these instructions.'
-    //         },
-    //         {
-    //             name: '_delete-overlay',
-    //             value: 'This command irreversibly deletes your overlay for the server this command has been executed on.'
-    //         }
-    //     ]
-    // }
+    };    
 
     return {
         linkEmbed: linkEmbed,
-        instructEmbed: instructEmbed,
-        // htmlEmbed: htmlEmbed,
-        // styleEmbed: styleEmbed,
-        // imageEmbed: imageEmbed,
-        // keepEmbed: keepEmbed,
-        // commandsEmbed: commandsEmbed
+        instructEmbed: instructEmbed
+    };
+}
+
+function getHelpMessage(user) {
+    var colorCode = getColor((user.id % 1024), {id: user.id}, {id: user.id});
+
+    var help1 = {
+        color: colorCode,
+        title: 'Commands Help',
+        description: 'Page 1 of 2 (General commands)',
+        fields: [
+            {
+                name: 'Command scope',
+                value: 'These commands are for each channel, where Toad is used, individually.'
+            },
+            {
+                name: 'Setting up your overlay',
+                value: 'You´ve already used this command at least once, so you know what it does.' + 
+                       '```_setup```' +
+                       'You can also use this command to resend the URL for the overlay for the channel, this command has been executed in.'
+            },
+            {
+                name: 'Deleting your overlay',
+                value: 'This command permanently deletes your overlay for the channel, this command has been executed in.' + 
+                       '```_delete```'
+            },
+            {
+                name: 'Setting teams to display',
+                value: 'These commands set the clans to display from their respective registry page on mkc.' + 
+                       '```_home {mkc team url/id}\n_guest {mkc team url/id}```' + 
+                       '```Examples:\n_home 10\n_guest https://www.mariokartcentral.com/mkc/registry/teams/100```' + 
+                       'Support for unregistered (sub)clans is coming soon™'
+            },
+            {
+                name: 'Reset scores',
+                value: 'This command sets the current scores for the channel, this command has been executed in, to zero.' + 
+                       '```_reset```'
+            }
+        ],
+        timestamp: new Date(),
+        footer: {
+            text: '© darkstormgames',
+        },
+    };
+
+    var help2 = {
+        color: colorCode,
+        title: 'Commands Help',
+        description: 'Page 2 of 2 (Editing commands)',
+        fields: [
+            {
+                name: 'Command scope',
+                value: 'These commands are executed in this private channel and edit all of your overlays for all channels.'
+            },
+            {
+                name: 'Setting the overlay HTML',
+                value: '' + 
+                       '```sethtml [Your HTML body]```' + 
+                       'Example and Default:' +
+                       '```sethtml [<div id="container">\n  <img id="bg" src="" >\n  <div id="difference"></div>\n\n  <div id="home-current"></div>\n  <img id="home-logo" src="">\n  <div id="home-tag"></div>\n\n  <div id="guest-current"></div>\n  <img id="guest-logo" src="">\n  <div id="guest-tag"></div>\n</div>]```' + 
+                       'IDs for data: \n' + 
+                       '> difference\n> home-current\n> home-logo\n> home-tag\n> home-name\n> guest-current\n> guest-logo\n> guest-tag\n> guest-name' + 
+                       ''
+            },
+            {
+                name: 'Setting the overlay CSS styles',
+                value: '' + 
+                       '```setstyle [Your CSS styles]```' + 
+                       'Example and Default:' + 
+                       '```setstyle [body{ background-color:rgba(0,255,0,0); }\n#container{ position:relative; text-align:center; color:white; font-size:14px; }\n#difference{ position:absolute; top:70%; left:50.5%; transform:translate(-50%,-50%); font-size:28px; }\n\n#home-current{ position:absolute; top:60px; left:25%; transform:translate(-50%,-50%); font-size:28px; }\n#home-tag{ position:absolute; top:20px; left:25%; transform:translate(-50%,-50%); font-size:28px; }\n#home-logo{ position:absolute; top:40px; left:37%; transform:translate(-50%,-50%); height:70px; }\n\n#guest-current{ position:absolute; top:60px; left:75%; transform:translate(-50%,-50%); font-size:28px; }\n#guest-tag{ position:absolute; top:20px; left:75%; transform:translate(-50%,-50%); font-size:28px; }\n#guest-logo{ position:absolute; top:40px; left:65%; transform:translate(-50%,-50%); height:70px; }]```' + 
+                       ''
+            },
+            {
+                name: 'Setting the background image',
+                value: '' + 
+                       '```setimage [Full URL to your background image]```' + 
+                       'Example and Default:' + 
+                       '```setimage [http://toad.darkstormgames.de/images/default.png]```' + 
+                       ''
+            },
+            {
+                name: 'Keep/reset results after "_stopwar"',
+                value: 'This setting determines, if scores should be kept after the "_stopwar" command was executed. A "1" keeps the result until the next "_startwar" and a "0" resets it to zero, when the war has been stopped.' + 
+                       '```keepresults [{0|1}]```' + 
+                       'Example and Default:' + 
+                       '```keepresults [0]```' + 
+                       ''
+            }
+        ],
+        timestamp: new Date(),
+        footer: {
+            text: '© darkstormgames',
+        },
+    };
+
+    return {
+        page1: help1,
+        page2: help2
     };
 }
 
 // --------------------------------------------------
 
 module.exports = {
-    get: getInstructionsMessage
+    get: getInstructionsMessage,
+    gethelp: getHelpMessage
 };
