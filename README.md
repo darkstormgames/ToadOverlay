@@ -7,6 +7,8 @@
 [![GitHub issues](https://img.shields.io/github/issues-raw/darkstormgames/ToadOverlay)](https://github.com/darkstormgames/ToadOverlay/issues)
 [![CodeFactor](https://www.codefactor.io/repository/github/darkstormgames/toadoverlay/badge)](https://www.codefactor.io/repository/github/darkstormgames/toadoverlay)
 
+
+
 ToadOverlay is an extension bot to [Toad](https://www.mariokartcentral.com/forums/index.php?threads/toadv2-a-discord-bot-for-mk8.532/), a MK8 discord bot and is used as a browser source overlay for streamers to show their current scores live on stream.
 
 ## Features
@@ -20,7 +22,7 @@ ToadOverlay is an extension bot to [Toad](https://www.mariokartcentral.com/forum
 ### Setting up your first overlay
 
 1. Make sure the bot has the same permissions on your server as the Toad bot.
-2. Execute the command **_setup** in the channel, where you usually use your Toad bot.
+2. Execute the command `_setup` in the channel, where you usually use your Toad bot.
 3. Add a new browser source in OBS or Streamlabs and use the URL the bot has sent you per DMs.
   * Width: 1000
   * Check the two boxes at the bottom of the page ("Shutdown source when not visible" and "Refresh browser when scene becomes active")
@@ -40,3 +42,8 @@ ToadOverlay is an extension bot to [Toad](https://www.mariokartcentral.com/forum
 #### Set guest team (for each channel separately)
 1. Execute the same steps as you would for the home team, but replace `_home` with `_guest`.
 2. The overlay should be updated after a few seconds.
+
+### Just use Toad bot, as you're used to 
+
+## Additional help
+For more help on using the commands and editing the overlay, refer to the (still empty) [wiki of this repository](https://github.com/darkstormgames/ToadOverlay/wiki).
