@@ -36,7 +36,7 @@ function execute(message, args) {
     if (guest_url.length < 30) {
       guest_url = '' + args[0];
     }
-    scraper.getPage(guest_url, message.guild.id, false)
+    scraper.getPage(guest_url, message.guild.id, message.channel.id, false)
     .then((result) => {
         if (result.error != null) {
             base.log.logMessage(result.debug_error, message.author, message.guild);
@@ -56,5 +56,6 @@ module.exports = {
     alt: alt,
     type: type,
     description: description,
-    execute: execute
+    execute: execute,
+    guildOnly: true
 };

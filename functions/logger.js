@@ -11,7 +11,7 @@ const fs = require('fs');
  * @param {Discord.User} user 
  * @param {Discord.Guild} guild 
  */
-function logMessage(message, user = null, guild = null) {
+function logMessage(message, user = null, guild = null, channel = null) {
     var logTime = new Date();
     var datetime = '[' +
         logTime.getFullYear() + '.' +
@@ -31,10 +31,19 @@ function logMessage(message, user = null, guild = null) {
         //fs.appendFile('all.log', datetime + '[USER: ' + user.toString() + '] ' + message + '\n', () => {});
         //logger.info('[USER: ' + user.toString() + '] ' + message);
     }
-    else {
+    else if (guild != null && user != null && channel == null) {
         console.log(datetime + '[USER: ' + user.username + ' (' + user.id + ')] [GUILD: ' + guild.name + ' (' + guild.id + ')] ' + message);
         //fs.appendFile('all.log', datetime + '[USER: ' + user.toString() + '] [GUILD: ' + guild.name + ' (' + guild.id + ')] ' + message + '\n', () => {});
         //logger.info('[USER: ' + user.toString() + '] [GUILD: ' + guild.name + ' (' + guild.id + ')] ' + message);
+    }
+    else {
+        console.log(datetime + '[USER: ' + user.username + ' (' + user.id + ')] [GUILD: ' + guild.name + ' (' + guild.id + ')] [CHANNEL: ' + channel.name + ' (' + channel.id + ')] ' + message);
+        //fs.appendFile('all.log', datetime + '[USER: ' + user.toString() + '] [GUILD: ' + guild.name + ' (' + guild.id + ')] ' + message + '\n', () => {});
+        //logger.info('[USER: ' + user.toString() + '] [GUILD: ' + guild.name + ' (' + guild.id + ')] ' + message);
+    }
+
+    if (message.toString().includes('Cannot enqueue Handshake after fatal error')) {
+        process.exit(4313);
     }
 }
 

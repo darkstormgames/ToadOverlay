@@ -30,7 +30,7 @@ const description = '';
  * @param {string[]} args 
  */
 function execute(message, args) {
-    base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 0, current_guest = 0, last_updated = now() WHERE guild_id = ' + message.guild.id + ' AND keep_results = 0;')
+    base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 0, current_guest = 0, last_updated = now() WHERE guild_id = ' + message.guild.id + ' AND channel_id = ' + message.channel.id + ' AND keep_results = 0;')
     .then((result) => {
         if (result.error && result.debug_error) {
             message.channel.send('There was an error resetting scores...\nPlease try again...');

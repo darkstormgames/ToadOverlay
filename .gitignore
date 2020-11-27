@@ -1,4 +1,8 @@
+
+# Config file
 config.json
+
+# Batch files
 *.bat
 
 # Logs
@@ -42,6 +46,7 @@ build/Release
 
 # Dependency directories
 node_modules/
+.bin/
 jspm_packages/
 
 # TypeScript v1 declaration files

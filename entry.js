@@ -10,7 +10,7 @@ const base = require('./functions/commandsBase');
 /**
  * Initializing Discord client and commands collection
  */
-const client = new Discord.Client({autoReconnect: true});
+const client = new Discord.Client({ autoReconnect: true, partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 client.commands = new Discord.Collection();
 
 /**
@@ -26,24 +26,22 @@ for (var file of commandFiles) {
  * Write to log on successful connection to discord-API
  */
 client.once('ready', () => {
-	base.log.logMessage('[DISCORD] Ready!');
+    base.log.logMessage('[DISCORD] Ready!');
+    
+    client.user.setActivity(`Toad from a safe distance on ${client.guilds.cache.size} servers.`, { type: 'WATCHING' });
+});
+
+/**
+ * Catch Unhandled promise rejection
+ */
+process.on('unhandledRejection', error => {
+	console.error('Unhandled promise rejection:', error);
 });
 
 /**
  * Message handling
  */
 client.on('message', (message) => {
-    // Always check, if database is available and reestablish connection, if needed
-    if (base.query.connection.state === 'disconnected') {
-        base.query.connection.connect(function(err) {
-            if (err) {
-                message.channel.send('There was an error connecting to the database... Please try again later.');
-                base.log.logMessage(err);
-                return;
-            }
-        });
-    }
-
     // Handle user commands
     if (validation.isUserCommand(message)) {
         var args = message.content.slice(prefix.length).split(' ');
@@ -58,6 +56,11 @@ client.on('message', (message) => {
     }
     // Handle private message commands
     else if (validation.isPrivateMessage(message)) {
+        if (message.content == 'help') {
+            client.commands.get('help').execute(message, null);
+            return;
+        }
+
         var content = message.content.split('[')[1] ? message.content.split('[')[1] : 'err';
         if (content == 'err') {
             message.author.send('The command you entered has the wrong format!\nMake sure, your data is included in square brackets => "command [Your input here...]"');
@@ -82,6 +85,31 @@ client.on('message', (message) => {
                (message.embeds[0] && message.embeds[0].title.startsWith(value.name)))) {
                 value.execute(message, null);
             }
+        });
+    }
+});
+
+/**
+ * Reaction handling
+ */
+client.on('messageReactionAdd', async (reaction, user) => {
+    if (reaction.partial) {
+        try {
+            await reaction.fetch();
+        }
+        catch (error) {
+            base.log.logMessage(error, user);
+            return;
+        }
+    }
+
+    if (reaction.message.author.id == 710403066213433385 && reaction.emoji.name === '❌' && !reaction.message.guild) {
+        reaction.message.delete({ reason: 'Message deleted by user reaction.' })
+        .then(() => {
+            base.log.logMessage(`Message "${reaction.message.content}" deleted from ${user.username}.`);
+        })
+        .catch((err) => {
+            base.log.logMessage(err, user);
         });
     }
 });
@@ -153,17 +181,28 @@ setInterval(() => {
     if (count > 13) {
         count = 0;
     }
+    
+    client.user.setActivity(`Toad from a safe distance on ${client.guilds.cache.size} servers.`, { type: 'WATCHING' });
 }, 2500)
 
 /**
  * Keep the connection to mysql-db alive
  */
 setInterval(() => {
+    if (base.query.connection.state === 'disconnected') {
+        base.query.connection.connect((err) => {
+            if (err) {
+                base.log.logMessage(err);
+                return;
+            }
+        });
+    }
+
     base.query.execute('SELECT 1');
 }, 5000)
 
 /**
- * Send a message, to keep the bot connected to the API
+ * Send a message, to keep the bot connected to the API at all times
  */
 setInterval(() => {
     var channel = client.channels.cache.find(channel => channel.id == 750752718267613205);

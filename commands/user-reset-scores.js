@@ -30,7 +30,7 @@ const description = 'Manually resets the scores for the current guild.';
  * @param {string[]} args 
  */
 function execute(message, args) {
-    base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 0, current_guest = 0, last_updated = now() WHERE guild_id = ' + message.guild.id + ';')
+    base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 0, current_guest = 0, last_updated = now() WHERE guild_id = ' + message.guild.id + ' AND channel_id = ' + message.channel.id)
     .then((result) => {
         if (result.error && result.debug_error) {
             message.channel.send('There was an error resetting war data...\nPlease try again later...');
@@ -49,5 +49,6 @@ module.exports = {
     alt: alt,
     type: type,
     description: description,
-    execute: execute
+    execute: execute,
+    guildOnly: true
 };
