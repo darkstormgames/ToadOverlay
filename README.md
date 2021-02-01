@@ -49,6 +49,18 @@ The bot is written from scratch in JavaScript based on the [Discord.js](https://
 
 ### Just use Toad bot, as you're used to 
 
+## Using custom team data
+If you want to use this overlay for a subclan that isn't registered on MKC, you can do so by just overriding the data with the following commands:
+
+| Command | Parameter | Description |
+| --- | --- | --- |
+| _setlogo-home | IMAGE/URL/EMPTY | Upload an image with the command as text, or use an URL to your logo. Leaving any sort of parameter empty just removes the image URL |
+| _setlogo-guest | IMAGE/URL/EMPTY | Upload an image with the command as text, or use an URL to your logo. Leaving any sort of parameter empty just removes the image URL |
+| _setname-home | TEXT | Just pass the name of the team as text |
+| _setname-guest | TEXT | Just pass the name of the team as text |
+| _settag-home | TEXT | Just pass the tag used as text |
+| _settag-guest | TEXT | Just pass the tag used as text |
+
 ## Additional help
 After setting up your overlay, you can just write `help` in the DMs with the bot, to get some basic help on commands.
 For more help on using the commands and editing the overlay, refer to the (still empty) [wiki of this repository](https://github.com/darkstormgames/ToadOverlay/wiki).
