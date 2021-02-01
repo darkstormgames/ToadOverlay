@@ -1,11 +1,12 @@
 /**
- * required modules
+ * @description required modules
  */
 const base = require('./commandsBase');
 const puppeteer = require('puppeteer');
 const $ = require('cheerio');
 
 /**
+ * @description loads the team-profile from the given mkc-id and writes the found data to the database
  * 
  * @param {string} url 
  * @param {number} guild_id 
@@ -13,9 +14,9 @@ const $ = require('cheerio');
  */
 function getPage(url, guild_id, channelId, isHome) {
     return new Promise(function (resolve) {
-        var team_tag = '';
-        var team_name = '';
-        var team_logo = '';
+        let team_tag = '';
+        let team_name = '';
+        let team_logo = '';
 
         puppeteer.launch({ args: ['--no-sandbox']})
         .then((browser) => {
@@ -28,27 +29,27 @@ function getPage(url, guild_id, channelId, isHome) {
             })
             .then((content) => {
                 $('#team_logo', content).each(function() {
-                    var logo_obj = $(this);
+                    let logo_obj = $(this);
                     if (logo_obj != undefined) {
                         team_logo = logo_obj[0].attribs.style.split('"')[1];
                     }
                 });
         
                 $('.team_tag', content).each(function() {
-                    var tag_obj = $(this);
+                    let tag_obj = $(this);
                     if (tag_obj != undefined) {
                         team_tag = tag_obj[0].childNodes[0].data;
                     }
                 });
         
                 $('.team_name', content).each(function() {
-                    var name_obj = $(this);
+                    let name_obj = $(this);
                     if (name_obj != undefined) {
                         team_name = name_obj[0].childNodes[0].data;
                     }
                 });
     
-                var sql_update_string = '';
+                let sql_update_string = '';
                 if (isHome) {
                     sql_update_string = 'UPDATE ' + base.query.dbName + '.user_data SET home_mkc_link = "' + url + '", home_name = "' + team_name + '", home_tag = "' + team_tag + '", home_img = "' + team_logo + '", last_updated = now() WHERE guild_id = ' + guild_id + ' AND channel_id = ' + channelId + ';';
                 }

@@ -1,31 +1,31 @@
 /**
- * @desc required modules
+ * @description required modules
  */
 const base = require('../functions/commandsBase');
 
 /**
- * @desc The name and trigger of the command
+ * @description The name and trigger of the command
  */
 const name = 'delete-overlay';
 
 /**
- * @desc Alternative trigger(s) for the command
+ * @description Alternative trigger(s) for the command
  */
 const alt = ['delete'];
 
 /**
- * @desc Defines the type of the command
+ * @description Defines the type of the command
  * This field is used for validation
  */
 const type = base.CommandTypeEnum.General;
 
 /**
- * @desc Short description of the command
+ * @description Short description of the command
  */
 const description = 'Delete your overlay from the server this command was executed from.';
 
 /**
- * @desc execution of the command
+ * @description execution of the command
  * @param {Discord.Message} message 
  * @param {string[]} args 
  */
@@ -44,9 +44,9 @@ function execute(message, args) {
         });
     }
     else if (message.guild) {
-        var guildUser = message.guild.member(message.author);
+        let guildUser = message.guild.member(message.author);
         if (guildUser.hasPermission('KICK_MEMBERS')) {
-            var uId = args[0].split('!')[1].split('>')[0];
+            let uId = args[0].split('!')[1].split('>')[0];
             base.query.execute('DELETE FROM ' + base.query.dbName + '.user_data WHERE guild_id = ' + message.guild.id + ' AND user_id = ' + uId + ' AND channel_id = ' + message.channel.id)
             .then((result) => {
                 if (result.debug_error != null && result.error != null) {

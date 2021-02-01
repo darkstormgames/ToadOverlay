@@ -1,33 +1,33 @@
 /**
- * @desc required modules
+ * @description required modules
  */
 const base = require('../functions/commandsBase');
 
 /**
- * @desc The name and trigger of the command
+ * @description The name and trigger of the command
  */
 const name = 'keepresults';
 
 /**
- * @desc Alternative trigger(s) for the command
+ * @description Alternative trigger(s) for the command
  */
 const alt = ['keepresult'];
 
 /**
- * @desc Defines the type of the command
+ * @description Defines the type of the command
  * This field is used for validation
  */
 const type = base.CommandTypeEnum.UserDM;
 
 /**
- * @desc Short description of the command
+ * @description Short description of the command
  */
 const description = '';
 
 /**
- * @desc execution of the command
+ * @description execution of the command
  * @param {Discord.Message} message 
- * @param {string[]} args 
+ * @param {string} content 
  */
 function execute(message, content) {
     if (content == 0 || content == 1) {
