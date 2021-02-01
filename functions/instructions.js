@@ -1,11 +1,11 @@
 const seedrandom = require('seedrandom');
 
 function getColor(internalId, guild, channel) {
-    var rng_r = seedrandom(((internalId * 91) * (guild.id % 42)).toString());
-    var rng_b = seedrandom(((guild.id % 87) * (channel.id % 42)).toString());
-    var rng_g = seedrandom(((channel.id % 89) * (internalId * 42)).toString());
+    let rng_r = seedrandom(((internalId * 91) * (guild.id % 42)).toString());
+    let rng_b = seedrandom(((guild.id % 87) * (channel.id % 42)).toString());
+    let rng_g = seedrandom(((channel.id % 89) * (internalId * 42)).toString());
 
-    var r = (((rng_r() * 100000000) % 1000) % 256),
+    let r = (((rng_r() * 100000000) % 1000) % 256),
         g = (((rng_b() * 1000000000) % 1000) % 256),
         b = (((rng_g() * 10000000) % 1000) % 256);
 
@@ -13,9 +13,9 @@ function getColor(internalId, guild, channel) {
 }
 
 function getInstructionsMessage(internalId, user, guild, channel) {
-    var colorCode = getColor(internalId, guild, channel);
+    let colorCode = getColor(internalId, guild, channel);
 
-    var linkEmbed = {
+    let linkEmbed = {
         color: colorCode,
         title: 'Overlay-URL for the channel "' + channel.name + '" on "' + guild.name + '"',
         // author: {
@@ -34,7 +34,7 @@ function getInstructionsMessage(internalId, user, guild, channel) {
             text: '© darkstormgames'
         }
     };
-    var instructEmbed = {
+    let instructEmbed = {
         color: 14540253,
         title: 'Using/Editing your overlay',
         fields: [
@@ -76,9 +76,9 @@ function getInstructionsMessage(internalId, user, guild, channel) {
 }
 
 function getHelpMessage(user) {
-    var colorCode = getColor((user.id % 1024), {id: user.id}, {id: user.id});
+    let colorCode = getColor((user.id % 1024), {id: user.id}, {id: user.id});
 
-    var help1 = {
+    let help1 = {
         color: colorCode,
         title: 'Commands Help',
         description: 'Page 1 of 2 (General commands)',
@@ -117,7 +117,7 @@ function getHelpMessage(user) {
         },
     };
 
-    var help2 = {
+    let help2 = {
         color: colorCode,
         title: 'Commands Help',
         description: 'Page 2 of 2 (Editing commands)',

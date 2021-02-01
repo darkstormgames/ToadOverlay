@@ -12,8 +12,8 @@ const fs = require('fs');
  * @param {Discord.Guild} guild 
  */
 function logMessage(message, user = null, guild = null, channel = null) {
-    var logTime = new Date();
-    var datetime = '[' +
+    let logTime = new Date();
+    let datetime = '[' +
         logTime.getFullYear() + '.' +
         (logTime.getMonth()+1) + '.' +
         logTime.getDate() + ' ' +

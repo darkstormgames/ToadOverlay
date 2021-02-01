@@ -1,38 +1,45 @@
 /**
- * @desc required modules
+ * @description required modules
  */
 const base = require('../functions/commandsBase');
 const scraper = require('../functions/scraper');
 
 /**
- * @desc The name and trigger of the command
+ * @description The name and trigger of the command
  */
 const name = 'setmkc-home';
 
 /**
- * @desc Alternative trigger(s) for the command
+ * @description Alternative trigger(s) for the command
  */
 const alt = ['home', 'setmkchome', 'set-home', 'sethome', 'mkc-home', 'mkchome'];
 
 /**
- * @desc Defines the type of the command
+ * @description Defines the type of the command
  * This field is used for validation
  */
 const type = base.CommandTypeEnum.General;
 
 /**
- * @desc Short description of the command
+ * @description Short description of the command
  */
 const description = 'Set the home team from the given mkc identifier.';
 
 /**
- * @desc execution of the command
+ * @description execution of the command
  * @param {Discord.Message} message 
  * @param {string[]} args 
  */
 function execute(message, args) {
-    var isnum = /^\d+$/.test(args[0]);
-    var home_url = isnum ? 'https://www.mariokartcentral.com/mkc/registry/teams/' + args[0] : args[0];
+    let isnum = /^\d+$/.test(args[0]);
+    let home_url = isnum ? 'https://www.mariokartcentral.com/mkc/registry/teams/' + args[0] : args[0];
+    if (!home_url) {
+        message.channel.send('There was an error setting the home-team!\nPlease try again with a valid team-id from MKC.')
+        return;
+    }
+    if (home_url.length < 30) {
+        home_url = '' + args[0];
+      }
     scraper.getPage(home_url, message.guild.id, message.channel.id, true)
     .then((result) => {
         if (result.error != null) {

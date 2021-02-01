@@ -16,9 +16,9 @@ client.commands = new Discord.Collection();
 /**
  * Loading commands from file(s)
  */
-var commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-for (var file of commandFiles) {
-	var command = require(`./commands/${file}`);
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
 
@@ -44,8 +44,8 @@ process.on('unhandledRejection', error => {
 client.on('message', (message) => {
     // Handle user commands
     if (validation.isUserCommand(message)) {
-        var args = message.content.slice(prefix.length).split(' ');
-        var command = args.shift().toLowerCase();
+        let args = message.content.slice(prefix.length).split(' ');
+        let command = args.shift().toLowerCase();
 
         client.commands.forEach((value, key, map) => {
             if (value.type == base.CommandTypeEnum.General && 
@@ -61,7 +61,7 @@ client.on('message', (message) => {
             return;
         }
 
-        var content = message.content.split('[')[1] ? message.content.split('[')[1] : 'err';
+        let content = message.content.split('[')[1] ? message.content.split('[')[1] : 'err';
         if (content == 'err') {
             message.author.send('The command you entered has the wrong format!\nMake sure, your data is included in square brackets => "command [Your input here...]"');
             return;
@@ -82,7 +82,7 @@ client.on('message', (message) => {
         client.commands.forEach((value, key, map) => {
             if (value.type == base.CommandTypeEnum.ToadCommand && 
                (message.content.startsWith(value.name) ||
-               (message.embeds[0] && message.embeds[0].title.startsWith(value.name)))) {
+               (message.embeds[0] && message.embeds[0].title && message.embeds[0].title.startsWith(value.name)))) {
                 value.execute(message, null);
             }
         });
@@ -131,47 +131,47 @@ client.login(token);
 /**
  * Run demo overlay
  */
-var count = 0;
+const count = 0;
 setInterval(() => {
     switch(count) {
         case 0:
             base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 0, current_guest = 0, last_updated = now() WHERE internal_id = 0;')
         break;
         case 1:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 31, current_guest = 51, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 48, current_guest = 34, last_updated = now() WHERE internal_id = 0;')
         break;
         case 2:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 73, current_guest = 91, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 75, current_guest = 89, last_updated = now() WHERE internal_id = 0;')
         break;
         case 3:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 111, current_guest = 135, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 123, current_guest = 123, last_updated = now() WHERE internal_id = 0;')
         break;
         case 4:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 157, current_guest = 171, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 165, current_guest = 163, last_updated = now() WHERE internal_id = 0;')
         break;
         case 5:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 201, current_guest = 209, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 193, current_guest = 217, last_updated = now() WHERE internal_id = 0;')
         break;
         case 6:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 253, current_guest = 239, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 236, current_guest = 256, last_updated = now() WHERE internal_id = 0;')
         break;
         case 7:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 293, current_guest = 281, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 275, current_guest = 299, last_updated = now() WHERE internal_id = 0;')
         break;
         case 8:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 334, current_guest = 322, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 319, current_guest = 337, last_updated = now() WHERE internal_id = 0;')
         break;
         case 9:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 377, current_guest = 361, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 371, current_guest = 367, last_updated = now() WHERE internal_id = 0;')
         break;
         case 10:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 423, current_guest = 397, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 410, current_guest = 410, last_updated = now() WHERE internal_id = 0;')
         break;
         case 11:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 463, current_guest = 439, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 453, current_guest = 449, last_updated = now() WHERE internal_id = 0;')
         break;
         case 12:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 500, current_guest = 484, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 493, current_guest = 491, last_updated = now() WHERE internal_id = 0;')
         break;
         case 13:
         break;
@@ -205,6 +205,6 @@ setInterval(() => {
  * Send a message, to keep the bot connected to the API at all times
  */
 setInterval(() => {
-    var channel = client.channels.cache.find(channel => channel.id == 750752718267613205);
+    let channel = client.channels.cache.find(channel => channel.id == 750752718267613205);
     channel.send("keepalive...");
 }, 30000)

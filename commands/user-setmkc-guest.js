@@ -1,38 +1,42 @@
 /**
- * @desc required modules
+ * @description required modules
  */
 const base = require('../functions/commandsBase');
 const scraper = require('../functions/scraper');
 
 /**
- * @desc The name and trigger of the command
+ * @description The name and trigger of the command
  */
 const name = 'setmkc-guest';
 
 /**
- * @desc Alternative trigger(s) for the command
+ * @description Alternative trigger(s) for the command
  */
 const alt = ['guest', 'setmkcguest', 'set-guest', 'setguest', 'mkc-guest', 'mkcguest'];
 
 /**
- * @desc Defines the type of the command
+ * @description Defines the type of the command
  * This field is used for validation
  */
 const type = base.CommandTypeEnum.General;
 
 /**
- * @desc Short description of the command
+ * @description Short description of the command
  */
 const description = 'Set the guest team from the given mkc identifier.';
 
 /**
- * @desc execution of the command
+ * @description execution of the command
  * @param {Discord.Message} message 
  * @param {string[]} args 
  */
 function execute(message, args) {
-    var isnum = /^\d+$/.test(args[0]);
-    var guest_url = isnum ? 'https://www.mariokartcentral.com/mkc/registry/teams/' + args[0] : args[0];
+    let isnum = /^\d+$/.test(args[0]);
+    let guest_url = isnum ? 'https://www.mariokartcentral.com/mkc/registry/teams/' + args[0] : args[0];
+    if (!guest_url) {
+        message.channel.send('There was an error setting the guest-team!\nPlease try again with a valid team-id from MKC.')
+        return;
+    }
     if (guest_url.length < 30) {
       guest_url = '' + args[0];
     }
