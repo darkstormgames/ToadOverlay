@@ -29,6 +29,7 @@ The bot is written from scratch in JavaScript based on the [Discord.js](https://
 2. Execute the command `_setup` in the channel, where you usually use your Toad bot.
 3. Add a new browser source in OBS or Streamlabs and use the URL the bot has sent you per DMs.
   * Width: 1000
+  * Height: ~120-150
   * Check the two boxes at the bottom of the page ("Shutdown source when not visible" and "Refresh browser when scene becomes active")
 4. Use Toad bot as you are used to.
 
