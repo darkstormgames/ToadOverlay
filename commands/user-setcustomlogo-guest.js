@@ -59,8 +59,17 @@ function execute(message, args) {
         });
     }
     else {
-        message.channel.send('No valid image given!\nPlease provide an image through an URL to your logo or by uploading it directly to this channel with the command as text.\n' 
-                                + '```Example:\n_setlogo-guest https://media.discordapp.net/attachments/534321571041378305/805849643548147722/YoshiPink-MK8.png```');
+        base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET guest_mkc_link = "", guest_img = "", last_updated = now() WHERE guild_id = ' + message.guild.id + ' AND channel_id = ' + message.channel.id + ';')
+        .then((result) => {
+            if (result.debug_error != null && result.error != null) {
+                message.channel.send('There was an error removing the logo for the guest team...\n\nPlease try again.');
+                base.log.logMessage(result.debug_error, message.author, message.guild, message.channel);
+            }
+            else {
+                base.log.logMessage('Executed command "setlogo-guest"', message.author, message.guild, message.channel);
+                message.channel.send('Custom logo for the guest team has been removed successfully.');
+            }
+        });
     }
 }
 
