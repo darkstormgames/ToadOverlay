@@ -6,6 +6,7 @@ const { prefix, token } = require('./config.json');
 const fs = require('fs');
 const validation = require('./functions/validations');
 const base = require('./functions/commandsBase');
+const { connected } = require('process');
 
 /**
  * Initializing Discord client and commands collection
@@ -16,9 +17,9 @@ client.commands = new Discord.Collection();
 /**
  * Loading commands from file(s)
  */
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
+var commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+for (var file of commandFiles) {
+	var command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
 
@@ -127,11 +128,10 @@ client.on('invalidated', () => {
  */
 client.login(token);
 
-
 /**
  * Run demo overlay
  */
-const count = 0;
+let count = 0;
 setInterval(() => {
     switch(count) {
         case 0:
@@ -182,7 +182,9 @@ setInterval(() => {
         count = 0;
     }
     
-    client.user.setActivity(`Toad from a safe distance on ${client.guilds.cache.size} servers.`, { type: 'WATCHING' });
+    if (client && client.user) {
+        client.user.setActivity(`Toad from a safe distance on ${client.guilds.cache.size} servers.`, { type: 'WATCHING' });
+    }
 }, 2500)
 
 /**
@@ -204,7 +206,13 @@ setInterval(() => {
 /**
  * Send a message, to keep the bot connected to the API at all times
  */
+let channel = null;
 setInterval(() => {
-    let channel = client.channels.cache.find(channel => channel.id == 750752718267613205);
-    channel.send("keepalive...");
+    channel = client.channels.cache.find(channel => channel.id == 750752718267613205);
+    if(channel) {
+        channel.send("keepalive...");
+    }
+    else {
+        console.log('keepalive-channel not found...')
+    }
 }, 30000)
