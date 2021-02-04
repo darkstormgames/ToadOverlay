@@ -36,17 +36,17 @@ module.exports = {
             .then((result) => {
                 if (result.error && result.debug_error) {
                     message.author.send('There was an error changing settings...\nPlease try again later.');
-                    base.log.logMessage(result.debug_error, message.author.id);
+                    base.log.logDM(result.debug_error, message.author);
                 }
                 else {
                     message.author.send('Setting has been changed successfully.');
-                    base.log.logMessage('Executed command "keepresults"', message.author.id);
+                    base.log.logDM('Executed command "keepresults"\n' + message.content, message.author);
                 }
             });
         }
         else {
             message.author.send('The provided parameter is invalid.');
-            base.log.logMessage('Executed command "keepresults" with invalid parameter.', message.author.id);
+            base.log.logDM('Executed command "keepresults" with invalid parameter.\n' + message.content, message.author);
         }
     }
 };

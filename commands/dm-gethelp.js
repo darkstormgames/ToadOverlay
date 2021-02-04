@@ -35,5 +35,6 @@ module.exports = {
         var text = instructions.gethelp(message.author);
         message.author.send({embed: text.page1});
         message.author.send({embed: text.page2});
+        base.log.logDM('Help requested...', message.author)
     }
 };

@@ -107,10 +107,10 @@ client.on('messageReactionAdd', async (reaction, user) => {
     if (reaction.message.author.id == 710403066213433385 && reaction.emoji.name === '❌' && !reaction.message.guild) {
         reaction.message.delete({ reason: 'Message deleted by user reaction.' })
         .then(() => {
-            base.log.logMessage(`Message "${reaction.message.content}" deleted from ${user.username}.`);
+            base.log.logDM(`Message deleted.`, user);
         })
         .catch((err) => {
-            base.log.logMessage(err, user);
+            base.log.logDM(err, user);
         });
     }
 });

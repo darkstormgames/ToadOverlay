@@ -35,11 +35,11 @@ module.exports = {
         .then((result) => {
             if (result.error && result.debug_error) {
                 message.author.send('There was an error updating your background image...\nPlease try again later.');
-                base.log.logMessage(result.debug_error, message.author.id);
+                base.log.logDM(result.debug_error, message.author);
             }
             else {
                 message.author.send('Your background image has been updated. Refresh your overlay to see the changes.');
-                base.log.logMessage('Executed command "setimage"', message.author.id);
+                base.log.logDM('Executed command "setimage"\n' + message.content, message.author);
             }
         });
     }

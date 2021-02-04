@@ -35,11 +35,11 @@ module.exports = {
         .then((result) => {
             if (result.error && result.debug_error) {
                 message.author.send('There was an error updating your styles...\nPlease try again later.');
-                base.log.logMessage(result.debug_error, message.author.id);
+                base.log.logDM(result.debug_error, message.author);
             }
             else {
                 message.author.send('Your CSS styles have been updated. Refresh your overlay to see the changes.');
-                base.log.logMessage('Executed command "setstyle"', message.author.id);
+                base.log.logDM('Executed command "setstyle"\n' + message.content, message.author);
             }
         });
     }

@@ -35,11 +35,11 @@ module.exports = {
         .then((result) => {
             if (result.error && result.debug_error) {
                 message.author.send('There was an error updating your html...\nPlease try again later.');
-                base.log.logMessage(result.debug_error, message.author.id);
+                base.log.logDM(result.debug_error, message.author);
             }
             else {
                 message.author.send('Your HTML body has been updated. Refresh your overlay to see the changes.');
-                base.log.logMessage('Executed command "sethtml"', message.author.id);
+                base.log.logDM('Executed command "sethtml"\n' + message.content, message.author);
             }
         });
     }

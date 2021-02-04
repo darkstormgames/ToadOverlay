@@ -35,5 +35,27 @@ module.exports = {
         if (message.toString().includes('Cannot enqueue Handshake after fatal error')) {
             process.exit(4313);
         }
+    },
+
+    logDM: (message, user = null) => {
+        let logTime = new Date();
+        let datetime = '[' +
+            logTime.getFullYear() + '.' +
+            (logTime.getMonth()+1) + '.' +
+            logTime.getDate() + ' ' +
+            logTime.getHours() + ':' + 
+            logTime.getMinutes() + ':' +
+            logTime.getSeconds() + '] ';
+    
+        if (user != null) {
+            console.log(datetime + '[USER: ' + user.username + ' (' + user.id + ')] ' + message);
+        }
+        else {
+            console.log(datetime + message);
+        }
+
+        if (message.toString().includes('Cannot enqueue Handshake after fatal error')) {
+            process.exit(4313);
+        }
     }
 };
