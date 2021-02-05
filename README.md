@@ -65,3 +65,7 @@ If you want to use this overlay for a subclan that isn't registered on MKC, you 
 ## Additional help
 After setting up your overlay, you can just write `help` in the DMs with the bot, to get some basic help on commands.
 For more help on using the commands and editing the overlay, refer to the (still empty) [wiki of this repository](https://github.com/darkstormgames/ToadOverlay/wiki).
+
+----------------------------
+
+[![Twitter](https://img.shields.io/twitter/follow/darkstormgames?logo=twitter)](https://twitter.com/darkstormgames) | [![Twitch](http://img.shields.io/twitch/status/rollo_dev)](https://twitch.tv/rollo_dev)
