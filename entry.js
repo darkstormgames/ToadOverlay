@@ -2,16 +2,17 @@
  * required modules
  */
 const Discord = require('discord.js');
-const { prefix, token } = require('./config.json');
+const { prefix, token, bot_id, foldersplit, workingdirectory } = require('./config.json');
 const fs = require('fs');
 const validation = require('./functions/validations');
 const base = require('./functions/commandsBase');
+const scheduling = require('./functions/scheduling');
 const { connected } = require('process');
 
 /**
  * Initializing Discord client and commands collection
  */
-const client = new Discord.Client({ autoReconnect: true, partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
+const client = new Discord.Client({ autoReconnect: true, partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'USER'] });
 client.commands = new Discord.Collection();
 
 /**
@@ -21,6 +22,14 @@ var commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.j
 for (var file of commandFiles) {
 	var command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
+}
+
+/**
+ * Create required folder(s)
+ * Change / and \ to your respective OS structure
+ */
+if (!fs.existsSync(workingdirectory + foldersplit + 'scheduleTemp')) {
+    fs.mkdirSync(workingdirectory + foldersplit + 'scheduleTemp');
 }
 
 /**
@@ -93,6 +102,7 @@ client.on('message', (message) => {
 /**
  * Reaction handling
  */
+let isWorkingOnFile = false;
 client.on('messageReactionAdd', async (reaction, user) => {
     if (reaction.partial) {
         try {
@@ -104,7 +114,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         }
     }
 
-    if (reaction.message.author.id == 710403066213433385 && reaction.emoji.name === '❌' && !reaction.message.guild) {
+    if (reaction.message.author.id == bot_id && reaction.emoji.name === '❌' && !reaction.message.guild && user.id != bot_id) {
         reaction.message.delete({ reason: 'Message deleted by user reaction.' })
         .then(() => {
             base.log.logDM(`Message deleted.`, user);
@@ -113,7 +123,47 @@ client.on('messageReactionAdd', async (reaction, user) => {
             base.log.logDM(err, user);
         });
     }
+    else if (reaction.message.author.id == bot_id && reaction.message.guild && user.id != bot_id) {
+        let loadedUser = await client.users.fetch(user.id, {cache: true});
+
+        while (isWorkingOnFile === true) {
+            await sleep(250);
+        }
+        
+        isWorkingOnFile = true;
+        switch(reaction.emoji.name)
+        {
+            case '✅':
+                scheduling.addCan(reaction.message, loadedUser);
+                break;
+            case '❌':
+                scheduling.addCant(reaction.message, loadedUser);
+                break;
+            case '❕':
+                scheduling.addSub(reaction.message, loadedUser);
+                break;
+            case '❔':
+                scheduling.addNotSure(reaction.message, loadedUser);
+                break;
+        }
+        isWorkingOnFile = false;
+
+        let userReactions = reaction.message.reactions.cache.filter(reaction => reaction.users.cache.has(user.id))
+        try {
+            for (let reaction of userReactions.values()) {
+                await reaction.users.remove(user.id);
+            }
+        } catch (error) {
+            console.error('Failed to remove reactions.');
+        }
+    }
 });
+
+function sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+}  
 
 /**
  * Reconnect, if discord-API closes the connection
@@ -210,7 +260,7 @@ let channel = null;
 setInterval(() => {
     channel = client.channels.cache.find(channel => channel.id == 750752718267613205);
     if(channel) {
-        channel.send("keepalive...");
+        channel.send('keepalive...');
     }
     else {
         console.log('keepalive-channel not found...')

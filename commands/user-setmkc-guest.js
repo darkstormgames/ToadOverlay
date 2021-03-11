@@ -40,7 +40,7 @@ module.exports = {
         let isnum = /^\d+$/.test(args[0]);
         let guest_url = isnum ? 'https://www.mariokartcentral.com/mkc/registry/teams/' + args[0] : args[0];
         if (!guest_url) {
-            message.channel.send('There was an error setting the guest-team!\nPlease try again with a valid team-id from MKC.')
+            message.channel.send('There was an error setting the guest-team!\nPlease try again with a valid team-id from MKC.');
             return;
         }
         if (guest_url.length < 30) {

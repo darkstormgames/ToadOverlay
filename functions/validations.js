@@ -30,5 +30,26 @@ module.exports = {
                 return true;
         else
             return false;
+    },
+
+    isKeepaliveMessage: (message) => {
+        if (message.author.id == bot_id 
+            && message.author.bot
+            && message.content == 'keepalive...')
+                return true;
+        else
+            return false;
+    },
+
+    stringIsNumbersOnly: (str) => {
+        return !isNaN(str);
+
+        // let numRegEx = '/^[0-9]+$/';
+        // if (str.match(numRegEx)) {
+        //     return true;
+        // }
+        // else {
+        //     return false;
+        // }
     }
 };
