@@ -79,7 +79,7 @@ function buildMessage(message, data) {
         msgData.push({ name: "Dropped (" + data.DROPPED.length + ")", value: droppedStr });
     }
 
-    let colorCode = getColor(data.time, message.guild.id, message.channel.id);
+    let colorCode = getColor(data.time, message.guild, message.channel);
     return {
         color: colorCode,
         title: 'War ' + data.time,
@@ -157,7 +157,7 @@ module.exports = {
         else {
             return;
         }
-        
+
         writeData(message, data);
         message.edit({embed: buildMessage(message, data)});
     },
@@ -171,6 +171,9 @@ module.exports = {
         if (getIndex(data.SUB, user.id) != -1) {
             isDropped = true;
         }
+	if (getIndex(data.CANT, user.id) != -1 && data.CANT[getIndex(data.CANT, user.id)].dropped == true) {
+            isDropped = true;
+	}
 
         data = removeFromData(data, user, ['CAN', 'CANT', 'SUB', 'DROPPED']);
 
@@ -180,7 +183,7 @@ module.exports = {
         else {
             return;
         }
-        
+
         writeData(message, data);
         message.edit({embed: buildMessage(message, data)});
     },
@@ -206,7 +209,7 @@ module.exports = {
 
         if (isDropped == true) {
             if (getIndex(data.DROPPED, user.id) == -1) {
-                data.DROPPED.push({ name: user.username, id: user.id });
+                data.DROPPED.push({ name: user.username, id: user.id, dropped: true });
             }
             else {
                 return;
@@ -214,7 +217,7 @@ module.exports = {
         }
         else {
             if (getIndex(data.CANT, user.id) == -1) {
-                data.CANT.push({ name: user.username, id: user.id });
+                data.CANT.push({ name: user.username, id: user.id, dropped: false });
             }
             else {
                 return;

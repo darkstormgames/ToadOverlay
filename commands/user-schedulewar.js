@@ -19,7 +19,7 @@
     return ((b & 0xFF) + ((g << 8) & 0xFF00) + ((r << 16) & 0xFF0000));
 }
 
- module.exports = {
+module.exports = {
     /**
     * @desc The name and trigger of the command
     */
@@ -81,33 +81,14 @@
         }
 
         times.forEach(time => {
-            let colorCode = getColor(time, message.guild.id, message.channel.id);
-
+            let colorCode = getColor(time, message.guild, message.channel);
+	        base.log.logMessage(colorCode);
             let scheduleEmbed = {
                 color: colorCode,
-                title: 'War ' + time,
-                // author: {
-                //     name: 'ToadOverlay',
-                //     icon_url: 'https://gamesites.nintendo.com.au/paper-mario-color-splash/assets/img/tip-toad1.png',
-                //     url: 'https://github.com/darkstormgames/ToadOverlay',
-                // },
-                fields: [
-                    // {
-                    //     name: 'Can',
-                    //     value: 'Test'
-                    // },
-                    // {
-                    //     name: 'Can\'t',
-                    //     value: 'Test'
-                    // },
-                    // {
-                    //     name: 'Sub',
-                    //     value: 'Test'
-                    // }
-                ]
+                title: 'War ' + time
             };
 
-            message.channel.send({embed: scheduleEmbed})
+            message.channel.send({ embed: scheduleEmbed })
                 .then(newMessage => {
                     fs.writeFile(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + message.channel.id + foldersplit 
                         + newMessage.id + '.json', '{\n\t"time": ' + time + ',\n\t"CAN": [],\n\t"CANT": [],\n\t"SUB": [],\n\t"NOTSURE": [],\n\t"DROPPED": []\n}', (err) => { if (err) console.log(err); });
@@ -116,10 +97,7 @@
                     // newMessage.react('❌');
                     // newMessage.react('❔');
                 })
-                .catch(console.error);
+                .catch((err) => base.log.logMessage('Failed to send embed...\n' + err));
         });
-
-
-
     },
- };
+};

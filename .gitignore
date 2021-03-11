@@ -1,6 +1,7 @@
 
 # Config file
 config.json
+scheduleTemp
 
 # Batch files
 *.bat
