@@ -85,7 +85,7 @@ module.exports = {
 	        base.log.logMessage(colorCode);
             let scheduleEmbed = {
                 color: colorCode,
-                title: 'War ' + time
+                title: '**War ' + time + '**'
             };
 
             message.channel.send({ embed: scheduleEmbed })

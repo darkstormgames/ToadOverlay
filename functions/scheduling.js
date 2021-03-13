@@ -36,7 +36,7 @@ function buildMessage(message, data) {
             }
             canStr += item.name;
         });
-        msgData.push({ name: "Can (" + data.CAN.length + ")", value: canStr });
+        msgData.push({ name: "✅ Can (" + data.CAN.length + ")", value: canStr });
     }
     if (data.SUB.length > 0) {
         let subStr = '';
@@ -46,7 +46,7 @@ function buildMessage(message, data) {
             }
             subStr += item.name;
         });
-        msgData.push({ name: "Can sub (" + data.SUB.length + ")", value: subStr });
+        msgData.push({ name: "❕Can sub (" + data.SUB.length + ")", value: subStr });
     }
     if (data.NOTSURE.length > 0) {
         let notSureStr = '';
@@ -56,7 +56,7 @@ function buildMessage(message, data) {
             }
             notSureStr += item.name;
         });
-        msgData.push({ name: "Not sure (" + data.NOTSURE.length + ")", value: notSureStr });
+        msgData.push({ name: "❔ Not sure (" + data.NOTSURE.length + ")", value: notSureStr });
     }
     if (data.CANT.length > 0) {
         let cantStr = '';
@@ -66,7 +66,7 @@ function buildMessage(message, data) {
             }
             cantStr += item.name;
         });
-        msgData.push({ name: "Can't (" + data.CANT.length + ")", value: cantStr });
+        msgData.push({ name: "❌ Can't (" + data.CANT.length + ")", value: cantStr });
     }
     if (data.DROPPED.length > 0) {
         let droppedStr = '';
@@ -76,13 +76,13 @@ function buildMessage(message, data) {
             }
             droppedStr += item.name;
         });
-        msgData.push({ name: "Dropped (" + data.DROPPED.length + ")", value: droppedStr });
+        msgData.push({ name: "❌ Dropped (" + data.DROPPED.length + ")", value: droppedStr });
     }
 
     let colorCode = getColor(data.time, message.guild, message.channel);
     return {
         color: colorCode,
-        title: 'War ' + data.time,
+        title: '**War ' + data.time + '**',
         fields: msgData
     };
 }
