@@ -32,6 +32,7 @@ module.exports = {
     */
     execute: (message, args) => {
         if (message.attachments.size > 0) {
+            base.log.logMessage('Executing command "setlogo-home"' + '\n\t\t' + message.content, message.author, message.guild, message.channel);
             // Write first image attached to the db
             base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET home_mkc_link = "", home_img = "' + message.attachments.values().next().value.proxyURL + '", last_updated = now() WHERE guild_id = ' + message.guild.id + ' AND channel_id = ' + message.channel.id + ';')
             .then((result) => {
@@ -40,12 +41,12 @@ module.exports = {
                     base.log.logMessage(result.debug_error + '\n\t\t' + message.content, message.author, message.guild, message.channel);
                 }
                 else {
-                    base.log.logMessage('Executed command "setlogo-home"' + '\n\t\t' + message.content, message.author, message.guild, message.channel);
                     message.channel.send('Custom logo for the home team has been set successfully from uploaded image.');
                 }
             });
         }
         else if (args.length > 0) {
+            base.log.logMessage('Executing command "setlogo-home"' + '\n\t\t' + message.content, message.author, message.guild, message.channel);
             // Write URL from arguments to the db
             base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET home_mkc_link = "", home_img = "' + args[0] + '", last_updated = now() WHERE guild_id = ' + message.guild.id + ' AND channel_id = ' + message.channel.id + ';')
             .then((result) => {
@@ -54,12 +55,12 @@ module.exports = {
                     base.log.logMessage(result.debug_error + '\n\t\t' + message.content, message.author, message.guild, message.channel);
                 }
                 else {
-                    base.log.logMessage('Executed command "setlogo-home"' + '\n\t\t' + message.content, message.author, message.guild, message.channel);
                     message.channel.send('Custom logo for the home team has been set successfully from URL.');
                 }
             });
         }
         else {
+            base.log.logMessage('Executing command "setlogo-home" - CLEAR', message.author, message.guild, message.channel);
             base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET home_mkc_link = "", home_img = "", last_updated = now() WHERE guild_id = ' + message.guild.id + ' AND channel_id = ' + message.channel.id + ';')
             .then((result) => {
                 if (result.debug_error != null && result.error != null) {
@@ -67,7 +68,6 @@ module.exports = {
                     base.log.logMessage(result.debug_error, message.author, message.guild, message.channel);
                 }
                 else {
-                    base.log.logMessage('Executed command "setlogo-home"', message.author, message.guild, message.channel);
                     message.channel.send('Custom logo for the home team has been removed successfully.');
                 }
             });

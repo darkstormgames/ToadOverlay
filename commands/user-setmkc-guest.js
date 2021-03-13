@@ -37,6 +37,7 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, args) => {
+        base.log.logMessage('Executing command "setmkc-guest"', message.author, message.guild);
         let isnum = /^\d+$/.test(args[0]);
         let guest_url = isnum ? 'https://www.mariokartcentral.com/mkc/registry/teams/' + args[0] : args[0];
         if (!guest_url) {
@@ -53,7 +54,6 @@ module.exports = {
                 message.channel.send(result.error);
             }
             else {
-                base.log.logMessage('Executed command "setmkc-guest"', message.author, message.guild);
                 message.channel.send('Guest team successfully set to ' + result.name + ' (' + result.tag + ')');
             }
         });

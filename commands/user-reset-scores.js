@@ -36,14 +36,12 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, args) => {
+        base.log.logMessage('Executing command "reset-scores"', message.author, message.guild, message.channel);
         base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 0, current_guest = 0, last_updated = now() WHERE guild_id = ' + message.guild.id + ' AND channel_id = ' + message.channel.id)
         .then((result) => {
             if (result.error && result.debug_error) {
                 message.channel.send('There was an error resetting war data...\nPlease try again later...');
-                base.log.logMessage(result.debug_error, message.author.id);
-            }
-            else {
-                base.log.logMessage('Executed command "reset-scores"', message.author, message.guild);
+                base.log.logMessage(result.debug_error, message.author, message.guild, message.channel);
             }
         });
     }

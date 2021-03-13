@@ -52,6 +52,7 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, args) => {
+        base.log.logMessage('Executing command "schedulewar"', message.author, message.guild, message.channel);
         if (!fs.existsSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id)) {
             fs.mkdirSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id);
         }
@@ -94,10 +95,10 @@ module.exports = {
                         + newMessage.id + '.json', '{\n\t"time": ' + time + ',\n\t"CAN": [],\n\t"CANT": [],\n\t"SUB": [],\n\t"NOTSURE": [],\n\t"DROPPED": []\n}', (err) => { if (err) console.log(err); });
 
                     newMessage.react('✅').then(() => newMessage.react('❕')).then(() => newMessage.react('❔')).then(() => newMessage.react('❌'));
-                    // newMessage.react('❌');
-                    // newMessage.react('❔');
                 })
                 .catch((err) => base.log.logMessage('Failed to send embed...\n' + err));
+                
+            base.log.logWarData(message.guild, message.channel, message.author, 'Created schedule for ' + time);
         });
     },
 };

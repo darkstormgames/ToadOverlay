@@ -31,6 +31,7 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, content) => {
+        base.log.logDM('Executing command "setstyle"\n' + message.content, message.author);
         base.query.execute("UPDATE " + base.query.dbName + ".user_data SET ol_css = '" + content + "' WHERE user_id = " + message.author.id)
         .then((result) => {
             if (result.error && result.debug_error) {
@@ -39,7 +40,6 @@ module.exports = {
             }
             else {
                 message.author.send('Your CSS styles have been updated. Refresh your overlay to see the changes.');
-                base.log.logDM('Executed command "setstyle"\n' + message.content, message.author);
             }
         });
     }
