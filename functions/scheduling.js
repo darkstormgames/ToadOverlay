@@ -1,5 +1,6 @@
 const fs = require('fs');
 const seedrandom = require('seedrandom');
+const log = require('./logger');
 const { foldersplit, workingdirectory } = require('../config.json');
 
 function getColor(internalId, guild, channel) {
@@ -79,7 +80,7 @@ function buildMessage(message, data) {
         msgData.push({ name: "Dropped (" + data.DROPPED.length + ")", value: droppedStr });
     }
 
-    let colorCode = getColor(data.time, message.guild, message.channel);
+    let colorCode = getColor((data.time + new Date().getDate()), message.guild, message.channel);
     return {
         color: colorCode,
         title: 'War ' + data.time,
@@ -96,35 +97,40 @@ function getIndex (arr, id) {
     return -1;
 }
 
-function removeFromData(data, user, para) {
+function removeFromData(data, user, para, message) {
     if (para.includes('CAN')) {
         let index = getIndex(data.CAN, user.id);
         if (index > -1) {
             data.CAN.splice(index, 1);
+            log.logWarData(message.guild, message.channel, user, 'Removed from CAN');
         }
     }
     if (para.includes('CANT')) {
         let index = getIndex(data.CANT, user.id);
         if (index > -1) {
             data.CANT.splice(index, 1);
+            log.logWarData(message.guild, message.channel, user, 'Removed from CANT');
         }
     }
     if (para.includes('SUB')) {
         let index = getIndex(data.SUB, user.id);
         if (index > -1) {
             data.SUB.splice(index, 1);
+            log.logWarData(message.guild, message.channel, user, 'Removed from SUB');
         }
     }
     if (para.includes('NOTSURE')) {
         let index = getIndex(data.NOTSURE, user.id);
         if (index > -1) {
             data.NOTSURE.splice(index, 1);
+            log.logWarData(message.guild, message.channel, user, 'Removed from NOTSURE');
         }
     }
     if (para.includes('DROPPED')) {
         let index = getIndex(data.DROPPED, user.id);
         if (index > -1) {
             data.DROPPED.splice(index, 1);
+            log.logWarData(message.guild, message.channel, user, 'Removed from DROPPED');
         }
     }
 
@@ -134,10 +140,11 @@ function removeFromData(data, user, para) {
 module.exports = {
     addCan: (message, user) => {
         let data = getData(message);
-        data = removeFromData(data, user, ['CANT', 'SUB', 'NOTSURE', 'DROPPED']);
+        data = removeFromData(data, user, ['CANT', 'SUB', 'NOTSURE', 'DROPPED'], message);
 
         if (getIndex(data.CAN, user.id) == -1) {
             data.CAN.push({ name: user.username, id: user.id });
+            log.logWarData(message.guild, message.channel, user, 'Added to CAN');
         }
         else {
             return;
@@ -149,10 +156,11 @@ module.exports = {
 
     addSub: (message, user) => {
         let data = getData(message);
-        data = removeFromData(data, user, ['CAN', 'CANT', 'NOTSURE', 'DROPPED']);
+        data = removeFromData(data, user, ['CAN', 'CANT', 'NOTSURE', 'DROPPED'], message);
 
         if (getIndex(data.SUB, user.id) == -1) {
             data.SUB.push({ name: user.username, id: user.id });
+            log.logWarData(message.guild, message.channel, user, 'Added to SUB');
         }
         else {
             return;
@@ -171,14 +179,15 @@ module.exports = {
         if (getIndex(data.SUB, user.id) != -1) {
             isDropped = true;
         }
-	if (getIndex(data.CANT, user.id) != -1 && data.CANT[getIndex(data.CANT, user.id)].dropped == true) {
+	    if (getIndex(data.CANT, user.id) != -1 && data.CANT[getIndex(data.CANT, user.id)].dropped == true) {
             isDropped = true;
-	}
+	    }
 
-        data = removeFromData(data, user, ['CAN', 'CANT', 'SUB', 'DROPPED']);
+        data = removeFromData(data, user, ['CAN', 'CANT', 'SUB', 'DROPPED'], message);
 
         if (getIndex(data.NOTSURE, user.id) == -1) {
             data.NOTSURE.push({ name: user.username, id: user.id, dropped: isDropped });
+            log.logWarData(message.guild, message.channel, user, 'Added to NOTSURE');
         }
         else {
             return;
@@ -205,11 +214,12 @@ module.exports = {
             isDropped = true;
         }
 
-        data = removeFromData(data, user, ['CAN', 'SUB', 'NOTSURE']);
+        data = removeFromData(data, user, ['CAN', 'SUB', 'NOTSURE'], message);
 
         if (isDropped == true) {
             if (getIndex(data.DROPPED, user.id) == -1) {
                 data.DROPPED.push({ name: user.username, id: user.id, dropped: true });
+                log.logWarData(message.guild, message.channel, user, 'Added to DROPPED');
             }
             else {
                 return;
@@ -218,6 +228,7 @@ module.exports = {
         else {
             if (getIndex(data.CANT, user.id) == -1) {
                 data.CANT.push({ name: user.username, id: user.id, dropped: false });
+                log.logWarData(message.guild, message.channel, user, 'Added to CANT');
             }
             else {
                 return;
@@ -227,4 +238,11 @@ module.exports = {
         writeData(message, data);
         message.edit({embed: buildMessage(message, data)});
     },
+
+    removeEntry: (message, user) => {
+        let data = getData(message);
+        data = removeFromData(data, user, ['CAN', 'CANT', 'SUB', 'NOTSURE', 'DROPPED'], message);
+        writeData(message, data);
+        message.edit({embed: buildMessage(message, data)});
+    }
 }

@@ -31,6 +31,7 @@ module.exports = {
     * @param {string} content 
     */
     execute: (message, content) => {
+        base.log.logDM('Executing command "keepresults"\n' + message.content, message.author);
         if (content == 0 || content == 1) {
             base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET keep_results = "' + content + '" WHERE user_id = ' + message.author.id)
             .then((result) => {
@@ -40,13 +41,11 @@ module.exports = {
                 }
                 else {
                     message.author.send('Setting has been changed successfully.');
-                    base.log.logDM('Executed command "keepresults"\n' + message.content, message.author);
                 }
             });
         }
         else {
             message.author.send('The provided parameter is invalid.');
-            base.log.logDM('Executed command "keepresults" with invalid parameter.\n' + message.content, message.author);
         }
     }
 };

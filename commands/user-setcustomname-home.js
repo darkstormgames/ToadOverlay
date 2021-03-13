@@ -31,6 +31,7 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, args) => {
+        base.log.logMessage('Executing command "setname-home"' + '\n\t\t' + message.content, message.author, message.guild, message.channel);
         if (args.length > 0) {
             // Write URL from arguments to the db
             base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET home_mkc_link = "", home_name = "' + args.join(' ') + '", last_updated = now() WHERE guild_id = ' + message.guild.id + ' AND channel_id = ' + message.channel.id + ';')
@@ -40,7 +41,6 @@ module.exports = {
                     base.log.logMessage(result.debug_error + '\n\t\t' + message.content, message.author, message.guild, message.channel);
                 }
                 else {
-                    base.log.logMessage('Executed command "setname-home"' + '\n\t\t' + message.content, message.author, message.guild, message.channel);
                     message.channel.send('Custom name for the home team has been set successfully.');
                 }
             });

@@ -123,7 +123,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
             base.log.logDM(err, user);
         });
     }
-    else if (reaction.message.author.id == bot_id && reaction.message.guild && user.id != bot_id) {
+    else if (reaction.message.author.id == bot_id && reaction.message.guild && user.id != bot_id && reaction.message.embeds[0].title.startsWith('War')) {
         let loadedUser = await client.users.fetch(user.id, {cache: true});
 
         while (isWorkingOnFile === true) {
@@ -144,6 +144,9 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 break;
             case '❔':
                 scheduling.addNotSure(reaction.message, loadedUser);
+                break;
+            case '♿':
+                scheduling.removeEntry(reaction.message, loadedUser);
                 break;
         }
         isWorkingOnFile = false;

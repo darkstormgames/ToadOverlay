@@ -2,7 +2,7 @@
 
 # ToadOverlay
 
-[![Discord.js](https://img.shields.io/badge/discord.js-v12.2.0-blue.svg?logo=npm)](https://github.com/discordjs)
+[![Discord.js](https://img.shields.io/badge/discord.js-v12.5.1-blue.svg?logo=npm)](https://github.com/discordjs)
 [![GitHub license](https://img.shields.io/badge/license-GPL--3.0-blue)](https://github.com/darkstormgames/ToadOverlay/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues-raw/darkstormgames/ToadOverlay)](https://github.com/darkstormgames/ToadOverlay/issues)
 [![CodeFactor](https://www.codefactor.io/repository/github/darkstormgames/toadoverlay/badge)](https://www.codefactor.io/repository/github/darkstormgames/toadoverlay)
