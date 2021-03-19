@@ -1,8 +1,8 @@
 /**
  * @description required modules
  */
-const base = require('../functions/commandsBase');
-const scraper = require('../functions/scraper');
+const base = require('../../functions/commandsBase');
+const scraper = require('../../functions/scraper');
 
 module.exports = {
     /**

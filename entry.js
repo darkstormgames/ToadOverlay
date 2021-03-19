@@ -18,11 +18,16 @@ client.commands = new Discord.Collection();
 /**
  * Loading commands from file(s)
  */
-var commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-for (var file of commandFiles) {
-	var command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
+let commandFolders = fs.readdirSync('./commands');
+for (let folder of commandFolders) {
+    let commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
+    for (let file of commandFiles) {
+        let command = require(`./commands/${folder}/${file}`);
+        client.commands.set(command.name, command);
+    }
 }
+
+
 
 /**
  * Create required folder(s)
@@ -38,7 +43,7 @@ if (!fs.existsSync(workingdirectory + foldersplit + 'scheduleTemp')) {
 client.once('ready', () => {
     base.log.logMessage('[DISCORD] Ready!');
     
-    client.user.setActivity(`Toad from a safe distance on ${client.guilds.cache.size} servers.`, { type: 'WATCHING' });
+    client.user.setActivity(`Toad from a safe distance on ${client.guilds.cache.size} servers. | Type "_setup" to get started.`, { type: 'WATCHING' });
 });
 
 /**
@@ -125,7 +130,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
     }
     else if (reaction.message.author.id == bot_id && reaction.message.guild && user.id != bot_id && reaction.message.embeds[0].title.startsWith('**War')) {
         let loadedUser = await client.users.fetch(user.id, {cache: true});
-
+        //let loadedGuild = await reaction.message.guild.fetch();
+        //let loadedChannel = await reaction.message.channel.fetch();
         while (isWorkingOnFile === true) {
             await sleep(250);
         }
@@ -236,7 +242,7 @@ setInterval(() => {
     }
     
     if (client && client.user) {
-        client.user.setActivity(`Toad from a safe distance on ${client.guilds.cache.size} servers.`, { type: 'WATCHING' });
+        client.user.setActivity(`Toad from a safe distance on ${client.guilds.cache.size} servers. | Type "_setup" to get started.`, { type: 'WATCHING' });
     }
 }, 2500)
 

@@ -1,7 +1,7 @@
 /**
  * @description required modules
  */
-const base = require('../functions/commandsBase');
+const base = require('../../functions/commandsBase');
 
 module.exports = {
     /**
@@ -34,7 +34,7 @@ module.exports = {
         if (message.attachments.size > 0) {
             base.log.logMessage('Executing command "setlogo-guest"' + '\n\t\t' + message.content, message.author, message.guild, message.channel);
             // Write first image attached to the db
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET guest_mkc_link = "", guest_img = "' + message.attachments.values().next().value.proxyURL + '", last_updated = now() WHERE guild_id = ' + message.guild.id + ' AND channel_id = ' + message.channel.id + ';')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET guest_mkc_url = "", guest_img = "' + message.attachments.values().next().value.proxyURL + '" WHERE channel_id = ' + message.channel.id + ';')
             .then((result) => {
                 if (result.debug_error != null && result.error != null) {
                     message.channel.send('There was an error updating the logo for the guest team...\n\nPlease try again.');
@@ -48,7 +48,7 @@ module.exports = {
         else if (args.length > 0) {
             base.log.logMessage('Executing command "setlogo-guest"', message.author, message.guild, message.channel);
             // Write URL from arguments to the db
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET guest_mkc_link = "", guest_img = "' + args[0] + '", last_updated = now() WHERE guild_id = ' + message.guild.id + ' AND channel_id = ' + message.channel.id + ';')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET guest_mkc_url = "", guest_img = "' + args[0] + '" WHERE channel_id = ' + message.channel.id + ';')
             .then((result) => {
                 if (result.debug_error != null && result.error != null) {
                     message.channel.send('There was an error updating the logo for the guest team...\n\nPlease try again.');
@@ -61,7 +61,7 @@ module.exports = {
         }
         else {
             base.log.logMessage('Executing command "setlogo-guest" - CLEAR', message.author, message.guild, message.channel);
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET guest_mkc_link = "", guest_img = "", last_updated = now() WHERE guild_id = ' + message.guild.id + ' AND channel_id = ' + message.channel.id + ';')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET guest_mkc_url = "", guest_img = "" WHERE channel_id = ' + message.channel.id + ';')
             .then((result) => {
                 if (result.debug_error != null && result.error != null) {
                     message.channel.send('There was an error removing the logo for the guest team...\n\nPlease try again.');

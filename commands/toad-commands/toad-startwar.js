@@ -1,7 +1,7 @@
 /**
  * @description required modules
  */
-const base = require('../functions/commandsBase');
+const base = require('../../functions/commandsBase');
 
 module.exports = {
     /**
@@ -32,12 +32,21 @@ module.exports = {
     */
     execute: (message, args) => {
         base.log.logMessage('Executing command "startwar"', message.author, message.guild, message.channel);
-        base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 0, current_guest = 0, last_updated = now() WHERE guild_id = ' + message.guild.id + ' AND channel_id = ' + message.channel.id + ';')
+
+        base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_current = 0, guest_current = 0 WHERE channel_id = ' + message.channel.id + ';')
         .then((result) => {
             if (result.error && result.debug_error) {
                 message.channel.send('There was an error setting up a new war...\nPlease try again...');
                 base.log.logMessage(result.debug_error, message.author, message.guild, message.channel);
             }
         });
+
+        // base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 0, current_guest = 0, last_updated = now() WHERE guild_id = ' + message.guild.id + ' AND channel_id = ' + message.channel.id + ';')
+        // .then((result) => {
+        //     if (result.error && result.debug_error) {
+        //         message.channel.send('There was an error setting up a new war...\nPlease try again...');
+        //         base.log.logMessage(result.debug_error, message.author, message.guild, message.channel);
+        //     }
+        // });
     }
 };

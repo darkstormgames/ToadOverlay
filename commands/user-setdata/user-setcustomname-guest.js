@@ -1,18 +1,18 @@
 /**
  * @description required modules
  */
-const base = require('../functions/commandsBase');
+const base = require('../../functions/commandsBase');
 
 module.exports = {
     /**
     * @description The name and trigger of the command
     */
-    name: 'settag-home',
+    name: 'setname-guest',
 
     /**
     * @description Alternative trigger(s) for the command
     */
-    alt: ['hsettag', 'htag', 'tag-home'],
+    alt: ['gsetname', 'gname', 'name-guest'],
 
     /**
     * @description Defines the type of the command
@@ -23,7 +23,7 @@ module.exports = {
     /**
     * @description Short description of the command
     */
-    description: 'Overrides the tag displayed on the overlay in the given channel.',
+    description: 'Overrides the name displayed on the overlay in the given channel.',
 
     /**
     * @description execution of the command
@@ -31,23 +31,23 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, args) => {
-        base.log.logMessage('Executing command "settag-home"' + '\n\t\t' + message.content, message.author, message.guild, message.channel);
+        base.log.logMessage('Executing command "setname-guest"' + '\n\t\t' + message.content, message.author, message.guild, message.channel);
         if (args.length > 0) {
             // Write URL from arguments to the db
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET home_mkc_link = "", home_tag = "' + args[0] + '", last_updated = now() WHERE guild_id = ' + message.guild.id + ' AND channel_id = ' + message.channel.id + ';')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET guest_mkc_url = "", guest_name = "' + args.join(' ') + '" WHERE channel_id = ' + message.channel.id + ';')
             .then((result) => {
                 if (result.debug_error != null && result.error != null) {
-                    message.channel.send('There was an error updating the tag for the home team...\n\nPlease try again.');
+                    message.channel.send('There was an error updating the name for the guest team...\n\nPlease try again.');
                     base.log.logMessage(result.debug_error + '\n\t\t' + message.content, message.author, message.guild, message.channel);
                 }
                 else {
-                    message.channel.send('Custom tag for the home team has been set successfully.');
+                    message.channel.send('Custom name for the guest team has been set successfully.');
                 }
             });
         }
         else {
-            message.channel.send('No valid tag given!\n' 
-                                    + '```Example:\n_settag-home N/A```');
+            message.channel.send('No valid name given!\n' 
+                                    + '```Example:\n_setname-guest This team sucks```');
         }
     }
-}
+};

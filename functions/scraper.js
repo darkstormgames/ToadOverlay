@@ -52,10 +52,10 @@ module.exports = {
         
                     let sql_update_string = '';
                     if (isHome) {
-                        sql_update_string = 'UPDATE ' + base.query.dbName + '.user_data SET home_mkc_link = "' + url + '", home_name = "' + team_name + '", home_tag = "' + team_tag + '", home_img = "' + team_logo + '", last_updated = now() WHERE guild_id = ' + guild_id + ' AND channel_id = ' + channelId + ';';
+                        sql_update_string = 'UPDATE ' + base.query.dbName + '.channel_data SET home_mkc_url = "' + url + '", home_name = "' + team_name + '", home_tag = "' + team_tag + '", home_img = "' + team_logo + '" WHERE channel_id = ' + channelId + ';';
                     }
                     else {
-                        sql_update_string = 'UPDATE ' + base.query.dbName + '.user_data SET guest_mkc_link = "' + url + '", guest_name = "' + team_name + '", guest_tag = "' + team_tag + '", guest_img = "' + team_logo + '", last_updated = now() WHERE guild_id = ' + guild_id + ' AND channel_id = ' + channelId + ';';
+                        sql_update_string = 'UPDATE ' + base.query.dbName + '.channel_data SET guest_mkc_url = "' + url + '", guest_name = "' + team_name + '", guest_tag = "' + team_tag + '", guest_img = "' + team_logo + '" WHERE channel_id = ' + channelId + ';';
                     }
                     base.log.logMessage('puppeteer completely done...' + team_name);
                     base.query.execute(sql_update_string)

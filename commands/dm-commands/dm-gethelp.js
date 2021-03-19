@@ -1,8 +1,8 @@
 /**
  * @description required modules
  */
-const base = require('../functions/commandsBase');
-const instructions = require('../functions/instructions');
+const base = require('../../functions/commandsBase');
+const instructions = require('../../functions/instructions');
 
 module.exports = {
     /**

@@ -52,7 +52,7 @@ module.exports = {
                 },
                 {
                     name: 'Commands',
-                    value: 'Commands to edit your overlay are executed in this private channel```sethtml [Your HTML body]\nsetstyle [Your CSS styles]\nsetimage [Full URL to your background image]\nkeepresults [{0|1}]```For more help regarding commands, just write "help" in this chat.'
+                    value: 'Commands to edit your overlay are executed in this private channel```sethtml [Your HTML body]\nsetstyle [Your CSS styles]\nsetimage [Full URL to your background image]```For more help regarding commands, just write "help" in this chat.'
                 },
                 {
                     name: 'Important note',
@@ -154,14 +154,6 @@ module.exports = {
                            '```setimage [Full URL to your background image]```' + 
                            'Example and Default:' + 
                            '```setimage [http://toad.darkstormgames.de/images/default.png]```' + 
-                           ''
-                },
-                {
-                    name: 'Keep/reset results after "_stopwar"',
-                    value: 'This setting determines, if scores should be kept after the "_stopwar" command was executed. A "1" keeps the result until the next "_startwar" and a "0" resets it to zero, when the war has been stopped.' + 
-                           '```keepresults [{0|1}]```' + 
-                           'Example and Default:' + 
-                           '```keepresults [0]```' + 
                            ''
                 }
             ],

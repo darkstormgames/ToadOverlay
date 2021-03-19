@@ -1,11 +1,11 @@
 /**
  * @desc required modules
  */
- const base = require('../functions/commandsBase');
- const validations = require('../functions/validations');
+ const base = require('../../functions/commandsBase');
+ const validations = require('../../functions/validations');
  const seedrandom = require('seedrandom');
  const fs = require('fs');
- const { foldersplit, workingdirectory } = require('../config.json');
+ const { foldersplit, workingdirectory } = require('../../config.json');
 
  function getColor(internalId, guild, channel) {
     let rng_r = seedrandom(((internalId * 91) * (guild.id % 42)).toString());
@@ -83,7 +83,6 @@ module.exports = {
 
         times.forEach(time => {
             let colorCode = getColor(time, message.guild, message.channel);
-	        base.log.logMessage(colorCode);
             let scheduleEmbed = {
                 color: colorCode,
                 title: '**War ' + time + '**'
