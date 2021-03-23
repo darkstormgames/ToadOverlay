@@ -3,6 +3,7 @@
  */
 const base = require('../../functions/commandsBase');
 const scraper = require('../../functions/scraper');
+const dbhelper = require('../../functions/db-helper');
 
 module.exports = {
     /**
@@ -38,6 +39,8 @@ module.exports = {
     */
     execute: (message, args) => {
         base.log.logMessage('Executing command "setmkc-guest"', message.author, message.guild);
+        dbhelper.checkBaseData(message.guild, message.channel, message.author);
+        
         let isnum = /^\d+$/.test(args[0]);
         let guest_url = isnum ? 'https://www.mariokartcentral.com/mkc/registry/teams/' + args[0] : args[0];
         if (!guest_url) {

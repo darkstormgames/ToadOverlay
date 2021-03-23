@@ -1,23 +1,11 @@
 /**
  * required modules
  */
-const seedrandom = require('seedrandom');
-
-function getColor(internalId, guild, channel) {
-    let rng_r = seedrandom(((internalId * 91) * (guild.id % 42)).toString());
-    let rng_b = seedrandom(((guild.id % 87) * (channel.id % 42)).toString());
-    let rng_g = seedrandom(((channel.id % 89) * (internalId * 42)).toString());
-
-    let r = (((rng_r() * 100000000) % 1000) % 256),
-        g = (((rng_b() * 1000000000) % 1000) % 256),
-        b = (((rng_g() * 10000000) % 1000) % 256);
-
-    return ((b & 0xFF) + ((g << 8) & 0xFF00) + ((r << 16) & 0xFF0000));
-}
+const { getRandomColor } = require('./utility');
 
 module.exports = {
     get: (internalId, user, guild, channel) => {
-        let colorCode = getColor(internalId, guild, channel);
+        let colorCode = getRandomColor(internalId, guild, channel);
     
         let linkEmbed = {
             color: colorCode,
@@ -30,7 +18,7 @@ module.exports = {
             fields: [
                 {
                     name: 'URL',
-                    value: '```http://toad.darkstormgames.de/index.php?g=' + guild.id + '&u=' + user.id + '&auth=' + internalId + '```'
+                    value: '```http://toad.darkstormgames.de/index.php?c=' + channel.id + '&u=' + user.id + '&auth=' + internalId + '```'
                 }
             ],
             timestamp: new Date(),
@@ -80,7 +68,7 @@ module.exports = {
     },
 
     gethelp: (user) => {
-        let colorCode = getColor((user.id % 1024), {id: user.id}, {id: user.id});
+        let colorCode = getRandomColor((user.id % 1024), {id: user.id}, {id: user.id});
     
         let help1 = {
             color: colorCode,

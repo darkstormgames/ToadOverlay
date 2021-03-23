@@ -8,7 +8,9 @@ const connection = mysql.createConnection({
     host: sql_data.host,
     user: sql_data.user,
     password: sql_data.password,
-    charset : 'utf8mb4'
+    charset : 'utf8mb4',
+    supportBigNumbers: true,
+    bigNumberStrings: true
 });
 
 module.exports = {

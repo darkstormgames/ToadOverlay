@@ -7,6 +7,7 @@ const fs = require('fs');
 const validation = require('./functions/validations');
 const base = require('./functions/commandsBase');
 const scheduling = require('./functions/scheduling');
+const dbhelper = require('./functions/db-helper');
 const { connected } = require('process');
 
 /**
@@ -130,8 +131,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
     }
     else if (reaction.message.author.id == bot_id && reaction.message.guild && user.id != bot_id && reaction.message.embeds[0].title.startsWith('**War')) {
         let loadedUser = await client.users.fetch(user.id, {cache: true});
-        //let loadedGuild = await reaction.message.guild.fetch();
-        //let loadedChannel = await reaction.message.channel.fetch();
+        dbhelper.checkBaseData(reaction.message.guild, reaction.message.channel, loadedUser);
+
         while (isWorkingOnFile === true) {
             await sleep(250);
         }

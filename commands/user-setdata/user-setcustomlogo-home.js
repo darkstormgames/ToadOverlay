@@ -2,6 +2,7 @@
  * @description required modules
  */
 const base = require('../../functions/commandsBase');
+const dbhelper = require('../../functions/db-helper');
 
 module.exports = {
     /**
@@ -31,6 +32,7 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, args) => {
+        dbhelper.checkBaseData(message.guild, message.channel, message.author);
         if (message.attachments.size > 0) {
             base.log.logMessage('Executing command "setlogo-home"' + '\n\t\t' + message.content, message.author, message.guild, message.channel);
             // Write first image attached to the db

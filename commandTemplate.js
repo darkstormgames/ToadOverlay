@@ -24,11 +24,6 @@ module.exports = {
     * @desc Short description of the command
     */
     description: '',
-
-    /**
-    * @description I have absolutely no idea anymore...
-    */
-    guildOnly: true,
     
     /**
     * @desc execution of the command
@@ -37,5 +32,5 @@ module.exports = {
     */
     execute: (message, args) => {
 
-    },
+    }
 };

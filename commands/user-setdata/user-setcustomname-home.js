@@ -2,6 +2,7 @@
  * @description required modules
  */
 const base = require('../../functions/commandsBase');
+const dbhelper = require('../../functions/db-helper');
 
 module.exports = {
     /**
@@ -32,6 +33,7 @@ module.exports = {
     */
     execute: (message, args) => {
         base.log.logMessage('Executing command "setname-home"' + '\n\t\t' + message.content, message.author, message.guild, message.channel);
+        dbhelper.checkBaseData(message.guild, message.channel, message.author);
         if (args.length > 0) {
             // Write URL from arguments to the db
             base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_mkc_url = "", home_name = "' + args.join(' ') + '" WHERE channel_id = ' + message.channel.id + ';')

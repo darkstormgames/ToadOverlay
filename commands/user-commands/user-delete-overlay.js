@@ -26,11 +26,6 @@ module.exports = {
     description: 'Delete your overlay from the server this command was executed from.',
 
     /**
-    * @description I have absolutely no idea anymore...
-    */
-    guildOnly: true,
-
-    /**
     * @description execution of the command
     * @param {Discord.Message} message 
     * @param {string[]} args 
@@ -38,7 +33,7 @@ module.exports = {
     execute: (message, args) => {
         base.log.logMessage('Executing command "delete-overlay"', message.author, message.guild, message.channel);
         if (!args || args == '' || args[0] == '') {
-            base.query.execute('DELETE FROM ' + base.query.dbName + '.user_channel WHERE user_id = ' + message.author.id + ' AND channel_id = ' + message.channel.id)
+            base.query.execute('UPDATE ' + base.query.dbName + '.user_channel SET isActive = 0 WHERE user_id = ' + message.author.id + ' AND channel_id = ' + message.channel.id)
             .then((result) => {
                 if (result.debug_error != null && result.error != null) {
                     message.channel.send('There was an error deleting your data...\n\nPlease try again.');
@@ -63,7 +58,7 @@ module.exports = {
             let guildUser = message.guild.member(message.author);
             if (guildUser.hasPermission('KICK_MEMBERS')) {
                 let uId = args[0].split('!')[1].split('>')[0];
-                base.query.execute('DELETE FROM ' + base.query.dbName + '.user_channel WHERE user_id = ' + uId + ' AND channel_id = ' + message.channel.id)
+                base.query.execute('UPDATE ' + base.query.dbName + '.user_channel SET isActive = 0 WHERE user_id = ' + uId + ' AND channel_id = ' + message.channel.id)
                 .then((result) => {
                     if (result.debug_error != null && result.error != null) {
                         message.channel.send('There was an error deleting the data...\n\nPlease try again.');

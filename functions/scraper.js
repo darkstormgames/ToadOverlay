@@ -69,13 +69,15 @@ module.exports = {
                                 debug_error: result.debug_error
                             });
                         }
-                        resolve({
-                            tag: team_tag,
-                            name: team_name,
-                            logo: team_logo,
-                            error: null,
-                            debug_error: null
-                        });
+                        else {
+                            resolve({
+                                tag: team_tag,
+                                name: team_name,
+                                logo: team_logo,
+                                error: null,
+                                debug_error: null
+                            });
+                        }
                     })
                     .catch((err) => {
                         base.log.logMessage('SQL-ERROR:\n' + err);
