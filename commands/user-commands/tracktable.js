@@ -1,7 +1,7 @@
 /**
  * @desc required modules
  */
- const base = require('../functions/commandsBase');
+ const base = require('../../functions/commandsBase');
  const dbhelper = require('../../functions/db-helper');
 
  module.exports = {
