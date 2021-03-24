@@ -74,7 +74,7 @@ function buildMessage(message, data, isOld = false) {
     let colorCode = getRandomColor(((data.format == 24 ? (data.rawTime.replace(/:/g, '.')) : (data.clockDiscriminator == 'PM' ? (data.rawTime.replace(/:/g, '.')) * 2 : (data.rawTime.replace(/:/g, '.')))) + new Date().getDate()), message.guild, message.channel);
     return {
         color: colorCode,
-        title: '**War ' + (data.rawTime + ' ' + data.clockDiscriminator).trim() + '** ' + ((canCount >= 3 && canCount < 6) ? '(+' + (6 - canCount).toString() + ')' : '') + (isOld == true ? ' - old' : ''),
+        title: '**War ' + (data.rawTime + ' ' + data.clockDiscriminator).trim() + '** ' + ((canCount >= 3 && canCount < 6) ? '(+' + (6 - canCount).toString() + ')' : '') + (isOld == true ? '- old' : ''),
         fields: msgData
     };
 }

@@ -449,32 +449,66 @@ function checkGuildUser(guild, user, newEntryCallback, failedCallback) {
                 }
             }
             else if (result && result.result && result.result.length > 0) {
-                resolve(result.result[0]);
-            }
-            else {
-                base.query.execute('INSERT INTO ' + base.query.dbName + '.guild_user (id, guild_id, user_id) VALUES ("' + uuid() + '", ' + guild.id + ', ' + user.id + ')')
-                .then((result) => {
-                    if (result.error != null && result.debug_error != null) {
-                        if (failedCallback instanceof Function) {
-                            failedCallback(result);
-                        }
-                    }
-                    else {
-                        base.query.execute('SELECT * FROM ' + base.query.dbName + '.guild_user WHERE guild_id = ' + guild.id + ' AND user_id = ' + user.id)
+                if (!result.result[0].displayname) {
+                    guild.members.fetch({user, force: true})
+                    .then((guildmember) => {
+                        base.query.execute('UPDATE ' + base.query.dbName + '.guild_user SET displayname =' + (guildmember.nickname != null ? '"' + guildmember.nickname + '"' : 'null') + ' WHERE guild_id = ' + guild.id + ' AND user_id = ' + user.id)
                         .then((result) => {
                             if (result.error != null && result.debug_error != null) {
                                 if (failedCallback instanceof Function) {
                                     failedCallback(result);
                                 }
                             }
-                            else if (result && result.result && result.result.length > 0) {
-                                if (newEntryCallback instanceof Function) {
-                                    newEntryCallback();
-                                }
-                                resolve(result.result[0]);
+                            else {
+                                base.query.execute('SELECT * FROM ' + base.query.dbName + '.guild_user WHERE guild_id = ' + guild.id + ' AND user_id = ' + user.id)
+                                .then((result) => {
+                                    if (result.error != null && result.debug_error != null) {
+                                        if (failedCallback instanceof Function) {
+                                            failedCallback(result);
+                                        }
+                                    }
+                                    else if (result && result.result && result.result.length > 0) {
+                                        if (newEntryCallback instanceof Function) {
+                                            newEntryCallback();
+                                        }
+                                        resolve(result.result[0]);
+                                    }
+                                })
                             }
-                        })
-                    }
+                        });
+                    });
+                }
+                else {
+                    resolve(result.result[0]);
+                }
+            }
+            else {
+                guild.members.fetch({user, force: true})
+                .then((guildmember) => {
+                    base.query.execute('INSERT INTO ' + base.query.dbName + '.guild_user (id, guild_id, user_id, displayname) VALUES ("' + uuid() + '", ' + guild.id + ', ' + user.id + ', ' + (guildmember.nickname != null ? '"' + guildmember.nickname + '"' : 'null') + ')')
+                    .then((result) => {
+                        if (result.error != null && result.debug_error != null) {
+                            if (failedCallback instanceof Function) {
+                                failedCallback(result);
+                            }
+                        }
+                        else {
+                            base.query.execute('SELECT * FROM ' + base.query.dbName + '.guild_user WHERE guild_id = ' + guild.id + ' AND user_id = ' + user.id)
+                            .then((result) => {
+                                if (result.error != null && result.debug_error != null) {
+                                    if (failedCallback instanceof Function) {
+                                        failedCallback(result);
+                                    }
+                                }
+                                else if (result && result.result && result.result.length > 0) {
+                                    if (newEntryCallback instanceof Function) {
+                                        newEntryCallback();
+                                    }
+                                    resolve(result.result[0]);
+                                }
+                            })
+                        }
+                    });
                 });
             }
         });
