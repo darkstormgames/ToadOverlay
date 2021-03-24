@@ -79,21 +79,25 @@ module.exports = {
                     });
                 });
             }
+            else {
+                
+            }
         }
         else if (args.length == 2) {
-            let fc = '', userId = 0;
+            let fc = '', userId = 0, userStr = '';
             for (let i = 0; i < 2; i++) {
                 if (/^<@!\d+>$/m.test(args[i])) {
                     userId = args[i].replace(/^<@!/m, '').replace(/>$/m, '');
                 }
-            }
-            for (let i = 0; i < 2; i++) {
-                if (/^(?:SW-)?[0-9]{4}-?[0-9]{4}-?[0-9]{4}/m.test(args[i])) {
+                else if (/^(?:SW-)?[0-9]{4}-?[0-9]{4}-?[0-9]{4}/m.test(args[i])) {
                     fc = args[i];
+                }
+                else {
+                    userStr = args[i];
                 }
             }
 
-            if (fc === '' || userId === 0) {
+            if (fc === '' || (userId === 0 && userStr === '')) {
                 message.channel.send('Couldn\'t read parameters!');
                 return;
             }
