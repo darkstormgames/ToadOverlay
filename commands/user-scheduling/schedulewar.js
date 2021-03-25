@@ -138,7 +138,7 @@ module.exports = {
         else {
             let isError = false;
             args.forEach((item) => {
-                let isTime = /^(?:(?:0?[0-9]|1[0-2])(:[0-5][0-9])?[aApP][mM]|(?:[01]?[0-9]|2[0-3])(:[0-5][0-9])?)$/.test(item);
+                let isTime = /^(?:(?:0?[0-9]|1[0-2])(:[0-5][0-9])?[aApP][mM]|(?:[01]?[0-9]|2[0-3])(:[0-5][0-9])?)$/m.test(item);
                 if (isTime == true) {
                     times.push(item);
                 }

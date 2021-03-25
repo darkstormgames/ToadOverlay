@@ -79,8 +79,45 @@ module.exports = {
                         });
                     });
                 }
+                else if (args[0] == 'all'){
+                    base.query.execute('SELECT * FROM ' + base.query.dbName + '.user WHERE fc_switch IS NOT NULL AND id IN (SELECT user_id FROM ' + base.query.dbName + '.guild_user WHERE guild_id = ' + message.guild.id + ') ORDER BY name')
+                    .then((result) => {
+                        if (result.error != null && result.debug_error != null) {
+                            message.channel.send('Failed to get friendcodes!');
+                            return;
+                        }
+                        else {
+                            let retVal = '**All friendcodes on ' + message.guild.name + ':**\n```css\n';
+                            for (let item in result.result) {
+                                retVal += (result.result[item].fc_switch.startsWith('SW-') ? '' : 'SW-') + result.result[item].fc_switch + ' (' + result.result[item].name + ')\n'
+                            }
+                            retVal += '```';
+                            message.channel.send(retVal);
+                        }
+                    });
+                }
                 else {
-    
+                    base.query.execute('SELECT * FROM ' + base.query.dbName + '.user WHERE fc_switch IS NOT NULL AND (name LIKE "%' + args[0] + '%" OR id IN (SELECT user_id FROM ' + base.query.dbName + '.guild_user WHERE guild_id = ' + message.guild.id + ' AND displayname LIKE "%' + args[0] + '%")) ORDER BY name')
+                    .then((result) => {
+                        if (result.error != null && result.debug_error != null) {
+                            message.channel.send('Failed to get friendcodes!');
+                            return;
+                        }
+                        else if (result.result.length == 0) {
+                            message.channel.send('No FC found for ' + args[0]);
+                        }
+                        else if (result.result.length == 1) {
+                            message.channel.send('FC for ' + result.result[0].name + ': ' + result.result[0].fc_switch);
+                        }
+                        else {
+                            let retVal = '**All friendcodes for ' + args[0] + ':**\n```css\n';
+                            for (let item in result.result) {
+                                retVal += (result.result[item].fc_switch.startsWith('SW-') ? '' : 'SW-') + result.result[item].fc_switch + ' (' + result.result[item].name + ')\n';
+                            }
+                            retVal += '```';
+                            message.channel.send(retVal);
+                        }
+                    });
                 }
             }
             else if (args.length == 2) {
