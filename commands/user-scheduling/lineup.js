@@ -4,7 +4,6 @@
  const fs = require('fs');
  const base = require('../../functions/commandsBase');
  const dbhelper = require('../../functions/db-helper');
- const { foldersplit, workingdirectory } = require('../../config.json');
 
  module.exports = {
      /**

@@ -5,7 +5,6 @@ const fs = require('fs');
 const query = require('./query');
 // const { v4: uuid } = require('uuid');
 const { v4: uuid } = require('uuid');
-const { foldersplit, workingdirectory } = require('../config.json');
 
 function pad_with_zeroes(number, length) {
     var my_string = '' + number;

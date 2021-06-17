@@ -6,7 +6,6 @@
  const { getRandomColor } = require('../../functions/utility');
  const { getMessage } = require('../../functions/scheduling');
  const fs = require('fs');
- const { foldersplit, workingdirectory } = require('../../config.json');
 
 module.exports = {
     /**

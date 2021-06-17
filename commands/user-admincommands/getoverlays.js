@@ -2,7 +2,6 @@
  * @description required modules
  */
  const base = require('../../functions/commandsBase');
- const { admin_id } = require('../../config.json');
 
  module.exports = {
      /**
