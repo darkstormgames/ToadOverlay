@@ -13,7 +13,7 @@
      /**
      * @desc Alternative trigger(s) for the command
      */
-     alt: ['tt'],
+     alt: ['tt', 'track'],
  
      /**
      * @desc Defines the type of the command

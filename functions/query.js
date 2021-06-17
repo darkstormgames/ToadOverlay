@@ -5,9 +5,9 @@ const mysql = require('mysql');
 const { sql_data } = require('../config.json');
 
 const connection = mysql.createConnection({
-    host: sql_data.host,
-    user: sql_data.user,
-    password: sql_data.password,
+    host: process.env.SQL_HOST,
+    user: process.env.SQL_USER,
+    password: process.env.SQL_PASS,
     charset : 'utf8mb4',
     supportBigNumbers: true,
     bigNumberStrings: true
@@ -16,7 +16,7 @@ const connection = mysql.createConnection({
 module.exports = {
     connection: connection,
 
-    dbName: sql_data.db_name,
+    dbName: process.env.SQL_NAME,
 
     execute: (query) => {
         return new Promise((resolve) => {

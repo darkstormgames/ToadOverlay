@@ -449,9 +449,9 @@ function checkGuildUser(guild, user, newEntryCallback, failedCallback) {
                 }
             }
             else if (result && result.result && result.result.length > 0) {
-                if (!result.result[0].displayname) {
-                    guild.members.fetch({user, force: true})
-                    .then((guildmember) => {
+                guild.members.fetch({user, force: true})
+                .then((guildmember) => {
+                    if (!result.result[0].displayname || (result.result[0].displayname && result.result[0].displayname != guildmember.nickname)) {
                         base.query.execute('UPDATE ' + base.query.dbName + '.guild_user SET displayname =' + (guildmember.nickname != null ? '"' + guildmember.nickname + '"' : 'null') + ' WHERE guild_id = ' + guild.id + ' AND user_id = ' + user.id)
                         .then((result) => {
                             if (result.error != null && result.debug_error != null) {
@@ -476,11 +476,11 @@ function checkGuildUser(guild, user, newEntryCallback, failedCallback) {
                                 })
                             }
                         });
-                    });
-                }
-                else {
-                    resolve(result.result[0]);
-                }
+                    }
+                    else {
+                        resolve(result.result[0]);
+                    }
+                });
             }
             else {
                 guild.members.fetch({user, force: true})

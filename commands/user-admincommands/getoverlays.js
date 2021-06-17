@@ -32,7 +32,7 @@
      * @param {string[]} args 
      */
      execute: (message, args) => {
-        if (message.author.id != admin_id) {
+        if (message.author.id != process.env.ADMIN_ID) {
             return;
         }
         base.log.logMessage('Executing command "delete-overlay"', message.author, message.guild, message.channel);

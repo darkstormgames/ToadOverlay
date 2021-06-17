@@ -39,18 +39,18 @@ module.exports = {
         base.log.logMessage('Executing command "schedulewar"', message.author, message.guild, message.channel);
         dbhelper.checkBaseData(message.guild, message.channel, message.author);
         
-        if (!fs.existsSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id)) {
-            fs.mkdirSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id);
+        if (!fs.existsSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id)) {
+            fs.mkdirSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id);
         }
-        if (!fs.existsSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + message.channel.id)) {
-            fs.mkdirSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + message.channel.id);
+        if (!fs.existsSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + message.channel.id)) {
+            fs.mkdirSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + message.channel.id);
         }
-        if (!fs.existsSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + 'guildConfig.json')) {
-            fs.writeFileSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + 'guildConfig.json', 
+        if (!fs.existsSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + 'guildConfig.json')) {
+            fs.writeFileSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + 'guildConfig.json', 
                 '{ "channels": [ { "id": ' + message.channel.id + ', "defaults": ["19","20","21","22","23"], "active": [], "timeout": 24 } ] }');
         }
 
-        let config = JSON.parse(fs.readFileSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + 'guildConfig.json'));
+        let config = JSON.parse(fs.readFileSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + 'guildConfig.json'));
 
         let currentChannelIndex = -1;
         while(currentChannelIndex == -1) {
@@ -111,7 +111,7 @@ module.exports = {
                 });
                 message.channel.send(retVal + '\n\nJust type _war to schedule all default times at once.');
             }
-            fs.writeFileSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + 'guildConfig.json', JSON.stringify(config));
+            fs.writeFileSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + 'guildConfig.json', JSON.stringify(config));
             return;
         }
         else if (args[0] == 'settimeout') {
@@ -122,7 +122,7 @@ module.exports = {
             else {
                 message.channel.send('Invalid timeout-value!\nValid values are between 1 and 168 (1 hour to 7 days)\nDefault timeout is 24 hours.');
             }
-            fs.writeFileSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + 'guildConfig.json', JSON.stringify(config));
+            fs.writeFileSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + 'guildConfig.json', JSON.stringify(config));
             return;
         }
         else if (args[0] == 'deactivateall') {
@@ -149,7 +149,7 @@ module.exports = {
 
             if (isError) {
                 message.channel.send('Please only provide valid time values without spaces as arguments.\nExample: _war 10am 11 10:15PM 23:30\n\nFor more help on more options for this command type _war help');
-                fs.writeFileSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + 'guildConfig.json', JSON.stringify(config));
+                fs.writeFileSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + 'guildConfig.json', JSON.stringify(config));
                 return;
             }
         }
@@ -173,7 +173,7 @@ module.exports = {
 
             message.channel.send({ embed: scheduleEmbed })
             .then(newMessage => {
-                fs.writeFile(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + message.channel.id + foldersplit 
+                fs.writeFile(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + message.channel.id + process.env.DIR_SPLIT 
                     + newMessage.id + '.json', '{ "time": "' + time + '", "rawTime": "' + rawTime + '", "clockDiscriminator": "' + clockDiscriminator + '", "format": "' + timeFormat + '", "CAN": [], "CANT": [], "SUB": [], "NOTSURE": [], "DROPPED": [] }', (err) => { if (err) console.log(err); });
                 for (let i = (config.channels[currentChannelIndex].active.length - 1); i >= 0; i--) {
                     if (config.channels[currentChannelIndex].active[i].time == time || 
@@ -189,7 +189,7 @@ module.exports = {
                 
                 newMessage.react('✅').then(() => newMessage.react('❕')).then(() => newMessage.react('❔')).then(() => newMessage.react('❌'));
             })
-            .then(() => fs.writeFileSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + 'guildConfig.json', JSON.stringify(config)))
+            .then(() => fs.writeFileSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + 'guildConfig.json', JSON.stringify(config)))
             .catch((err) => base.log.logMessage('Failed to send embed...\n' + err));
                 
             base.log.logWarData(message.guild, message.channel, message.author, 'Created schedule for ' + time);

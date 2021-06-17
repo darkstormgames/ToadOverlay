@@ -1,14 +1,10 @@
-/**
- * required modules
- */
+require('dotenv').config();
 const Discord = require('discord.js');
-const { prefix, token, bot_id, foldersplit, workingdirectory } = require('./config.json');
 const fs = require('fs');
 const validation = require('./functions/validations');
 const base = require('./functions/commandsBase');
 const scheduling = require('./functions/scheduling');
 const dbhelper = require('./functions/db-helper');
-const { connected } = require('process');
 
 /**
  * Initializing Discord client and commands collection
@@ -28,21 +24,19 @@ for (let folder of commandFolders) {
     }
 }
 
-
-
 /**
  * Create required folder(s)
  * Change / and \ to your respective OS structure
  */
-if (!fs.existsSync(workingdirectory + foldersplit + 'scheduleTemp')) {
-    fs.mkdirSync(workingdirectory + foldersplit + 'scheduleTemp');
+if (!fs.existsSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp')) {
+    fs.mkdirSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp');
 }
 
 /**
  * Write to log on successful connection to discord-API
  */
 client.once('ready', () => {
-    base.log.logMessage('[DISCORD] Ready!');
+    base.log.logMessage('[DISCORD] Ready!', 'LOGIN');
     
     client.user.setActivity(`Toad from a safe distance on ${client.guilds.cache.size} servers. | Type "_setup" to get started.`, { type: 'WATCHING' });
 });
@@ -60,7 +54,7 @@ process.on('unhandledRejection', error => {
 client.on('message', (message) => {
     // Handle user commands
     if (validation.isUserCommand(message)) {
-        let args = message.content.slice(prefix.length).split(' ');
+        let args = message.content.slice(process.env.PREFIX.length).split(' ');
         let command = args.shift().toLowerCase();
 
         client.commands.forEach((value, key, map) => {
@@ -120,7 +114,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         }
     }
 
-    if (reaction.message.author.id == bot_id && reaction.emoji.name === '❌' && !reaction.message.guild && user.id != bot_id) {
+    if (reaction.message.author.id == process.env.BOT_ID && reaction.emoji.name === '❌' && !reaction.message.guild && user.id != process.env.BOT_ID) {
         reaction.message.delete({ reason: 'Message deleted by user reaction.' })
         .then(() => {
             base.log.logDM(`Message deleted.`, user);
@@ -129,7 +123,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
             base.log.logDM(err, user);
         });
     }
-    else if (reaction.message.author.id == bot_id && reaction.message.guild && user.id != bot_id && reaction.message.embeds[0].title.startsWith('**War')) {
+    else if (reaction.message.author.id == process.env.BOT_ID && reaction.message.guild && user.id != process.env.BOT_ID && reaction.message.embeds[0].title.startsWith('**War')) {
         let loadedUser = await client.users.fetch(user.id, {cache: true});
         dbhelper.checkBaseData(reaction.message.guild, reaction.message.channel, loadedUser);
 
@@ -180,13 +174,13 @@ function sleep(ms) {
  */
 client.on('invalidated', () => {
     base.log.logMessage('[DISCORD] Connection lost. Restarting...');
-    client.login(token);
+    client.login(process.env.CLIENT_TOKEN);
 });
 
 /**
  * Login to discord-API
  */
-client.login(token);
+client.login(process.env.CLIENT_TOKEN);
 
 /**
  * Run demo overlay
@@ -195,43 +189,43 @@ let count = 0;
 setInterval(() => {
     switch(count) {
         case 0:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 0, current_guest = 0, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_current = 0, guest_current = 0 WHERE id = "ab1c19fb-e4d9-4547-9f75-f627e0b94541";')
         break;
         case 1:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 48, current_guest = 34, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_current = 48, guest_current = 34 WHERE id = "ab1c19fb-e4d9-4547-9f75-f627e0b94541";')
         break;
         case 2:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 75, current_guest = 89, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_current = 75, guest_current = 89 WHERE id = "ab1c19fb-e4d9-4547-9f75-f627e0b94541";')
         break;
         case 3:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 123, current_guest = 123, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_current = 123, guest_current = 123 WHERE id = "ab1c19fb-e4d9-4547-9f75-f627e0b94541";')
         break;
         case 4:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 165, current_guest = 163, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_current = 165, guest_current = 163 WHERE id = "ab1c19fb-e4d9-4547-9f75-f627e0b94541";')
         break;
         case 5:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 193, current_guest = 217, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_current = 193, guest_current = 217 WHERE id = "ab1c19fb-e4d9-4547-9f75-f627e0b94541";')
         break;
         case 6:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 236, current_guest = 256, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_current = 236, guest_current = 256 WHERE id = "ab1c19fb-e4d9-4547-9f75-f627e0b94541";')
         break;
         case 7:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 275, current_guest = 299, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_current = 275, guest_current = 299 WHERE id = "ab1c19fb-e4d9-4547-9f75-f627e0b94541";')
         break;
         case 8:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 319, current_guest = 337, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_current = 319, guest_current = 337 WHERE id = "ab1c19fb-e4d9-4547-9f75-f627e0b94541";')
         break;
         case 9:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 371, current_guest = 367, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_current = 371, guest_current = 367 WHERE id = "ab1c19fb-e4d9-4547-9f75-f627e0b94541";')
         break;
         case 10:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 410, current_guest = 410, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_current = 410, guest_current = 410 WHERE id = "ab1c19fb-e4d9-4547-9f75-f627e0b94541";')
         break;
         case 11:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 453, current_guest = 449, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_current = 453, guest_current = 449 WHERE id = "ab1c19fb-e4d9-4547-9f75-f627e0b94541";')
         break;
         case 12:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 493, current_guest = 491, last_updated = now() WHERE internal_id = 0;')
+            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_current = 493, guest_current = 491 WHERE id = "ab1c19fb-e4d9-4547-9f75-f627e0b94541";')
         break;
         case 13:
         break;
@@ -248,22 +242,6 @@ setInterval(() => {
 }, 2500)
 
 /**
- * Keep the connection to mysql-db alive
- */
-setInterval(() => {
-    if (base.query.connection.state === 'disconnected') {
-        base.query.connection.connect((err) => {
-            if (err) {
-                base.log.logMessage(err);
-                return;
-            }
-        });
-    }
-
-    base.query.execute('SELECT 1');
-}, 5000)
-
-/**
  * Send a message, to keep the bot connected to the API at all times
  */
 let channel = null;
@@ -275,4 +253,4 @@ setInterval(() => {
     else {
         console.log('keepalive-channel not found...')
     }
-}, 30000)
+}, 60000)

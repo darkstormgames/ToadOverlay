@@ -1,13 +1,12 @@
 /**
  * @description required modules
  */
-const { prefix, bot_id } = require('../config.json');
 const Discord = require('discord.js');
 
 module.exports = {
     isUserCommand: (message) => {
-        if ((message.content.startsWith(prefix) 
-            || message.mentions.has(new Discord.User(message.client, { id: bot_id }), { ignoreRoles: true, ignoreEveryone: true })) 
+        if ((message.content.startsWith(process.env.PREFIX) 
+            || message.mentions.has(new Discord.User(message.client, { id: process.env.BOT_ID }), { ignoreRoles: true, ignoreEveryone: true })) 
             && !message.author.bot 
             && message.guild !== null)
                 return true;
@@ -16,7 +15,7 @@ module.exports = {
     },
 
     isPrivateMessage: (message) => {
-        if (!message.content.startsWith(prefix) 
+        if (!message.content.startsWith(process.env.PREFIX) 
             && !message.author.bot 
             && message.guild === null)
                 return true;
@@ -33,7 +32,7 @@ module.exports = {
     },
 
     isKeepaliveMessage: (message) => {
-        if (message.author.id == bot_id 
+        if (message.author.id == process.env.BOT_ID 
             && message.author.bot
             && message.content == 'keepalive...')
                 return true;
@@ -41,15 +40,46 @@ module.exports = {
             return false;
     },
 
-    stringIsNumbersOnly: (str) => {
-        return !isNaN(str);
+    getCommandArgs: (content) => {
+        let baseCmd = '';
+        let commands = [];
+        baseCmd = content.split(' ').shift().toLowerCase();
 
-        // let numRegEx = '/^[0-9]+$/';
-        // if (str.match(numRegEx)) {
-        //     return true;
-        // }
-        // else {
-        //     return false;
-        // }
+        let currentArg = '';
+        for(let i = baseCmd.length; i < content.length; i++) {
+
+        }
+
+        return [{
+                    command: '', 
+                    args: [
+                        {
+                            arg: '', 
+                            isNestedCmd: false
+                        }, 
+                        {
+                            arg: '', 
+                            isNestedCmd: true
+                        }
+                    ]
+                }, 
+                {
+                    command: '', 
+                    args: [
+                        {
+                            arg: '', 
+                            isNestedCmd: false
+                        }, 
+                        {
+                            arg: '', 
+                            isNestedCmd: true
+                        }
+                    ]
+                }
+            ];
+    },
+
+    stringIsNumbersOnly: (str) => {
+        return /\d+/.test(str);
     }
 };

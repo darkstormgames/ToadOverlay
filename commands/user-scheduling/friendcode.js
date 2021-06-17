@@ -33,7 +33,7 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, args) => {
-        base.log.logMessage('Executing command "template"', message.author, message.guild, message.channel);
+        base.log.logMessage('Executing command "friendcode"', message.author, message.guild, message.channel);
         dbhelper.checkBaseData(message.guild, message.channel, message.author)
         .then(() => {
             if (args.length == 0) {
@@ -44,7 +44,7 @@ module.exports = {
                         return;
                     }
                     else {
-                        message.channel.send('Switch-FC for ' + message.author.username + ': ' + result.result[0].fc_switch);
+                        message.channel.send((result.result[0].fc_switch.startsWith('SW-') ? '' : 'SW-') + result.result[0].fc_switch);
                     }
                 });
             }
@@ -73,7 +73,7 @@ module.exports = {
                                     return;
                                 }
                                 else {
-                                    message.channel.send('FC for ' + guildmember.user.username + ': ' + result.result[0].fc_switch);
+                                    message.channel.send((result.result[0].fc_switch.startsWith('SW-') ? '' : 'SW-') + result.result[0].fc_switch);
                                 }
                             });
                         });
@@ -97,7 +97,7 @@ module.exports = {
                     });
                 }
                 else {
-                    base.query.execute('SELECT * FROM ' + base.query.dbName + '.user WHERE fc_switch IS NOT NULL AND (name LIKE "%' + args[0] + '%" OR id IN (SELECT user_id FROM ' + base.query.dbName + '.guild_user WHERE guild_id = ' + message.guild.id + ' AND displayname LIKE "%' + args[0] + '%")) ORDER BY name')
+                    base.query.execute('SELECT * FROM ' + base.query.dbName + '.user WHERE fc_switch IS NOT NULL AND (name LIKE "%' + args[0] + '%" OR (id IN (SELECT user_id FROM ' + base.query.dbName + '.guild_user WHERE guild_id = ' + message.guild.id + ' AND displayname LIKE "%' + args[0] + '%"))) ORDER BY name')
                     .then((result) => {
                         if (result.error != null && result.debug_error != null) {
                             message.channel.send('Failed to get friendcodes!');
@@ -107,7 +107,7 @@ module.exports = {
                             message.channel.send('No FC found for ' + args[0]);
                         }
                         else if (result.result.length == 1) {
-                            message.channel.send('FC for ' + result.result[0].name + ': ' + result.result[0].fc_switch);
+                            message.channel.send((result.result[0].fc_switch.startsWith('SW-') ? '' : 'SW-') + result.result[0].fc_switch);
                         }
                         else {
                             let retVal = '**All friendcodes for ' + args[0] + ':**\n```css\n';

@@ -1,17 +1,16 @@
 const fs = require('fs');
 const { getRandomColor } = require('../functions/utility');
 const log = require('./logger');
-const { foldersplit, workingdirectory } = require('../config.json');
 
 function getData(message) {
-    let rawdata = fs.readFileSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + message.channel.id + foldersplit 
+    let rawdata = fs.readFileSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + message.channel.id + process.env.DIR_SPLIT 
         + message.id + '.json');
     return JSON.parse(rawdata);
 }
 
 function writeData(message, data) {
     let rawdata = JSON.stringify(data);
-    fs.writeFileSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + message.channel.id + foldersplit 
+    fs.writeFileSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + message.channel.id + process.env.DIR_SPLIT 
     + message.id + '.json', rawdata);
 }
 

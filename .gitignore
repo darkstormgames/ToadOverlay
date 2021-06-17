@@ -2,6 +2,7 @@
 # Config file
 config.json
 scheduleTemp
+.env
 
 # Batch files
 *.bat

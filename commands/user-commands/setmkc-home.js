@@ -2,7 +2,7 @@
  * @description required modules
  */
 const base = require('../../functions/commandsBase');
-const scraper = require('../../functions/scraper');
+const search = require('../../functions/MKCWrapper/SearchEngine');
 const dbhelper = require('../../functions/db-helper');
 
 module.exports = {
@@ -41,24 +41,49 @@ module.exports = {
         base.log.logMessage('Executing command "setmkc-home"', message.author, message.guild);
         dbhelper.checkBaseData(message.guild, message.channel, message.author);
 
-        let isnum = /^\d+$/.test(args[0]);
-        let home_url = isnum ? 'https://www.mariokartcentral.com/mkc/registry/teams/' + args[0] : args[0];
-        if (!home_url) {
-            message.channel.send('There was an error setting the home-team!\nPlease try again with a valid team-id from MKC.')
+        if (!args[0]) {
+            message.channel.send('There was an error setting the home-team!\nPlease try again with a valid team-id from MKC.');
             return;
         }
-        if (home_url.length < 30) {
-            home_url = '' + args[0];
-          }
-        scraper.getPage(home_url, message.guild.id, message.channel.id, true)
+        let isnum = false;
+        let value = args[0];
+        let rounds = 0;
+        while (isnum == false) {
+            value = value.split('/')[value.split('/').length - 1];
+            isnum = /^\d+$/.test(value);
+            rounds += 1;
+            if (rounds > 3) {
+                message.channel.send('There was an error setting the home-team!\nPlease try again with a valid team-id from MKC.');
+                return;
+            }
+        }
+
+        search.getTeamById(value)
         .then((result) => {
-            if (result.error != null) {
-                base.log.logMessage(result.debug_error, message.author, message.guild);
-                message.channel.send(result.error);
+            if (!result || result == null) {
+                message.channel.send('There was an error setting the home-team!\nPlease try again with a valid team-id from MKC.');
+                return;
             }
-            else {
-                message.channel.send('Home team successfully set to ' + result.name + ' (' + result.tag + ')');
-            }
+            let sql_update_string = 'UPDATE ' + base.query.dbName + '.channel_data SET ' + 
+                'home_mkc_url = "https://www.mariokartcentral.com/mkc/registry/teams/' + url + 
+                '", home_name = "' + result.team_name + 
+                '", home_tag = "' + result.team_tag + 
+                '", home_img = "' + (result.team_logo == "" ? '' : ('https://www.mariokartcentral.com/mkc/storage/' + result.team_logo)) + 
+                '" WHERE channel_id = ' + message.channel.id + ';';
+            base.query.execute(sql_update_string)
+            .then((dbresult) => {
+                if (dbresult.error != null) {
+                    base.log.logMessage(dbresult.debug_error, message.author, message.guild);
+                    message.channel.send(dbresult.error);
+                }
+                else {
+                    message.channel.send('home team successfully set to ' + result.team_name + ' (' + result.team_tag + ')');
+                }
+            })
+            .catch((err) => {
+                base.log.logMessage('SQL-ERROR:\n' + err);
+                message.channel.send('There was an error setting the home-team!\nPlease try again.');
+            });
         });
     }
 };
