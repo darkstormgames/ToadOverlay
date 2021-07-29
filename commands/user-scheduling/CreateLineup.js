@@ -2,9 +2,8 @@
  * @desc required modules
  */
  const fs = require('fs');
- const base = require('../../functions/commandsBase');
- const dbhelper = require('../../functions/db-helper');
- const { foldersplit, workingdirectory } = require('../../config.json');
+ const base = require('../../Functions/CommandsBase');
+ const dbhelper = require('../../Functions/DBDataHelper');
 
  module.exports = {
      /**
@@ -34,16 +33,16 @@
      * @param {string[]} args 
      */
      execute: (message, args) => {
-        base.log.logMessage('Executing command "lineup"', message.author, message.guild, message.channel);
+        base.log.logMessage('Executing command "lineup"', 'lineup', message.content, message.guild, message.channel, message.author);
         dbhelper.checkBaseData(message.guild, message.channel, message.author);
         
-        if (!fs.existsSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id) &&
-            !fs.existsSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + message.channel.id)) {
+        if (!fs.existsSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id) &&
+            !fs.existsSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + message.channel.id)) {
                 message.channel.send('```There are no scheduled matches in this channel.\nType _war first to set up scheduling.\n\nExamples:\n_war 8pm 9pm 10pm\n_war 20 21 22```');
                 return;
         }
 
-        let config = JSON.parse(fs.readFileSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + 'guildConfig.json'));
+        let config = JSON.parse(fs.readFileSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + 'guildConfig.json'));
         let currentChannelIndex = -1;
         for (let i = (config.channels.length - 1); i >= 0; i--) {
             if (config.channels[i].id == message.channel.id) {
@@ -64,9 +63,8 @@
 
         if (args.length == 0) {
             let retVal = '```Active lineups in ' + message.channel.name + '\n';
-            // for (let war in activeWars) {
             for (let i = 0; i <= (config.channels[currentChannelIndex].active.length - 1); i++) {
-                let data = JSON.parse(fs.readFileSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + message.channel.id + foldersplit + activeWars[i].id + '.json'));
+                let data = JSON.parse(fs.readFileSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + message.channel.id + process.env.DIR_SPLIT + activeWars[i].id + '.json'));
                 retVal += (data.rawTime + '' + data.clockDiscriminator).trim() + ': ' + (data.CAN.length + data.SUB.length) + '/6 =>✅ ' + data.CAN.length + ' |❕ ' + data.SUB.length + ' |❔ ' + data.NOTSURE.length + ' |❌ ' + (data.CANT.length + data.DROPPED.length) + '\n';
             }
             retVal += '```';
@@ -93,7 +91,7 @@
             // for (let time of times) {
             //     let retVal = '```Active lineups in ' + message.channel.name + '\n';
             //     for (let i = 0; i <= (config.channels[currentChannelIndex].active.length - 1); i++) {
-            //         let data = JSON.parse(fs.readFileSync(workingdirectory + foldersplit + 'scheduleTemp' + foldersplit + message.guild.id + foldersplit + message.channel.id + foldersplit + activeWars[i].id + '.json'));
+            //         let data = JSON.parse(fs.readFileSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + message.channel.id + process.env.DIR_SPLIT + activeWars[i].id + '.json'));
             //         retVal += '**War ' + (data.rawTime + ' ' + data.clockDiscriminator).trim() + ':**\n';
             //     }
             //     retVal += '```';

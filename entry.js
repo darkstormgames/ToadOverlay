@@ -1,14 +1,12 @@
-/**
- * required modules
- */
+require('dotenv').config();
 const Discord = require('discord.js');
-const { prefix, token, bot_id, foldersplit, workingdirectory } = require('./config.json');
 const fs = require('fs');
-const validation = require('./functions/validations');
-const base = require('./functions/commandsBase');
-const scheduling = require('./functions/scheduling');
-const dbhelper = require('./functions/db-helper');
-const { connected } = require('process');
+const base = require('./Functions/CommandsBase');
+const dbhelper = require('./Functions/DBDataHelper');
+const keepalive = require('./Functions/KeepaliveFunctions');
+const reactions = require('./Functions/MessageReactionHandler');
+const scheduling = require('./Functions/WarScheduling');
+const validation = require('./Functions/DataValidations');
 
 /**
  * Initializing Discord client and commands collection
@@ -28,21 +26,19 @@ for (let folder of commandFolders) {
     }
 }
 
-
-
 /**
  * Create required folder(s)
  * Change / and \ to your respective OS structure
  */
-if (!fs.existsSync(workingdirectory + foldersplit + 'scheduleTemp')) {
-    fs.mkdirSync(workingdirectory + foldersplit + 'scheduleTemp');
+if (!fs.existsSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp')) {
+    fs.mkdirSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp');
 }
 
 /**
  * Write to log on successful connection to discord-API
  */
 client.once('ready', () => {
-    base.log.logMessage('[DISCORD] Ready!');
+    base.log.logMessage('[DISCORD] Ready!', 'LOGIN');
     
     client.user.setActivity(`Toad from a safe distance on ${client.guilds.cache.size} servers. | Type "_setup" to get started.`, { type: 'WATCHING' });
 });
@@ -60,7 +56,7 @@ process.on('unhandledRejection', error => {
 client.on('message', (message) => {
     // Handle user commands
     if (validation.isUserCommand(message)) {
-        let args = message.content.slice(prefix.length).split(' ');
+        let args = message.content.slice(process.env.PREFIX.length).split(' ');
         let command = args.shift().toLowerCase();
 
         client.commands.forEach((value, key, map) => {
@@ -107,172 +103,83 @@ client.on('message', (message) => {
 
 /**
  * Reaction handling
+ * ... this is shit ...
  */
-let isWorkingOnFile = false;
+//let isWorkingOnFile = false; // ToDo: Critical bug with many users... Needs complete refactoring -.-
 client.on('messageReactionAdd', async (reaction, user) => {
     if (reaction.partial) {
         try {
             await reaction.fetch();
         }
         catch (error) {
-            base.log.logMessage(error, user);
+            base.log.logMessage('An error occurred...', 'REACTION', error, null, null, user);
             return;
         }
     }
 
-    if (reaction.message.author.id == bot_id && reaction.emoji.name === '❌' && !reaction.message.guild && user.id != bot_id) {
-        reaction.message.delete({ reason: 'Message deleted by user reaction.' })
-        .then(() => {
-            base.log.logDM(`Message deleted.`, user);
-        })
-        .catch((err) => {
-            base.log.logDM(err, user);
-        });
+    if (reaction.message.author.id == process.env.BOT_ID && reaction.emoji.name === '❌' && !reaction.message.guild && user.id != process.env.BOT_ID) {
+        reactions.DeletePrivateMessage(reaction, user);
     }
-    else if (reaction.message.author.id == bot_id && reaction.message.guild && user.id != bot_id && reaction.message.embeds[0].title.startsWith('**War')) {
-        let loadedUser = await client.users.fetch(user.id, {cache: true});
-        dbhelper.checkBaseData(reaction.message.guild, reaction.message.channel, loadedUser);
+    else if (reaction.message.author.id == process.env.BOT_ID && reaction.message.guild && user.id != process.env.BOT_ID && reaction.message.embeds[0].title.startsWith('**War')) {
+        reactions.HandleScheduleReaction(client, reaction, user);
+        // let loadedUser = await client.users.fetch(user.id, {cache: true});
+        // dbhelper.checkBaseData(reaction.message.guild, reaction.message.channel, loadedUser);
 
-        while (isWorkingOnFile === true) {
-            await sleep(250);
-        }
+        // while (isWorkingOnFile === true) {
+        //     await sleep(250);
+        // }
         
-        isWorkingOnFile = true;
-        switch(reaction.emoji.name)
-        {
-            case '✅':
-                scheduling.addCan(reaction.message, loadedUser);
-                break;
-            case '❌':
-                scheduling.addCant(reaction.message, loadedUser);
-                break;
-            case '❕':
-                scheduling.addSub(reaction.message, loadedUser);
-                break;
-            case '❔':
-                scheduling.addNotSure(reaction.message, loadedUser);
-                break;
-            case '♿':
-                scheduling.removeEntry(reaction.message, loadedUser);
-                break;
-        }
-        isWorkingOnFile = false;
+        // isWorkingOnFile = true;
+        // switch(reaction.emoji.name)
+        // {
+        //     case '✅':
+        //         scheduling.addCan(reaction.message, loadedUser);
+        //         break;
+        //     case '❌':
+        //         scheduling.addCant(reaction.message, loadedUser);
+        //         break;
+        //     case '❕':
+        //         scheduling.addSub(reaction.message, loadedUser);
+        //         break;
+        //     case '❔':
+        //         scheduling.addNotSure(reaction.message, loadedUser);
+        //         break;
+        //     case '♿':
+        //         scheduling.removeEntry(reaction.message, loadedUser);
+        //         break;
+        // }
+        // isWorkingOnFile = false;
 
-        let userReactions = reaction.message.reactions.cache.filter(reaction => reaction.users.cache.has(user.id))
-        try {
-            for (let reaction of userReactions.values()) {
-                await reaction.users.remove(user.id);
-            }
-        } catch (error) {
-            console.error('Failed to remove reactions.');
-        }
+        // let userReactions = reaction.message.reactions.cache.filter(reaction => reaction.users.cache.has(user.id))
+        // try {
+        //     for (let reaction of userReactions.values()) {
+        //         await reaction.users.remove(user.id);
+        //     }
+        // } catch (error) {
+        //     console.error('Failed to remove reactions.');
+        // }
     }
 });
 
-function sleep(ms) {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-}  
+/**
+ * Needs testing, before it can be deleted...
+ */
+// function sleep(ms) {
+//     return new Promise((resolve) => {
+//       setTimeout(resolve, ms);
+//     });
+// }  
 
 /**
  * Reconnect, if discord-API closes the connection
  */
 client.on('invalidated', () => {
-    base.log.logMessage('[DISCORD] Connection lost. Restarting...');
-    client.login(token);
+    base.log.logMessage('[DISCORD] Connection lost. Restarting...', 'LOGIN');
+    client.login(process.env.CLIENT_TOKEN);
 });
 
 /**
  * Login to discord-API
  */
-client.login(token);
-
-/**
- * Run demo overlay
- */
-let count = 0;
-setInterval(() => {
-    switch(count) {
-        case 0:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 0, current_guest = 0, last_updated = now() WHERE internal_id = 0;')
-        break;
-        case 1:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 48, current_guest = 34, last_updated = now() WHERE internal_id = 0;')
-        break;
-        case 2:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 75, current_guest = 89, last_updated = now() WHERE internal_id = 0;')
-        break;
-        case 3:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 123, current_guest = 123, last_updated = now() WHERE internal_id = 0;')
-        break;
-        case 4:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 165, current_guest = 163, last_updated = now() WHERE internal_id = 0;')
-        break;
-        case 5:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 193, current_guest = 217, last_updated = now() WHERE internal_id = 0;')
-        break;
-        case 6:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 236, current_guest = 256, last_updated = now() WHERE internal_id = 0;')
-        break;
-        case 7:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 275, current_guest = 299, last_updated = now() WHERE internal_id = 0;')
-        break;
-        case 8:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 319, current_guest = 337, last_updated = now() WHERE internal_id = 0;')
-        break;
-        case 9:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 371, current_guest = 367, last_updated = now() WHERE internal_id = 0;')
-        break;
-        case 10:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 410, current_guest = 410, last_updated = now() WHERE internal_id = 0;')
-        break;
-        case 11:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 453, current_guest = 449, last_updated = now() WHERE internal_id = 0;')
-        break;
-        case 12:
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_data SET current_home = 493, current_guest = 491, last_updated = now() WHERE internal_id = 0;')
-        break;
-        case 13:
-        break;
-    }
-
-    count++;
-    if (count > 13) {
-        count = 0;
-    }
-    
-    if (client && client.user) {
-        client.user.setActivity(`Toad from a safe distance on ${client.guilds.cache.size} servers. | Type "_setup" to get started.`, { type: 'WATCHING' });
-    }
-}, 2500)
-
-/**
- * Keep the connection to mysql-db alive
- */
-setInterval(() => {
-    if (base.query.connection.state === 'disconnected') {
-        base.query.connection.connect((err) => {
-            if (err) {
-                base.log.logMessage(err);
-                return;
-            }
-        });
-    }
-
-    base.query.execute('SELECT 1');
-}, 5000)
-
-/**
- * Send a message, to keep the bot connected to the API at all times
- */
-let channel = null;
-setInterval(() => {
-    channel = client.channels.cache.find(channel => channel.id == 750752718267613205);
-    if(channel) {
-        channel.send('keepalive...');
-    }
-    else {
-        console.log('keepalive-channel not found...')
-    }
-}, 30000)
+client.login(process.env.CLIENT_TOKEN);
+keepalive.startKeepaliveFunctions(client);
