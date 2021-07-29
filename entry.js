@@ -4,6 +4,7 @@ const fs = require('fs');
 const base = require('./functions/commandsBase');
 const dbhelper = require('./functions/db-helper');
 const keepalive = require('./functions/keepalive');
+const reactions = require('./functions/MessageReactionHandler');
 const scheduling = require('./functions/scheduling');
 const validation = require('./functions/validations');
 
@@ -111,65 +112,63 @@ client.on('messageReactionAdd', async (reaction, user) => {
             await reaction.fetch();
         }
         catch (error) {
-            base.log.logMessage(error, user);
+            base.log.logMessage('An error occurred...', 'REACTION', error, null, null, user);
             return;
         }
     }
 
     if (reaction.message.author.id == process.env.BOT_ID && reaction.emoji.name === '❌' && !reaction.message.guild && user.id != process.env.BOT_ID) {
-        reaction.message.delete({ reason: 'Message deleted by user reaction.' })
-        .then(() => {
-            base.log.logDM(`Message deleted.`, user);
-        })
-        .catch((err) => {
-            base.log.logDM(err, user);
-        });
+        reactions.DeletePrivateMessage(reaction, user);
     }
     else if (reaction.message.author.id == process.env.BOT_ID && reaction.message.guild && user.id != process.env.BOT_ID && reaction.message.embeds[0].title.startsWith('**War')) {
-        let loadedUser = await client.users.fetch(user.id, {cache: true});
-        dbhelper.checkBaseData(reaction.message.guild, reaction.message.channel, loadedUser);
+        reactions.HandleScheduleReaction(reaction, user);
+        // let loadedUser = await client.users.fetch(user.id, {cache: true});
+        // dbhelper.checkBaseData(reaction.message.guild, reaction.message.channel, loadedUser);
 
-        while (isWorkingOnFile === true) {
-            await sleep(250);
-        }
+        // while (isWorkingOnFile === true) {
+        //     await sleep(250);
+        // }
         
-        isWorkingOnFile = true;
-        switch(reaction.emoji.name)
-        {
-            case '✅':
-                scheduling.addCan(reaction.message, loadedUser);
-                break;
-            case '❌':
-                scheduling.addCant(reaction.message, loadedUser);
-                break;
-            case '❕':
-                scheduling.addSub(reaction.message, loadedUser);
-                break;
-            case '❔':
-                scheduling.addNotSure(reaction.message, loadedUser);
-                break;
-            case '♿':
-                scheduling.removeEntry(reaction.message, loadedUser);
-                break;
-        }
-        isWorkingOnFile = false;
+        // isWorkingOnFile = true;
+        // switch(reaction.emoji.name)
+        // {
+        //     case '✅':
+        //         scheduling.addCan(reaction.message, loadedUser);
+        //         break;
+        //     case '❌':
+        //         scheduling.addCant(reaction.message, loadedUser);
+        //         break;
+        //     case '❕':
+        //         scheduling.addSub(reaction.message, loadedUser);
+        //         break;
+        //     case '❔':
+        //         scheduling.addNotSure(reaction.message, loadedUser);
+        //         break;
+        //     case '♿':
+        //         scheduling.removeEntry(reaction.message, loadedUser);
+        //         break;
+        // }
+        // isWorkingOnFile = false;
 
-        let userReactions = reaction.message.reactions.cache.filter(reaction => reaction.users.cache.has(user.id))
-        try {
-            for (let reaction of userReactions.values()) {
-                await reaction.users.remove(user.id);
-            }
-        } catch (error) {
-            console.error('Failed to remove reactions.');
-        }
+        // let userReactions = reaction.message.reactions.cache.filter(reaction => reaction.users.cache.has(user.id))
+        // try {
+        //     for (let reaction of userReactions.values()) {
+        //         await reaction.users.remove(user.id);
+        //     }
+        // } catch (error) {
+        //     console.error('Failed to remove reactions.');
+        // }
     }
 });
 
-function sleep(ms) {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-}  
+/**
+ * Needs testing, before it can be deleted...
+ */
+// function sleep(ms) {
+//     return new Promise((resolve) => {
+//       setTimeout(resolve, ms);
+//     });
+// }  
 
 /**
  * Reconnect, if discord-API closes the connection

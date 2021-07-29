@@ -46,14 +46,14 @@
                 //  or leave as zeroes, if you want to test through the sample.
                 //
                 //
-                xmlhttp.open("GET", "http://toad.darkstormgames.de/test.php?g=0&u=0&auth=0", true);
+                xmlhttp.open("POST", "http://toad.darkstormgames.de/test.php?c=0&u=0&auth=0", true);
                 xmlhttp.send();
                 return false;
             }
 
             setInterval(() => {
                 update();
-            }, 250);
+            }, 500);
             update();
         </script>
         <style>
@@ -70,71 +70,54 @@
                 width: 962px;
             }
             #difference {
-                position:absolute;
                 top:70%;
                 left:50.8%;
-                transform:translate(-50%,-50%);
-                opacity:0.75;
             }
             #home-current {
-                position:absolute;
                 top:60px;
                 left:20%;
-                transform:translate(-50%,-50%);
-                opacity:0.9;
             }
             #home-tag {
-                position:absolute;
                 top:20px;
                 left:20%;
-                transform:translate(-50%,-50%);
-                opacity:0.9;
             }
             #home-name {
-                position:absolute;
                 top:20px;
                 left:20%;
-                transform:translate(-50%,-50%);
-                opacity:0.9;
             }
             #home-logo {
-                position:absolute;
                 top:40px;
                 left:35%;
-                transform:translate(-50%,-50%);
-                opacity:0.85;
                 height:70px;
             }
             #guest-current {
-                position:absolute;
                 top:60px;
                 left:80%;
-                transform:translate(-50%,-50%);
-                opacity:0.9;
             }
             #guest-tag {
-                position:absolute;
                 top:20px;
                 left:80%;
-                transform:translate(-50%,-50%);
-                opacity:0.9;
             }
             #guest-name {
-                position:absolute;
                 top:20px;
                 left:80%;
-                transform:translate(-50%,-50%);
-                opacity:0.9;
             }
             #guest-logo {
-                position:absolute;
                 top:40px;
                 left:67.5%;
-                transform:translate(-50%,-50%);
                 height:70px;
+            }
+            .central-position {
+                position:absolute;
+                transform:translate(-50%,-50%);
+            }
+            .opacity-90 {
+                opacity:0.9;
+            }
+            .opacity-85 {
                 opacity:0.85;
             }
-            #bg {
+            .opacity-75 {
                 opacity:0.75;
             }
         </style>
@@ -147,16 +130,18 @@
                    <img id="bg" src="" > 
                 Or just leave it in the HTML. Doesn't really make any difference. It just won't take the image URL from "setimage [URL]" anymore.
             -->
-            <img id="bg" src="http://toad.darkstormgames.de/images/default.png" >
-            <div id="difference"></div>
-            <div id="home-current"></div>
-            <img id="home-logo" src="">
-            <div id="home-tag"></div>
-            <!--<div id="home-name"></div>-->
-            <div id="guest-current"></div>
-            <img id="guest-logo" src="">
-            <div id="guest-tag"></div>
-            <!--<div id="guest-name"></div>-->
+            <img id="bg" class="opacity-75" src="http://toad.darkstormgames.de/images/default.png" >
+            <div id="difference" class="central-position opacity-75"></div>
+            
+            <div id="home-current" class="central-position opacity-90"></div>
+            <img id="home-logo" class="central-position opacity-85" src="">
+            <div id="home-tag" class="central-position opacity-90"></div>
+            <!--<div id="home-name" class="central-position opacity-90"></div>-->
+
+            <div id="guest-current" class="central-position opacity-90"></div>
+            <img id="guest-logo" class="central-position opacity-85" src="">
+            <div id="guest-tag" class="central-position opacity-90"></div>
+            <!--<div id="guest-name" class="central-position opacity-90"></div>-->
         </div>
     </body>
 </html>

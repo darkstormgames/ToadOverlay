@@ -3,9 +3,7 @@
  */
 const fs = require('fs');
 const query = require('./query');
-// const { v4: uuid } = require('uuid');
 const { v4: uuid } = require('uuid');
-const { foldersplit, workingdirectory } = require('../config.json');
 
 function pad_with_zeroes(number, length) {
     var my_string = '' + number;
@@ -28,7 +26,10 @@ function getDatePrefix() {
 
 module.exports = {
     /**
+    * Logs nearly everything...
     * @param {string} message
+    * @param {string} command
+    * @param {any} data
     * @param {Discord.Guild} guild
     * @param {Discord.Channel} channel
     * @param {Discord.User} user
@@ -44,24 +45,43 @@ module.exports = {
             message + '", ' +
             (data ? '"' + data + '"' : 'NULL') + ');');
 
+        let datetime = getDatePrefix();
+        console.log(datetime + (guild ? '[GUILD: ' + guild.name + ' (' + guild.id + ')]' : '[GUILD: N/A]') + ' ' +
+            (channel ? '[CHANNEL: ' + channel.name + ' (' + channel.id + ')]' : '[CHANNEL: N/A]') + ' ' +
+            (user ? '[USER: ' + user.username + ' (' + user.id + ')]' : '[USER: N/A]') + ' ' + 
+            command + ' ' + message);
+        fs.appendFile(process.env.DIR_LOGS + process.env.DIR_SPLIT + 'commands_' + process.env.ENVIRONMENT + '_' + logTime.getFullYear().toString() + pad_with_zeroes((logTime.getMonth()+1), 2) + '.log',
+            datetime + (guild ? '[GUILD: ' + guild.name + ' (' + guild.id + ')]' : '[GUILD: N/A]') + ' ' +
+            (channel ? '[CHANNEL: ' + channel.name + ' (' + channel.id + ')]' : '[CHANNEL: N/A]') + ' ' +
+            (user ? '[USER: ' + user.username + ' (' + user.id + ')]' : '[USER: N/A]') + ' ' + 
+            command + ' ' + 
+            message + '\n');
+
         if (message.toString().includes('Cannot enqueue Handshake after fatal error')) {
             process.exit(4313);
         }
     },
 
+    /**
+     * Logs commands from direct messages
+     * @param {string} message 
+     * @param {Discord.User} user 
+     */
     logDM: (message, user = null) => {
         let datetime = getDatePrefix();
 
         if (user != null) {
             console.log(datetime + '[USER: ' + user.username + ' (' + user.id + ')] ' + message);
-            fs.appendFile(process.env.DIR_LOGS + process.env.DIR_SPLIT + 'directMessage.log', datetime + '[USER: ' + user.username + ' (' + user.id + ')] ' + message + '\n', (err) => {
-                if (err) console.log(err);
+            fs.appendFile(process.env.DIR_LOGS + process.env.DIR_SPLIT + 'directMessage_' + process.env.ENVIRONMENT + '_' + logTime.getFullYear().toString() + pad_with_zeroes((logTime.getMonth()+1), 2) + '.log', 
+                datetime + '[USER: ' + user.username + ' (' + user.id + ')] ' + message + '\n', (err) => {
+                    if (err) console.log(err);
             });
         }
         else {
             console.log(datetime + message);
-            fs.appendFile(process.env.DIR_LOGS + process.env.DIR_SPLIT + 'directMessage.log', datetime + message + '\n', (err) => {
-                if (err) console.log(err);
+            fs.appendFile(process.env.DIR_LOGS + process.env.DIR_SPLIT + 'directMessage_' + process.env.ENVIRONMENT + '_' + logTime.getFullYear().toString() + pad_with_zeroes((logTime.getMonth()+1), 2) + '.log', 
+                datetime + message + '\n', (err) => {
+                    if (err) console.log(err);
             });
         }
 
@@ -70,13 +90,20 @@ module.exports = {
         }
     },
 
+    /**
+     * Logs reactions for scheduling
+     * @param {Discord.Guild} guild 
+     * @param {Discord.Channel} channel 
+     * @param {Discord.User} user 
+     * @param {string} message 
+     */
     logWarData: (guild, channel, user, message) => {
         let datetime = getDatePrefix();
 
         let logTime = new Date();
         fs.appendFile(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + guild.id + process.env.DIR_SPLIT + 
-            'activity_' + logTime.getFullYear().toString() + pad_with_zeroes((logTime.getMonth()+1), 2) + '.log', 
-            datetime + '[GUILD: ' + guild.name + ' (' + guild.id + ')] [CHANNEL: ' + channel.name + ' (' + channel.id + ')] [USER: ' + user.username + ' (' + user.id + ')] ' + message + '\n', (err) => {
+            'activity_' + process.env.ENVIRONMENT + '_' + logTime.getFullYear().toString() + pad_with_zeroes((logTime.getMonth()+1), 2) + '.log', 
+            datetime + '[CHANNEL: ' + channel.name + ' (' + channel.id + ')] [USER: ' + user.username + ' (' + user.id + ')] ' + message + '\n', (err) => {
                 if (err) console.log(err);
         });
     }

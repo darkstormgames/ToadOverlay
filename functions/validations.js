@@ -4,6 +4,10 @@
 const Discord = require('discord.js');
 
 module.exports = {
+    /**
+     * Checks, if the given message is a command executed as a user
+     * @param {*} message
+     */
     isUserCommand: (message) => {
         if ((message.content.startsWith(process.env.PREFIX) 
             || message.mentions.has(new Discord.User(message.client, { id: process.env.BOT_ID }), { ignoreRoles: true, ignoreEveryone: true })) 
@@ -14,6 +18,10 @@ module.exports = {
             return false;
     },
 
+    /**
+     * Checks, if the given message is a command executed as a user in private messages
+     * @param {*} message
+     */
     isPrivateMessage: (message) => {
         if (!message.content.startsWith(process.env.PREFIX) 
             && !message.author.bot 
@@ -23,6 +31,10 @@ module.exports = {
             return false;
     },
 
+    /**
+     * Checks, if the given message is a command executed as the Toad bot
+     * @param {*} message
+     */
     isToadMessage: (message) => {
         if (message.author.id == 177162177432649728 
             && message.author.bot)
@@ -31,6 +43,10 @@ module.exports = {
             return false;
     },
 
+    /**
+     * Checks, if the given message is a keepalive message
+     * @param {*} message
+     */
     isKeepaliveMessage: (message) => {
         if (message.author.id == process.env.BOT_ID 
             && message.author.bot
@@ -40,6 +56,11 @@ module.exports = {
             return false;
     },
 
+    /**
+     * ToDo: Some shit with better argument parsing...
+     * @param {string} content 
+     * @returns 
+     */
     getCommandArgs: (content) => {
         let baseCmd = '';
         let commands = [];
@@ -79,6 +100,11 @@ module.exports = {
             ];
     },
 
+    /**
+     * Checks, if the given string consists of only digits
+     * @param {string} str 
+     * @returns {boolean}
+     */
     stringIsNumbersOnly: (str) => {
         return /\d+/.test(str);
     }
