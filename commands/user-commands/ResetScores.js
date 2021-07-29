@@ -1,7 +1,7 @@
 /**
  * @description required modules
  */
-const base = require('../../functions/commandsBase');
+const base = require('../../Functions/CommandsBase');
 
 module.exports = {
     /**
@@ -36,12 +36,12 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, args) => {
-        base.log.logMessage('Executing command "reset-scores"', message.author, message.guild, message.channel);
+        base.log.logMessage('Executing command "reset-scores"', 'reset-scores', message.content, message.guild, message.channel, message.author);
         base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_current = 0, guest_current = 0 WHERE channel_id = ' + message.channel.id)
         .then((result) => {
             if (result.error && result.debug_error) {
                 message.channel.send('There was an error resetting war data...\nPlease try again later...');
-                base.log.logMessage(result.debug_error, message.author, message.guild, message.channel);
+                base.log.logMessage(result.debug_error, 'reset-scores', result.error, message.guild, message.channel, message.author);
             }
         });
     }

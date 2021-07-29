@@ -2,7 +2,7 @@
  * required modules
  */
 const fs = require('fs');
-const query = require('./query');
+const query = require('./DBQueryHelper');
 const { v4: uuid } = require('uuid');
 
 function pad_with_zeroes(number, length) {
@@ -39,13 +39,18 @@ module.exports = {
             uuid() + '",' +
             (guild ? guild.id : 'NULL') + ', ' +
             (channel ? channel.id : 'NULL') + ', ' +
-            (user ? user.id : 'NULL') + ', "' +
-            process.env.ENVIRONMENT + '", "' +
-            command + '", "' +
-            message + '", ' +
-            (data ? '"' + data + '"' : 'NULL') + ');');
+            (user ? user.id : 'NULL') + ", '" +
+            process.env.ENVIRONMENT + "', '" +
+            command + "', '" +
+            message + "', " +
+            (data ? "'" + data + "'" : 'NULL') + ');')
+        .then((result) => {
+            console.log(result.error);
+            console.log(result.debug_error);
+        })
 
         let datetime = getDatePrefix();
+        let logTime = new Date();
         console.log(datetime + (guild ? '[GUILD: ' + guild.name + ' (' + guild.id + ')]' : '[GUILD: N/A]') + ' ' +
             (channel ? '[CHANNEL: ' + channel.name + ' (' + channel.id + ')]' : '[CHANNEL: N/A]') + ' ' +
             (user ? '[USER: ' + user.username + ' (' + user.id + ')]' : '[USER: N/A]') + ' ' + 
@@ -55,7 +60,9 @@ module.exports = {
             (channel ? '[CHANNEL: ' + channel.name + ' (' + channel.id + ')]' : '[CHANNEL: N/A]') + ' ' +
             (user ? '[USER: ' + user.username + ' (' + user.id + ')]' : '[USER: N/A]') + ' ' + 
             command + ' ' + 
-            message + '\n');
+            message + '\n', (err) => {
+                if (err) console.log(err);
+        });
 
         if (message.toString().includes('Cannot enqueue Handshake after fatal error')) {
             process.exit(4313);
@@ -69,6 +76,7 @@ module.exports = {
      */
     logDM: (message, user = null) => {
         let datetime = getDatePrefix();
+        let logTime = new Date();
 
         if (user != null) {
             console.log(datetime + '[USER: ' + user.username + ' (' + user.id + ')] ' + message);
@@ -97,13 +105,13 @@ module.exports = {
      * @param {Discord.User} user 
      * @param {string} message 
      */
-    logWarData: (guild, channel, user, message) => {
+    logWarData: (guild, channel, user, message, title, messageId) => {
         let datetime = getDatePrefix();
 
         let logTime = new Date();
         fs.appendFile(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + guild.id + process.env.DIR_SPLIT + 
             'activity_' + process.env.ENVIRONMENT + '_' + logTime.getFullYear().toString() + pad_with_zeroes((logTime.getMonth()+1), 2) + '.log', 
-            datetime + '[CHANNEL: ' + channel.name + ' (' + channel.id + ')] [USER: ' + user.username + ' (' + user.id + ')] ' + message + '\n', (err) => {
+            datetime + '[CHANNEL: ' + channel.name + ' (' + channel.id + ')] [USER: ' + user.username + ' (' + user.id + ')] ' + message + (title ? ' for ' + title + ' (' + messageId + ')' : '') + '\n', (err) => {
                 if (err) console.log(err);
         });
     }

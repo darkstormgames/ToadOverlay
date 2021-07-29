@@ -1,6 +1,6 @@
 const fs = require('fs');
-const { getRandomColor } = require('../functions/utility');
-const log = require('./logger');
+const { getRandomColor } = require('./ColorHelper');
+const log = require('./Logger');
 
 function getData(message) {
     let rawdata = fs.readFileSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + message.channel.id + process.env.DIR_SPLIT 
@@ -92,35 +92,35 @@ function removeFromData(data, user, para, message) {
         let index = getIndex(data.CAN, user.id);
         if (index > -1) {
             data.CAN.splice(index, 1);
-            log.logWarData(message.guild, message.channel, user, 'Removed from CAN');
+            log.logWarData(message.guild, message.channel, user, 'Removed from CAN', message.embeds[0].title, message.id);
         }
     }
     if (para.includes('CANT')) {
         let index = getIndex(data.CANT, user.id);
         if (index > -1) {
             data.CANT.splice(index, 1);
-            log.logWarData(message.guild, message.channel, user, 'Removed from CANT');
+            log.logWarData(message.guild, message.channel, user, 'Removed from CANT', message.embeds[0].title, message.id);
         }
     }
     if (para.includes('SUB')) {
         let index = getIndex(data.SUB, user.id);
         if (index > -1) {
             data.SUB.splice(index, 1);
-            log.logWarData(message.guild, message.channel, user, 'Removed from SUB');
+            log.logWarData(message.guild, message.channel, user, 'Removed from SUB', message.embeds[0].title, message.id);
         }
     }
     if (para.includes('NOTSURE')) {
         let index = getIndex(data.NOTSURE, user.id);
         if (index > -1) {
             data.NOTSURE.splice(index, 1);
-            log.logWarData(message.guild, message.channel, user, 'Removed from NOTSURE');
+            log.logWarData(message.guild, message.channel, user, 'Removed from NOTSURE', message.embeds[0].title, message.id);
         }
     }
     if (para.includes('DROPPED')) {
         let index = getIndex(data.DROPPED, user.id);
         if (index > -1) {
             data.DROPPED.splice(index, 1);
-            log.logWarData(message.guild, message.channel, user, 'Removed from DROPPED');
+            log.logWarData(message.guild, message.channel, user, 'Removed from DROPPED', message.embeds[0].title, message.id);
         }
     }
 
@@ -200,7 +200,7 @@ module.exports = {
                 created: (new Date()).toString(), 
                 changed: (new Date()).toString() 
             });
-            log.logWarData(message.guild, message.channel, user, 'Added to CAN');
+            log.logWarData(message.guild, message.channel, user, 'Added to CAN', message.embeds[0].title, message.id);
         }
         else {
             let oldEntry = getExistingEntry(data, user.id);
@@ -213,7 +213,7 @@ module.exports = {
                 created: oldEntry.created, 
                 changed: (new Date()).toString() 
             });
-            log.logWarData(message.guild, message.channel, user, 'Added to CAN');
+            log.logWarData(message.guild, message.channel, user, 'Added to CAN', message.embeds[0].title, message.id);
         }
 
         writeData(message, data);
@@ -237,7 +237,7 @@ module.exports = {
                 created: (new Date()).toString(), 
                 changed: (new Date()).toString() 
             });
-            log.logWarData(message.guild, message.channel, user, 'Added to SUB');
+            log.logWarData(message.guild, message.channel, user, 'Added to SUB', message.embeds[0].title, message.id);
         }
         else {
             let oldEntry = getExistingEntry(data, user.id);
@@ -250,7 +250,7 @@ module.exports = {
                 created: oldEntry.created, 
                 changed: (new Date()).toString() 
             });
-            log.logWarData(message.guild, message.channel, user, 'Added to SUB');
+            log.logWarData(message.guild, message.channel, user, 'Added to SUB', message.embeds[0].title, message.id);
         }
 
         writeData(message, data);
@@ -275,7 +275,7 @@ module.exports = {
                 created: (new Date()).toString(), 
                 changed: (new Date()).toString() 
             });
-            log.logWarData(message.guild, message.channel, user, 'Added to NOTSURE');
+            log.logWarData(message.guild, message.channel, user, 'Added to NOTSURE', message.embeds[0].title, message.id);
         }
         else {
             let oldEntry = getExistingEntry(data, user.id);
@@ -289,7 +289,7 @@ module.exports = {
                     created: oldEntry.created, 
                     changed: (new Date()).toString() 
                 });
-                log.logWarData(message.guild, message.channel, user, 'Added to NOTSURE');
+                log.logWarData(message.guild, message.channel, user, 'Added to NOTSURE', message.embeds[0].title, message.id);
             } 
             else {
                 data.NOTSURE.push({ 
@@ -299,7 +299,7 @@ module.exports = {
                     created: oldEntry.created, 
                     changed: (new Date()).toString() 
                 });
-                log.logWarData(message.guild, message.channel, user, 'Added to NOTSURE');
+                log.logWarData(message.guild, message.channel, user, 'Added to NOTSURE', message.embeds[0].title, message.id);
             }
         }
 
@@ -325,7 +325,7 @@ module.exports = {
                 created: (new Date()).toString(), 
                 changed: (new Date()).toString() 
             });
-            log.logWarData(message.guild, message.channel, user, 'Added to CANT');
+            log.logWarData(message.guild, message.channel, user, 'Added to CANT', message.embeds[0].title, message.id);
         }
         else {
             let oldEntry = getExistingEntry(data, user.id);
@@ -340,7 +340,7 @@ module.exports = {
                         created: oldEntry.created, 
                         changed: (new Date()).toString()  
                     });
-                    log.logWarData(message.guild, message.channel, user, 'Added to DROPPED');
+                    log.logWarData(message.guild, message.channel, user, 'Added to DROPPED', message.embeds[0].title, message.id);
                 }
                 else {
                     data.CANT.push({ 
@@ -350,7 +350,7 @@ module.exports = {
                         created: oldEntry.created, 
                         changed: (new Date()).toString()  
                     });
-                    log.logWarData(message.guild, message.channel, user, 'Added to CANT');
+                    log.logWarData(message.guild, message.channel, user, 'Added to CANT', message.embeds[0].title, message.id);
                 }
             } 
             else {
@@ -361,7 +361,7 @@ module.exports = {
                     created: oldEntry.created, 
                     changed: (new Date()).toString()  
                 });
-                log.logWarData(message.guild, message.channel, user, 'Added to CANT');
+                log.logWarData(message.guild, message.channel, user, 'Added to CANT', message.embeds[0].title, message.id);
             }
         }
 
@@ -374,5 +374,6 @@ module.exports = {
         data = removeFromData(data, user, ['CAN', 'CANT', 'SUB', 'NOTSURE', 'DROPPED'], message);
         writeData(message, data);
         message.edit({embed: buildMessage(message, data)});
+        log.logWarData(message.guild, message.channel, user, 'Removed', message.embeds[0].title, message.id);
     }
 }

@@ -1,8 +1,8 @@
 /**
  * @description required modules
  */
-const base = require('../../functions/commandsBase');
-const instructions = require('../../functions/instructions');
+const base = require('../../Functions/CommandsBase');
+const instructions = require('../../Functions/HelpInstructions');
 
 module.exports = {
     /**
@@ -24,7 +24,7 @@ module.exports = {
     /**
     * @description Short description of the command
     */
-    description: '',
+    description: 'Gets the help text as defined in HelpInstructions.js',
 
     /**
     * @description execution of the command

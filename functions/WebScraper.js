@@ -8,7 +8,7 @@ const $ = require('cheerio');
 module.exports = {
     /**
     * @description loads the team-profile from the given mkc-id and writes the found data to the database
-    * 
+    * Obsolete function
     * @param {string} url 
     * @param {number} guild_id 
     * @param {boolean} isHome 

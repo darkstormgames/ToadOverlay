@@ -1,7 +1,7 @@
 /**
  * @description required modules
  */
-const base = require('../../functions/commandsBase');
+const base = require('../../Functions/CommandsBase');
 
 module.exports = {
     /**
@@ -12,7 +12,7 @@ module.exports = {
     /**
     * @description Alternative trigger(s) for the command
     */
-    alt: ['set-html'],
+    alt: ['html', 'set-html'],
 
     /**
     * @description Defines the type of the command

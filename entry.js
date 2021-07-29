@@ -1,12 +1,12 @@
 require('dotenv').config();
 const Discord = require('discord.js');
 const fs = require('fs');
-const base = require('./functions/commandsBase');
-const dbhelper = require('./functions/db-helper');
-const keepalive = require('./functions/keepalive');
-const reactions = require('./functions/MessageReactionHandler');
-const scheduling = require('./functions/scheduling');
-const validation = require('./functions/validations');
+const base = require('./Functions/CommandsBase');
+const dbhelper = require('./Functions/DBDataHelper');
+const keepalive = require('./Functions/KeepaliveFunctions');
+const reactions = require('./Functions/MessageReactionHandler');
+const scheduling = require('./Functions/WarScheduling');
+const validation = require('./Functions/DataValidations');
 
 /**
  * Initializing Discord client and commands collection
@@ -105,7 +105,7 @@ client.on('message', (message) => {
  * Reaction handling
  * ... this is shit ...
  */
-let isWorkingOnFile = false; // ToDo: Critical bug with many users... Needs complete refactoring -.-
+//let isWorkingOnFile = false; // ToDo: Critical bug with many users... Needs complete refactoring -.-
 client.on('messageReactionAdd', async (reaction, user) => {
     if (reaction.partial) {
         try {
@@ -121,7 +121,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         reactions.DeletePrivateMessage(reaction, user);
     }
     else if (reaction.message.author.id == process.env.BOT_ID && reaction.message.guild && user.id != process.env.BOT_ID && reaction.message.embeds[0].title.startsWith('**War')) {
-        reactions.HandleScheduleReaction(reaction, user);
+        reactions.HandleScheduleReaction(client, reaction, user);
         // let loadedUser = await client.users.fetch(user.id, {cache: true});
         // dbhelper.checkBaseData(reaction.message.guild, reaction.message.channel, loadedUser);
 
@@ -174,7 +174,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
  * Reconnect, if discord-API closes the connection
  */
 client.on('invalidated', () => {
-    base.log.logMessage('[DISCORD] Connection lost. Restarting...');
+    base.log.logMessage('[DISCORD] Connection lost. Restarting...', 'LOGIN');
     client.login(process.env.CLIENT_TOKEN);
 });
 
@@ -182,4 +182,4 @@ client.on('invalidated', () => {
  * Login to discord-API
  */
 client.login(process.env.CLIENT_TOKEN);
-keepalive.startKeepaliveFunctions();
+keepalive.startKeepaliveFunctions(client);

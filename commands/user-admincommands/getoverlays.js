@@ -1,14 +1,13 @@
 /**
  * @description required modules
  */
- const base = require('../../functions/commandsBase');
- const { admin_id } = require('../../config.json');
+ const base = require('../../Functions/CommandsBase');
 
  module.exports = {
      /**
      * @description The name and trigger of the command
      */
-     name: 'getoverlays',
+     name: 'admin-getoverlays',
  
      /**
      * @description Alternative trigger(s) for the command
@@ -35,15 +34,7 @@
         if (message.author.id != process.env.ADMIN_ID) {
             return;
         }
-        base.log.logMessage('Executing command "delete-overlay"', message.author, message.guild, message.channel);
+        base.log.logMessage('Trying to execute admin command "getoverlays"', 'admin-getoverlays', message.content, message.guild, message.channel, message.author);
         
-        base.query.execute('SELECT * FROM ' + base.query.dbName + '.user_channel WHERE isActive = TRUE')
-        .then((result) => {
-            if (result && result.result && result.result.length > 0) {
-                result.result.forEach((element) => {
-                    message.channel.send('```http://toad.darkstormgames.de/index.php?c=' + element.channel_id + '&u=' + element.user_id + '&auth=' + element.id + '```');
-                });
-            }
-        })
      }
  };

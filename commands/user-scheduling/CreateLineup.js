@@ -2,9 +2,8 @@
  * @desc required modules
  */
  const fs = require('fs');
- const base = require('../../functions/commandsBase');
- const dbhelper = require('../../functions/db-helper');
- const { foldersplit, workingdirectory } = require('../../config.json');
+ const base = require('../../Functions/CommandsBase');
+ const dbhelper = require('../../Functions/DBDataHelper');
 
  module.exports = {
      /**
@@ -34,7 +33,7 @@
      * @param {string[]} args 
      */
      execute: (message, args) => {
-        base.log.logMessage('Executing command "lineup"', message.author, message.guild, message.channel);
+        base.log.logMessage('Executing command "lineup"', 'lineup', message.content, message.guild, message.channel, message.author);
         dbhelper.checkBaseData(message.guild, message.channel, message.author);
         
         if (!fs.existsSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id) &&

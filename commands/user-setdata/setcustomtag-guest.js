@@ -1,8 +1,8 @@
 /**
  * @description required modules
  */
-const base = require('../../functions/commandsBase');
-const dbhelper = require('../../functions/db-helper');
+const base = require('../../Functions/CommandsBase');
+const dbhelper = require('../../Functions/DBDataHelper');
 
 module.exports = {
     /**
@@ -32,7 +32,7 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, args) => {
-        base.log.logMessage('Executing command "settag-guest"' + '\n\t\t' + message.content, message.author, message.guild, message.channel);
+        base.log.logMessage('Executing command "settag-guest"', 'settag-guest', message.content, message.guild, message.channel, message.author);
         dbhelper.checkBaseData(message.guild, message.channel, message.author);
         if (args.length > 0) {
             // Write URL from arguments to the db
@@ -40,7 +40,7 @@ module.exports = {
             .then((result) => {
                 if (result.debug_error != null && result.error != null) {
                     message.channel.send('There was an error updating the tag for the guest team...\n\nPlease try again.');
-                    base.log.logMessage(result.debug_error + '\n\t\t' + message.content, message.author, message.guild, message.channel);
+                    base.log.logMessage(result.debug_error, 'settag-guest', message.content, message.guild, message.channel, message.author);
                 }
                 else {
                     message.channel.send('Custom tag for the guest team has been set successfully.');

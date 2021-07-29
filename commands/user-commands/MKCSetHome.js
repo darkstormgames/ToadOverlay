@@ -1,9 +1,9 @@
 /**
  * @description required modules
  */
-const base = require('../../functions/commandsBase');
-const search = require('../../functions/MKCWrapper/SearchEngine');
-const dbhelper = require('../../functions/db-helper');
+const base = require('../../Functions/CommandsBase');
+const search = require('../../Functions/MKCWrapper/SearchEngine');
+const dbhelper = require('../../Functions/DBDataHelper');
 
 module.exports = {
     /**
@@ -38,7 +38,7 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, args) => {
-        base.log.logMessage('Executing command "setmkc-home"', message.author, message.guild);
+        base.log.logMessage('Executing command "setmkc-home"', 'setmkc-home', message.content, message.guild, message.channel, message.author);
         dbhelper.checkBaseData(message.guild, message.channel, message.author);
 
         if (!args[0]) {
@@ -73,7 +73,7 @@ module.exports = {
             base.query.execute(sql_update_string)
             .then((dbresult) => {
                 if (dbresult.error != null) {
-                    base.log.logMessage(dbresult.debug_error, message.author, message.guild);
+                    base.log.logMessage(dbresult.debug_error, 'setmkc-home', dbresult.error, message.guild, message.channel, message.author);
                     message.channel.send(dbresult.error);
                 }
                 else {
@@ -81,7 +81,7 @@ module.exports = {
                 }
             })
             .catch((err) => {
-                base.log.logMessage('SQL-ERROR:\n' + err);
+                base.log.logMessage('SQL-ERROR', 'setmkc-home', err, message.guild, message.channel, message.author);
                 message.channel.send('There was an error setting the home-team!\nPlease try again.');
             });
         });

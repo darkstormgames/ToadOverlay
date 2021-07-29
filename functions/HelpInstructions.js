@@ -1,7 +1,7 @@
 /**
  * required modules
  */
-const { getRandomColor } = require('./utility');
+const { getRandomColor } = require('./ColorHelper');
 
 module.exports = {
     get: (internalId, user, guild, channel) => {

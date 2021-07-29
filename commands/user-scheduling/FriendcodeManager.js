@@ -2,8 +2,8 @@
 * @desc required modules
 */
 const { User } = require('discord.js');
-const base = require('../../functions/commandsBase');
-const dbhelper = require('../../functions/db-helper');
+const base = require('../../Functions/CommandsBase');
+const dbhelper = require('../../Functions/DBDataHelper');
 
 module.exports = {
     /**
@@ -33,7 +33,7 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, args) => {
-        base.log.logMessage('Executing command "friendcode"', message.author, message.guild, message.channel);
+        base.log.logMessage('Executing command "friendcode"', 'friendcode', message.content, message.guild, message.channel, message.author);
         dbhelper.checkBaseData(message.guild, message.channel, message.author)
         .then(() => {
             if (args.length == 0) {

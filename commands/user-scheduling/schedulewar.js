@@ -1,12 +1,11 @@
 /**
  * @desc required modules
  */
- const base = require('../../functions/commandsBase');
- const dbhelper = require('../../functions/db-helper');
- const { getRandomColor } = require('../../functions/utility');
- const { getMessage } = require('../../functions/scheduling');
+ const base = require('../../Functions/CommandsBase');
+ const dbhelper = require('../../Functions/DBDataHelper');
+ const { getRandomColor } = require('../../Functions/ColorHelper');
+ const { getMessage } = require('../../Functions/WarScheduling');
  const fs = require('fs');
- const { foldersplit, workingdirectory } = require('../../config.json');
 
 module.exports = {
     /**
@@ -36,7 +35,7 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, args) => {
-        base.log.logMessage('Executing command "schedulewar"', message.author, message.guild, message.channel);
+        base.log.logMessage('Executing command "schedulewar"', 'schedulewar', message.content, message.guild, message.channel, message.author);
         dbhelper.checkBaseData(message.guild, message.channel, message.author);
         
         if (!fs.existsSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id)) {
@@ -190,7 +189,7 @@ module.exports = {
                 newMessage.react('✅').then(() => newMessage.react('❕')).then(() => newMessage.react('❔')).then(() => newMessage.react('❌'));
             })
             .then(() => fs.writeFileSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + 'guildConfig.json', JSON.stringify(config)))
-            .catch((err) => base.log.logMessage('Failed to send embed...\n' + err));
+            .catch((err) => base.log.logMessage('Failed to send embed...', 'schedulewar', err, message.guild, message.channel, message.author));
                 
             base.log.logWarData(message.guild, message.channel, message.author, 'Created schedule for ' + time);
         }

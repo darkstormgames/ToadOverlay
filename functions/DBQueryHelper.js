@@ -2,7 +2,6 @@
  * @description required modules
  */
 const mysql = require('mysql');
-const { sql_data } = require('../config.json');
 
 const connection = mysql.createConnection({
     host: process.env.SQL_HOST,

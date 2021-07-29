@@ -1,7 +1,7 @@
 /**
  * @description required modules
  */
-const base = require('../../functions/commandsBase');
+const base = require('../../Functions/CommandsBase');
 
 module.exports = {
     /**
@@ -31,13 +31,13 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, args) => {
-        base.log.logMessage('Executing command "delete-overlay"', message.author, message.guild, message.channel);
+        base.log.logMessage('Executing command "delete-overlay"', 'delete-overlay', message.content, message.guild, message.channel, message.author);
         if (!args || args == '' || args[0] == '') {
             base.query.execute('UPDATE ' + base.query.dbName + '.user_channel SET isActive = 0 WHERE user_id = ' + message.author.id + ' AND channel_id = ' + message.channel.id)
             .then((result) => {
                 if (result.debug_error != null && result.error != null) {
                     message.channel.send('There was an error deleting your data...\n\nPlease try again.');
-                    base.log.logMessage(result.debug_error, message.author, message.guild, message.channel);
+                    base.log.logMessage(result.debug_error, 'delete-overlay', result.error, message.guild, message.channel, message.author);
                     return;
                 }
             })
@@ -47,7 +47,7 @@ module.exports = {
                 .then((result) => {
                     if (result.debug_error != null && result.error != null) {
                         message.channel.send('There was an error deleting your data...\n\nPlease try again.');
-                        base.log.logMessage(result.debug_error, message.author, message.guild, message.channel);
+                        base.log.logMessage(result.debug_error, 'delete-overlay', result.error, message.guild, message.channel, message.author);
                     }
                     else {
                         message.channel.send(message.author.toString() + ' Your overlay for this channel has been deleted successfully.');
@@ -62,7 +62,7 @@ module.exports = {
                 .then((result) => {
                     if (result.debug_error != null && result.error != null) {
                         message.channel.send('There was an error deleting the data...\n\nPlease try again.');
-                        base.log.logMessage(result.debug_error, message.author, message.guild, message.channel);
+                        base.log.logMessage(result.debug_error, 'delete-overlay', result.error, message.guild, message.channel, message.author);
                     }
                 })
                 .then(() => base.query.execute('DELETE FROM ' + base.query.dbName + '.channel_profile' + 
@@ -71,16 +71,16 @@ module.exports = {
                     .then((result) => {
                         if (result.debug_error != null && result.error != null) {
                             message.channel.send('There was an error deleting your data...\n\nPlease try again.');
-                            base.log.logMessage(result.debug_error, message.author, message.guild, message.channel);
+                            base.log.logMessage(result.debug_error, 'delete-overlay', result.error, message.guild, message.channel, message.author);
                         }
                         else {
-                            base.log.logMessage('Executed command "delete-overlay" for user ' + args[0], message.author, message.guild, message.channel);
+                            base.log.logMessage('Executed command "delete-overlay" for user ' + args[0], 'delete-overlay', null, message.guild, message.channel, message.author);
                             message.channel.send(message.author.toString() + ' The overlay for the user ' + args[0] + ' in this channel has been deleted successfully.');
                         }
                 }));
             }
             else {
-                base.log.logMessage('Insufficient permissions.', message.author, message.guild, message.channel);
+                base.log.logMessage('Insufficient permissions.', 'delete-overlay', null, message.guild, message.channel, message.author);
                 message.channel.send(message.author.toString() + ' You don´t have the permissions to perform this action!');
             }
         }

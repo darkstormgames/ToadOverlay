@@ -1,8 +1,8 @@
 /**
  * @desc required modules
  */
- const base = require('../../functions/commandsBase');
- const dbhelper = require('../../functions/db-helper');
+ const base = require('../../Functions/CommandsBase');
+ const dbhelper = require('../../Functions/DBDataHelper');
 
  module.exports = {
      /**
@@ -32,7 +32,7 @@
      * @param {string[]} args 
      */
      execute: (message, args) => {
-        base.log.logMessage('Executing command "tracktable"', message.author, message.guild, message.channel);
+        base.log.logMessage('Executing command "tracktable"', 'tracktable', message.content, message.guild, message.channel, message.author);
         dbhelper.checkBaseData(message.guild, message.channel, message.author);
         
         if (args.length == 1) {

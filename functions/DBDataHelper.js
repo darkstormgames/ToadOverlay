@@ -1,4 +1,4 @@
-const base = require('./commandsBase');
+const base = require('./CommandsBase');
 const { v4: uuid } = require('uuid');
 
 function checkGuild(guild, newEntryCallback, failedCallback) {

@@ -1,7 +1,8 @@
 /**
  * @description required modules
  */
-const base = require('../../functions/commandsBase');
+const base = require('../../Functions/CommandsBase');
+const dbhelper = require('../../Functions/DBDataHelper');
 
 module.exports = {
     /**
@@ -33,13 +34,14 @@ module.exports = {
     execute: (message, args) => {
         let currentHome = message.embeds[0].fields[0].value;
         let currentGuest = message.embeds[0].fields[1].value;
-        base.log.logMessage('Executing command "update-result" | ' + currentHome + ' - ' + currentGuest, message.author, message.guild, message.channel);
+        base.log.logMessage('Executing command "update-result"', 'update-result', currentHome + ' - ' + currentGuest, message.guild, message.channel, message.author);
+        dbhelper.checkBaseData(message.guild, message.channel, message.author);
     
         base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_current = ' + currentHome + ', guest_current = ' + currentGuest + ' WHERE channel_id = ' + message.channel.id + ';')
         .then((result) => {
             if (result.error && result.debug_error) {
                 message.channel.send('There was an error updating war data...\nPlease try again later... Or not, because it´s already too late...');
-                base.log.logMessage(result.debug_error, message.author, message.guild, message.channel);
+                base.log.logMessage(result.debug_error, 'update-result', null, message.guild, message.channel, message.author);
             }
         });
     }

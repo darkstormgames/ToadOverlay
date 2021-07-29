@@ -1,4 +1,4 @@
-const base = require('./commandsBase');
+const base = require('./CommandsBase');
 const Discord = require('discord.js');
 
 let count = 0;
