@@ -54,13 +54,13 @@ module.exports = {
 
         if (user != null) {
             console.log(datetime + '[USER: ' + user.username + ' (' + user.id + ')] ' + message);
-            fs.appendFile(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'bot.log', datetime + '[USER: ' + user.username + ' (' + user.id + ')] ' + message + '\n', (err) => {
+            fs.appendFile(process.env.DIR_LOGS + process.env.DIR_SPLIT + 'directMessage.log', datetime + '[USER: ' + user.username + ' (' + user.id + ')] ' + message + '\n', (err) => {
                 if (err) console.log(err);
             });
         }
         else {
             console.log(datetime + message);
-            fs.appendFile(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'bot.log', datetime + message + '\n', (err) => {
+            fs.appendFile(process.env.DIR_LOGS + process.env.DIR_SPLIT + 'directMessage.log', datetime + message + '\n', (err) => {
                 if (err) console.log(err);
             });
         }

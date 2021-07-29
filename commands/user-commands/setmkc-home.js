@@ -65,7 +65,7 @@ module.exports = {
                 return;
             }
             let sql_update_string = 'UPDATE ' + base.query.dbName + '.channel_data SET ' + 
-                'home_mkc_url = "https://www.mariokartcentral.com/mkc/registry/teams/' + url + 
+                'home_mkc_url = "https://www.mariokartcentral.com/mkc/registry/teams/' + value + 
                 '", home_name = "' + result.team_name + 
                 '", home_tag = "' + result.team_tag + 
                 '", home_img = "' + (result.team_logo == "" ? '' : ('https://www.mariokartcentral.com/mkc/storage/' + result.team_logo)) + 
