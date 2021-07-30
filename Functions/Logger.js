@@ -43,11 +43,7 @@ module.exports = {
             process.env.ENVIRONMENT + "', '" +
             command + "', '" +
             message + "', " +
-            (data ? "'" + data + "'" : 'NULL') + ');')
-        .then((result) => {
-            console.log(result.error);
-            console.log(result.debug_error);
-        })
+            (data ? "'" + data + "'" : 'NULL') + ');');
 
         let datetime = getDatePrefix();
         let logTime = new Date();
