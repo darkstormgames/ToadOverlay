@@ -33,6 +33,7 @@
      */
      execute: (message, args) => {
         if (message.author.id != process.env.ADMIN_ID) {
+            message.channel.send('https://tenor.com/view/youre-not-my-dad-kid-gif-8300190');
             return;
         }
         base.log.logMessage('Executing command "admin-addtoaduser"', 'admin-addtoaduser', null, message.guild, message.channel, message.author);

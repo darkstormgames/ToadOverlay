@@ -32,6 +32,7 @@
      */
      execute: (message, args) => {
         if (message.author.id != process.env.ADMIN_ID) {
+            message.channel.send('https://tenor.com/view/youre-not-my-dad-kid-gif-8300190');
             return;
         }
         base.log.logMessage('Trying to execute admin command "getoverlays"', 'admin-getoverlays', message.content, message.guild, message.channel, message.author);
