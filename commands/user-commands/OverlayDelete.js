@@ -32,7 +32,7 @@ module.exports = {
     */
     execute: (message, args) => {
         base.log.logMessage('Executing command "delete-overlay"', 'delete-overlay', message.content, message.guild, message.channel, message.author);
-        if (!args || args == '' || args[0] == '') {
+        if (!args || args.length == 0) {
             base.query.execute('UPDATE ' + base.query.dbName + '.user_channel SET isActive = 0 WHERE user_id = ' + message.author.id + ' AND channel_id = ' + message.channel.id)
             .then((result) => {
                 if (result.debug_error != null && result.error != null) {
@@ -54,7 +54,7 @@ module.exports = {
                     }
             }));
         }
-        else if (message.guild) {
+        else if (args.length == 1 && /^<@!\d+>$/m.test(args[0]) && message.guild) {
             let guildUser = message.guild.member(message.author);
             if (guildUser.hasPermission('KICK_MEMBERS')) {
                 let uId = args[0].split('!')[1].split('>')[0];

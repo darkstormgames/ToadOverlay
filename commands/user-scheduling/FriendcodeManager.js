@@ -73,7 +73,7 @@ module.exports = {
                                     return;
                                 }
                                 else {
-                                    message.channel.send((result.result[0].fc_switch.startsWith('SW-') ? '' : 'SW-') + result.result[0].fc_switch);
+                                    message.channel.send('Friendcode for ' + result.result[0].name + ': ' + (result.result[0].fc_switch.startsWith('SW-') ? '' : 'SW-') + result.result[0].fc_switch);
                                 }
                             });
                         });
