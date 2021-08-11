@@ -10,7 +10,7 @@
 
 
 ToadOverlay is an extension bot to [Toad](https://www.mariokartcentral.com/forums/index.php?threads/toadv2-a-discord-bot-for-mk8.532/), a MK8 discord bot and is used as a browser source overlay for competitive Mario Kart streamers to show their current scores live on stream.
-The bot is written from scratch in JavaScript based on the [Discord.js](https://github.com/discordjs) framework for Node.js and is currently hosted on a random Windows 8 tablet, I still had lying around, until I can safely afford proper hosting.
+The bot is written from scratch in JavaScript based on the [Discord.js](https://github.com/discordjs) framework for Node.js.
 
 <img height="120" align="left" style="float: left; margin: 0 10px 0 0;" alt="ToadOverlay" src="http://hosting133705.a2f81.netcup.net/toad.darkstormgames/images/overlay_sample.gif"> 
 
