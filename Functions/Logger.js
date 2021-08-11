@@ -2,7 +2,7 @@
  * required modules
  */
 const fs = require('fs');
-const query = require('./DBQueryHelper');
+const db = require('./DBFunctions/SQLBase');
 const { v4: uuid } = require('uuid');
 
 function pad_with_zeroes(number, length) {
@@ -34,28 +34,35 @@ module.exports = {
     * @param {Discord.Channel} channel
     * @param {Discord.User} user
     */
-    logMessage: (message, command, data = null, guild = null, channel = null, user = null) => {
-        query.execute('INSERT INTO ' + process.env.SQL_NAME + '.log_commands (id, guild_id, channel_id, user_id, env_type, command, message, data) VALUES ("' + 
-            uuid() + '",' +
-            (guild ? guild.id : 'NULL') + ', ' +
-            (channel ? channel.id : 'NULL') + ', ' +
-            (user ? user.id : 'NULL') + ", '" +
-            process.env.ENVIRONMENT + "', '" +
-            command + "', '" +
-            message + "', " +
-            (data ? "'" + data + "'" : 'NULL') + ');');
-
+    logMessage: (message, command, data = null, guild = null, channel = null, user = null, fileOnly = false) => {
         let datetime = getDatePrefix();
         let logTime = new Date();
-        console.log(datetime + (guild ? '[GUILD: ' + guild.name + ' (' + guild.id + ')]' : '[GUILD: N/A]') + ' ' +
-            (channel ? '[CHANNEL: ' + channel.name + ' (' + channel.id + ')]' : '[CHANNEL: N/A]') + ' ' +
-            (user ? '[USER: ' + user.username + ' (' + user.id + ')]' : '[USER: N/A]') + ' ' + 
-            command + ' ' + message);
+
+        if (fileOnly == false) {
+            db.ExecuteQuery('INSERT INTO ' + process.env.SQL_NAME + '.log_commands (id, guild_id, channel_id, user_id, env_type, command, message, data) VALUES ("' +
+                uuid() + '", ' +
+                (guild ? guild.id : 'NULL') + ', ' +
+                (channel ? channel.id : 'NULL') + ', ' +
+                (user ? user.id : 'NULL') + ', "' +
+                process.env.ENVIRONMENT + '", "' +
+                command + '", "' +
+                message.replaceAll('"', '.') + '", ' +
+                (data ? '"' + data.toString().replaceAll('"', '.').replaceAll('\'', '.').replaceAll('`', '.').replaceAll('´', '.') + '"' : 'NULL') + ');', 
+                (error) => {
+                    console.log('Couldn\'t write to database! ' + error);
+                });
+
+            console.log(datetime + (guild ? '[GUILD: ' + guild.name + ' (' + guild.id + ')]' : '[GUILD: N/A]') + ' ' +
+                (channel ? '[CHANNEL: ' + channel.name + ' (' + channel.id + ')]' : '[CHANNEL: N/A]') + ' ' +
+                (user ? '[USER: ' + user.username + ' (' + user.id + ')]' : '[USER: N/A]') + ' ' +
+                command + ' ' + message);
+        }
+        
         fs.appendFile(process.env.DIR_LOGS + process.env.DIR_SPLIT + 'commands_' + process.env.ENVIRONMENT + '_' + logTime.getFullYear().toString() + pad_with_zeroes((logTime.getMonth()+1), 2) + '.log',
             datetime + (guild ? '[GUILD: ' + guild.name + ' (' + guild.id + ')]' : '[GUILD: N/A]') + ' ' +
             (channel ? '[CHANNEL: ' + channel.name + ' (' + channel.id + ')]' : '[CHANNEL: N/A]') + ' ' +
-            (user ? '[USER: ' + user.username + ' (' + user.id + ')]' : '[USER: N/A]') + ' ' + 
-            command + ' ' + 
+            (user ? '[USER: ' + user.username + ' (' + user.id + ')]' : '[USER: N/A]') + ' ' +
+            command + ' ' +
             message + '\n', (err) => {
                 if (err) console.log(err);
         });

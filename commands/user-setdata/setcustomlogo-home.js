@@ -2,7 +2,6 @@
  * @description required modules
  */
 const base = require('../../Functions/CommandsBase');
-const dbhelper = require('../../Functions/DBDataHelper');
 
 module.exports = {
     /**
@@ -32,17 +31,17 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, args) => {
-        dbhelper.checkBaseData(message.guild, message.channel, message.author);
+        base.db.CheckBaseData(message.guild, message.channel, message.author);
         if (message.attachments.size > 0) {
             base.log.logMessage('Executing command "setlogo-home"', 'setlogo-home', message.content, message.guild, message.channel, message.author);
             // Write first image attached to the db
-            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_mkc_url = "", home_img = "' + message.attachments.values().next().value.proxyURL + '" WHERE channel_id = ' + message.channel.id + ';')
+            base.db.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + '.channel_data SET home_mkc_url = "", home_img = "' + message.attachments.values().next().value.proxyURL + '" WHERE channel_id = ' + message.channel.id + ';', 
+            (error) => {
+                message.channel.send('There was an error updating the logo for the home team...\n\nPlease try again.');
+                base.log.logMessage('There was an error updating the logo for the home team...', 'setlogo-home', error, message.guild, message.channel, message.author);
+            })
             .then((result) => {
-                if (result.debug_error != null && result.error != null) {
-                    message.channel.send('There was an error updating the logo for the home team...\n\nPlease try again.');
-                    base.log.logMessage(result.debug_error, 'setlogo-home', result.error, message.guild, message.channel, message.author);
-                }
-                else {
+                if (result == true) {
                     message.channel.send('Custom logo for the home team has been set successfully from uploaded image.');
                 }
             });
@@ -50,26 +49,26 @@ module.exports = {
         else if (args.length > 0) {
             base.log.logMessage('Executing command "setlogo-home"', 'setlogo-home', message.content, message.guild, message.channel, message.author);
             // Write URL from arguments to the db
-            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_mkc_url = "", home_img = "' + args[0] + '" WHERE channel_id = ' + message.channel.id + ';')
+            base.db.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + '.channel_data SET home_mkc_url = "", home_img = "' + args[0] + '" WHERE channel_id = ' + message.channel.id + ';', 
+            (error) => {
+                message.channel.send('There was an error updating the logo for the home team...\n\nPlease try again.');
+                base.log.logMessage('There was an error updating the logo for the home team...', 'setlogo-home', error, message.guild, message.channel, message.author);
+            })
             .then((result) => {
-                if (result.debug_error != null && result.error != null) {
-                    message.channel.send('There was an error updating the logo for the home team...\n\nPlease try again.');
-                    base.log.logMessage(result.debug_error, 'setlogo-home', result.error, message.guild, message.channel, message.author);
-                }
-                else {
+                if (result == true) {
                     message.channel.send('Custom logo for the home team has been set successfully from URL.');
                 }
             });
         }
         else {
             base.log.logMessage('Executing command "setlogo-home" - CLEAR', 'setlogo-home', message.content, message.guild, message.channel, message.author);
-            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_mkc_url = "", home_img = "" WHERE channel_id = ' + message.channel.id + ';')
+            base.db.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + '.channel_data SET home_mkc_url = "", home_img = "" WHERE channel_id = ' + message.channel.id + ';', 
+            (error) => {
+                message.channel.send('There was an error removing the logo for the home team...\n\nPlease try again.');
+                base.log.logMessage('There was an error removing the logo for the home team...', 'setlogo-home', error, message.guild, message.channel, message.author);
+            })
             .then((result) => {
-                if (result.debug_error != null && result.error != null) {
-                    message.channel.send('There was an error removing the logo for the home team...\n\nPlease try again.');
-                    base.log.logMessage(result.debug_error, 'setlogo-home', result.error, message.guild, message.channel, message.author);
-                }
-                else {
+                if (result == true) {
                     message.channel.send('Custom logo for the home team has been removed successfully.');
                 }
             });

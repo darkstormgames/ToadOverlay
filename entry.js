@@ -2,10 +2,8 @@ require('dotenv').config();
 const Discord = require('discord.js');
 const fs = require('fs');
 const base = require('./Functions/CommandsBase');
-const dbhelper = require('./Functions/DBDataHelper');
 const keepalive = require('./Functions/KeepaliveFunctions');
 const reactions = require('./Functions/MessageReactionHandler');
-const scheduling = require('./Functions/WarScheduling');
 const validation = require('./Functions/DataValidations');
 
 /**
@@ -103,9 +101,7 @@ client.on('message', (message) => {
 
 /**
  * Reaction handling
- * ... this is shit ...
  */
-//let isWorkingOnFile = false; // ToDo: Critical bug with many users... Needs complete refactoring -.-
 client.on('messageReactionAdd', async (reaction, user) => {
     if (reaction.partial) {
         try {
@@ -122,53 +118,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
     }
     else if (reaction.message.author.id == process.env.BOT_ID && reaction.message.guild && user.id != process.env.BOT_ID && reaction.message.embeds[0].title.startsWith('**War')) {
         reactions.HandleScheduleReaction(client, reaction, user);
-        // let loadedUser = await client.users.fetch(user.id, {cache: true});
-        // dbhelper.checkBaseData(reaction.message.guild, reaction.message.channel, loadedUser);
-
-        // while (isWorkingOnFile === true) {
-        //     await sleep(250);
-        // }
-        
-        // isWorkingOnFile = true;
-        // switch(reaction.emoji.name)
-        // {
-        //     case '✅':
-        //         scheduling.addCan(reaction.message, loadedUser);
-        //         break;
-        //     case '❌':
-        //         scheduling.addCant(reaction.message, loadedUser);
-        //         break;
-        //     case '❕':
-        //         scheduling.addSub(reaction.message, loadedUser);
-        //         break;
-        //     case '❔':
-        //         scheduling.addNotSure(reaction.message, loadedUser);
-        //         break;
-        //     case '♿':
-        //         scheduling.removeEntry(reaction.message, loadedUser);
-        //         break;
-        // }
-        // isWorkingOnFile = false;
-
-        // let userReactions = reaction.message.reactions.cache.filter(reaction => reaction.users.cache.has(user.id))
-        // try {
-        //     for (let reaction of userReactions.values()) {
-        //         await reaction.users.remove(user.id);
-        //     }
-        // } catch (error) {
-        //     console.error('Failed to remove reactions.');
-        // }
     }
-});
-
-/**
- * Needs testing, before it can be deleted...
- */
-// function sleep(ms) {
-//     return new Promise((resolve) => {
-//       setTimeout(resolve, ms);
-//     });
-// }  
+}); 
 
 /**
  * Reconnect, if discord-API closes the connection

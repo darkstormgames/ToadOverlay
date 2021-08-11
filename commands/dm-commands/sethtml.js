@@ -32,13 +32,13 @@ module.exports = {
     */
     execute: (message, content) => {
         base.log.logDM('Executing command "sethtml"\n' + message.content, message.author);
-        base.query.execute("UPDATE " + base.query.dbName + ".profile SET html = '" + content + "' WHERE user_id = " + message.author.id)
+        base.db.ExecuteQuery("UPDATE " + process.env.SQL_NAME + ".profile SET html = '" + content + "' WHERE user_id = " + message.author.id, 
+        (error) => {
+            message.author.send('There was an error updating your html...\nPlease try again later.');
+            base.log.logDM(error, message.author);
+        })
         .then((result) => {
-            if (result.error && result.debug_error) {
-                message.author.send('There was an error updating your html...\nPlease try again later.');
-                base.log.logDM(result.debug_error, message.author);
-            }
-            else {
+            if (result == true) {
                 message.author.send('Your HTML body has been updated. Refresh your overlay to see the changes.');
             }
         });

@@ -33,23 +33,21 @@ module.exports = {
     execute: (message, args) => {
         base.log.logMessage('Executing command "delete-overlay"', 'delete-overlay', message.content, message.guild, message.channel, message.author);
         if (!args || args.length == 0) {
-            base.query.execute('UPDATE ' + base.query.dbName + '.user_channel SET isActive = 0 WHERE user_id = ' + message.author.id + ' AND channel_id = ' + message.channel.id)
-            .then((result) => {
-                if (result.debug_error != null && result.error != null) {
-                    message.channel.send('There was an error deleting your data...\n\nPlease try again.');
-                    base.log.logMessage(result.debug_error, 'delete-overlay', result.error, message.guild, message.channel, message.author);
-                    return;
-                }
+            base.db.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + '.user_channel SET isActive = 0 WHERE user_id = ' + message.author.id + ' AND channel_id = ' + message.channel.id, 
+            (error) => {
+                message.channel.send('There was an error deleting your data...\n\nPlease try again.');
+                base.log.logMessage('There was an error deleting your data...', 'delete-overlay', error, message.guild, message.channel, message.author);
+                return;
             })
-            .then(() => base.query.execute('DELETE FROM ' + base.query.dbName + '.channel_profile' + 
+            .then(() => base.db.ExecuteQuery('DELETE FROM ' + process.env.SQL_NAME + '.channel_profile' + 
                 ' WHERE channel_id = ' + message.channel.id + 
-                ' AND profile_id IN (SELECT id FROM ' + base.query.dbName + '.profile WHERE user_id = ' + message.author.id + ')')
+                ' AND profile_id IN (SELECT id FROM ' + process.env.SQL_NAME + '.profile WHERE user_id = ' + message.author.id + ')', 
+                (error) => {
+                    message.channel.send('There was an error deleting your data...\n\nPlease try again.');
+                    base.log.logMessage('There was an error deleting your data...', 'delete-overlay', error, message.guild, message.channel, message.author);
+                })
                 .then((result) => {
-                    if (result.debug_error != null && result.error != null) {
-                        message.channel.send('There was an error deleting your data...\n\nPlease try again.');
-                        base.log.logMessage(result.debug_error, 'delete-overlay', result.error, message.guild, message.channel, message.author);
-                    }
-                    else {
+                    if (result == true) {
                         message.channel.send(message.author.toString() + ' Your overlay for this channel has been deleted successfully.');
                     }
             }));
@@ -58,22 +56,20 @@ module.exports = {
             let guildUser = message.guild.member(message.author);
             if (guildUser.hasPermission('KICK_MEMBERS')) {
                 let uId = args[0].split('!')[1].split('>')[0];
-                base.query.execute('UPDATE ' + base.query.dbName + '.user_channel SET isActive = 0 WHERE user_id = ' + uId + ' AND channel_id = ' + message.channel.id)
-                .then((result) => {
-                    if (result.debug_error != null && result.error != null) {
-                        message.channel.send('There was an error deleting the data...\n\nPlease try again.');
-                        base.log.logMessage(result.debug_error, 'delete-overlay', result.error, message.guild, message.channel, message.author);
-                    }
+                base.db.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + '.user_channel SET isActive = 0 WHERE user_id = ' + uId + ' AND channel_id = ' + message.channel.id, 
+                (error) => {
+                    message.channel.send('There was an error deleting the data...\n\nPlease try again.');
+                    base.log.logMessage('There was an error deleting your data...', 'delete-overlay', error, message.guild, message.channel, message.author);
                 })
-                .then(() => base.query.execute('DELETE FROM ' + base.query.dbName + '.channel_profile' + 
+                .then(() => base.db.ExecuteQuery('DELETE FROM ' + process.env.SQL_NAME + '.channel_profile' + 
                     ' WHERE channel_id = ' + message.channel.id + 
-                    ' AND profile_id IN (SELECT id FROM ' + base.query.dbName + '.profile WHERE user_id = ' + uId + ')')
+                    ' AND profile_id IN (SELECT id FROM ' + process.env.SQL_NAME + '.profile WHERE user_id = ' + uId + ')', 
+                    (error) => {
+                        message.channel.send('There was an error deleting your data...\n\nPlease try again.');
+                        base.log.logMessage('There was an error deleting your data...', 'delete-overlay', error, message.guild, message.channel, message.author);
+                    })
                     .then((result) => {
-                        if (result.debug_error != null && result.error != null) {
-                            message.channel.send('There was an error deleting your data...\n\nPlease try again.');
-                            base.log.logMessage(result.debug_error, 'delete-overlay', result.error, message.guild, message.channel, message.author);
-                        }
-                        else {
+                        if (result == true) {
                             base.log.logMessage('Executed command "delete-overlay" for user ' + args[0], 'delete-overlay', null, message.guild, message.channel, message.author);
                             message.channel.send(message.author.toString() + ' The overlay for the user ' + args[0] + ' in this channel has been deleted successfully.');
                         }

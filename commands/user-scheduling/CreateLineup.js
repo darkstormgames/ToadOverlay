@@ -3,7 +3,6 @@
  */
  const fs = require('fs');
  const base = require('../../Functions/CommandsBase');
- const dbhelper = require('../../Functions/DBDataHelper');
 
  module.exports = {
      /**
@@ -34,7 +33,7 @@
      */
      execute: (message, args) => {
         base.log.logMessage('Executing command "lineup"', 'lineup', message.content, message.guild, message.channel, message.author);
-        dbhelper.checkBaseData(message.guild, message.channel, message.author);
+        base.db.CheckBaseData(message.guild, message.channel, message.author);
         
         if (!fs.existsSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id) &&
             !fs.existsSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + message.channel.id)) {

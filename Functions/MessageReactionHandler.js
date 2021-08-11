@@ -1,5 +1,4 @@
 const base = require('./CommandsBase');
-const dbhelper = require('./DBDataHelper');
 const scheduling = require('./WarScheduling');
 
 module.exports = {
@@ -16,7 +15,7 @@ module.exports = {
     HandleScheduleReaction: (client, reaction, user) => {
         client.users.fetch(user.id, {cache: true})
         .then((loadedUser) => {
-            dbhelper.checkBaseData(reaction.message.guild, reaction.message.channel, loadedUser);
+            base.db.CheckBaseData(reaction.message.guild, reaction.message.channel, loadedUser);
 
             switch(reaction.emoji.name)
             {

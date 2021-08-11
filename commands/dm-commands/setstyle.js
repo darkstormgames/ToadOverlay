@@ -32,13 +32,13 @@ module.exports = {
     */
     execute: (message, content) => {
         base.log.logDM('Executing command "setstyle"\n' + message.content, message.author);
-        base.query.execute("UPDATE " + base.query.dbName + ".profile SET css = '" + content + "' WHERE user_id = " + message.author.id)
+        base.db.ExecuteQuery("UPDATE " + process.env.SQL_NAME + ".profile SET css = '" + content + "' WHERE user_id = " + message.author.id, 
+        (error) => {
+            message.author.send('There was an error updating your styles...\nPlease try again later.');
+            base.log.logDM(error, message.author);
+        })
         .then((result) => {
-            if (result.error && result.debug_error) {
-                message.author.send('There was an error updating your styles...\nPlease try again later.');
-                base.log.logDM(result.debug_error, message.author);
-            }
-            else {
+            if (result == true) {
                 message.author.send('Your CSS styles have been updated. Refresh your overlay to see the changes.');
             }
         });

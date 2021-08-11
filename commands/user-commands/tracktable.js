@@ -2,7 +2,6 @@
  * @desc required modules
  */
  const base = require('../../Functions/CommandsBase');
- const dbhelper = require('../../Functions/DBDataHelper');
 
  module.exports = {
      /**
@@ -33,7 +32,7 @@
      */
      execute: (message, args) => {
         base.log.logMessage('Executing command "tracktable"', 'tracktable', message.content, message.guild, message.channel, message.author);
-        dbhelper.checkBaseData(message.guild, message.channel, message.author);
+        base.db.CheckBaseData(message.guild, message.channel, message.author);
         
         if (args.length == 1) {
             switch (args[0].toLowerCase())

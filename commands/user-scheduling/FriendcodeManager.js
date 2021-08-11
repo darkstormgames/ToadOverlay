@@ -1,9 +1,8 @@
 /**
 * @desc required modules
 */
-const { User } = require('discord.js');
+const Discord = require('discord.js');
 const base = require('../../Functions/CommandsBase');
-const dbhelper = require('../../Functions/DBDataHelper');
 
 module.exports = {
     /**
@@ -34,26 +33,30 @@ module.exports = {
     */
     execute: (message, args) => {
         base.log.logMessage('Executing command "friendcode"', 'friendcode', message.content, message.guild, message.channel, message.author);
-        dbhelper.checkBaseData(message.guild, message.channel, message.author)
+        base.db.CheckBaseData(message.guild, message.channel, message.author)
         .then(() => {
             if (args.length == 0) {
-                base.query.execute('SELECT * FROM ' + base.query.dbName + '.user WHERE id = ' + message.author.id)
+                base.db.User.Get(message.author.id, (error) => {
+                    message.channel.send('Failed to get friendcode!');
+                    base.log.logMessage('Failed to get friendcode from user!', 'friendcode', error, message.guild, message.channel, message.author);
+                    return;
+                })
                 .then((result) => {
-                    if (result.error != null && result.debug_error != null) {
-                        message.channel.send('Failed to get friendcode!');
-                        return;
-                    }
-                    else {
+                    if (!(typeof result == 'boolean') && result[0]) {
                         message.channel.send((result.result[0].fc_switch.startsWith('SW-') ? '' : 'SW-') + result.result[0].fc_switch);
                     }
                 });
             }
             else if (args.length == 1) {
-                if (/^(?:SW-)?[0-9]{4}-?[0-9]{4}-?[0-9]{4}/m.test(args[0])) {
-                    base.query.execute('UPDATE ' + base.query.dbName + '.user SET fc_switch = "' + args[0] + '" WHERE id = ' + message.author.id)
+                if (args[0] == 'help') {
+                    message.channel.send(base.help.Friendcode);
+                }
+                else if (/^(?:SW-)?[0-9]{4}-?[0-9]{4}-?[0-9]{4}/m.test(args[0])) {
+                    base.db.User.UpdateFriendcode(message.author, args[0])
                     .then ((result) => {
-                        if (result.error != null && result.debug_error != null) {
+                        if (result === false) {
                             message.channel.send('Failed to set friendcode!');
+                            base.log.logMessage('Failed to set friendcode!', 'friendcode SW', error, message.guild, message.channel, message.author);
                             return;
                         }
                         else {
@@ -64,15 +67,15 @@ module.exports = {
                 else if (/^<@!\d+>$/m.test(args[0])) {
                     message.guild.members.fetch(args[0].replace(/^<@!/m, '').replace(/>$/m, ''))
                     .then((guildmember) => {
-                        dbhelper.checkBaseData(message.guild, message.channel, guildmember.user)
+                        base.db.CheckBaseData(message.guild, message.channel, guildmember.user)
                         .then(() => {
-                            base.query.execute('SELECT * FROM ' + base.query.dbName + '.user WHERE id = ' + guildmember.id)
+                            base.db.User.Get(guildmember.id, (error) => {
+                                message.channel.send('Failed to get friendcode!');
+                                base.log.logMessage('Failed to get friendcode!', 'friendcode user', error, message.guild, message.channel, message.author);
+                                return;
+                            })
                             .then((result) => {
-                                if (result.error != null && result.debug_error != null) {
-                                    message.channel.send('Failed to get friendcode!');
-                                    return;
-                                }
-                                else {
+                                if (!(typeof result == 'boolean') && result[0]) {
                                     message.channel.send('Friendcode for ' + result.result[0].name + ': ' + (result.result[0].fc_switch.startsWith('SW-') ? '' : 'SW-') + result.result[0].fc_switch);
                                 }
                             });
@@ -80,13 +83,21 @@ module.exports = {
                     });
                 }
                 else if (args[0] == 'all'){
-                    base.query.execute('SELECT * FROM ' + base.query.dbName + '.user WHERE fc_switch IS NOT NULL AND id IN (SELECT user_id FROM ' + base.query.dbName + '.guild_user WHERE guild_id = ' + message.guild.id + ') ORDER BY name')
+                    base.db.ExecuteQuery('SELECT * FROM ' + process.env.SQL_NAME + '.user WHERE fc_switch IS NOT NULL AND id IN (SELECT user_id FROM ' + process.env.SQL_NAME + '.guild_user WHERE guild_id = ' + message.guild.id + ') ORDER BY name', 
+                        (error) => {
+                            if (error != null) {
+                                message.channel.send('Failed to get friendcodes!');
+                                base.log.logMessage('Failed to get friendcodes!', 'friendcode all', error, message.guild, message.channel, message.author);
+                                return;
+                            }
+                        }, true)
                     .then((result) => {
-                        if (result.error != null && result.debug_error != null) {
+                        if (typeof result == 'boolean' && result === false) {
                             message.channel.send('Failed to get friendcodes!');
+                            base.log.logMessage('Failed to get friendcodes!', 'friendcode all', error, message.guild, message.channel, message.author);
                             return;
                         }
-                        else {
+                        else if (!(typeof result == 'boolean') && result[0]) {
                             let retVal = '**All friendcodes on ' + message.guild.name + ':**\n```css\n';
                             for (let item in result.result) {
                                 retVal += (result.result[item].fc_switch.startsWith('SW-') ? '' : 'SW-') + result.result[item].fc_switch + ' (' + result.result[item].name + ')\n'
@@ -97,16 +108,19 @@ module.exports = {
                     });
                 }
                 else {
-                    base.query.execute('SELECT * FROM ' + base.query.dbName + '.user WHERE fc_switch IS NOT NULL AND (name LIKE "%' + args[0] + '%" OR (id IN (SELECT user_id FROM ' + base.query.dbName + '.guild_user WHERE guild_id = ' + message.guild.id + ' AND displayname LIKE "%' + args[0] + '%"))) ORDER BY name')
+                    base.db.ExecuteQuery('SELECT * FROM ' + process.env.SQL_NAME + '.user WHERE fc_switch IS NOT NULL AND (name LIKE "%' + args[0] + '%" OR (id IN (SELECT user_id FROM ' + process.env.SQL_NAME + '.guild_user WHERE guild_id = ' + message.guild.id + ' AND displayname LIKE "%' + args[0] + '%"))) ORDER BY name', 
+                        (error) => {
+                            if (error != null) {
+                                message.channel.send('Failed to get friendcodes!');
+                                base.log.logMessage('Failed to get friendcodes!', 'friendcode like', error, message.guild, message.channel, message.author);
+                                return;
+                            }
+                        }, true)
                     .then((result) => {
-                        if (result.error != null && result.debug_error != null) {
-                            message.channel.send('Failed to get friendcodes!');
-                            return;
-                        }
-                        else if (result.result.length == 0) {
+                        if (typeof result == 'boolean' && result === false) {
                             message.channel.send('No FC found for ' + args[0]);
                         }
-                        else if (result.result.length == 1) {
+                        else if (!(typeof result == 'boolean') && result.length == 1) {
                             message.channel.send((result.result[0].fc_switch.startsWith('SW-') ? '' : 'SW-') + result.result[0].fc_switch);
                         }
                         else {
@@ -138,16 +152,17 @@ module.exports = {
     
                 message.guild.members.fetch(userId)
                 .then((guildmember) => {
-                    dbhelper.checkBaseData(message.guild, message.channel, guildmember.user)
+                    base.db.CheckBaseData(message.guild, message.channel, guildmember.user)
                     .then(() => {
-                        base.query.execute('UPDATE ' + base.query.dbName + '.user SET fc_switch = "' + fc + '" WHERE id = ' + guildmember.id)
+                        base.db.User.UpdateFriendcode(guildmember, fc)
                         .then ((result) => {
-                            if (result.error != null && result.debug_error != null) {
+                            if (result === false) {
                                 message.channel.send('Failed to set friendcode!');
+                                base.log.logMessage('Failed to set friendcode!', 'friendcode SW user', error, message.guild, message.channel, message.author);
                                 return;
                             }
                             else {
-                                message.channel.send('Friendcode set for ' + guildmember.user.username + '.');
+                                message.channel.send('Friendcode set for ' + message.author.username + '.');
                             }
                         });
                     });

@@ -6,7 +6,7 @@ const Discord = require('discord.js');
 module.exports = {
     /**
      * Checks, if the given message is a command executed as a user
-     * @param {*} message
+     * @param {Discord.Message} message
      */
     isUserCommand: (message) => {
         if ((message.content.startsWith(process.env.PREFIX) 
@@ -20,7 +20,7 @@ module.exports = {
 
     /**
      * Checks, if the given message is a command executed as a user in private messages
-     * @param {*} message
+     * @param {Discord.Message} message
      */
     isPrivateMessage: (message) => {
         if (!message.content.startsWith(process.env.PREFIX) 
@@ -33,7 +33,7 @@ module.exports = {
 
     /**
      * Checks, if the given message is a command executed as the Toad bot
-     * @param {*} message
+     * @param {Discord.Message} message
      */
     isToadMessage: (message) => {
         if (message.author.id == 177162177432649728 
@@ -45,7 +45,7 @@ module.exports = {
 
     /**
      * Checks, if the given message is a keepalive message
-     * @param {*} message
+     * @param {Discord.Message} message
      */
     isKeepaliveMessage: (message) => {
         if (message.author.id == process.env.BOT_ID 

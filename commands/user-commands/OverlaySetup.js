@@ -3,7 +3,6 @@
  */
 const instructions = require('../../Functions/HelpInstructions');
 const base = require('../../Functions/CommandsBase');
-const dbhelper = require('../../Functions/DBDataHelper');
 
 module.exports = {
     /**
@@ -36,7 +35,7 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, args) => {
-        dbhelper.checkBaseData(message.guild, message.channel, message.author)
+        base.db.CheckBaseData(message.guild, message.channel, message.author)
         .then(() => {
             base.log.logMessage('Executing command "setup"', 'setup', message.content, message.guild, message.channel, message.author);
             let dbGuild = null;
@@ -49,10 +48,12 @@ module.exports = {
             //
             // Get or AddNew Guild
             //
-            dbhelper.checkGuild(message.guild, null, (result) => {
-                base.log.logMessage(result.debug_error, 'setup', result.error, message.guild, message.channel, message.author);
-                message.channel.send(message.author.toString() + result.error);
-                return;
+            base.db.BaseDataHelper.checkGuild(message.guild, null, (result) => {
+                if (result != null) {
+                    base.log.logMessage('Error checking Guild!', 'setup', result.toString().replace('\'', '"').replace('`', '"').replace('´', '"'), message.guild, message.channel, message.author);
+                    message.channel.send(message.author.toString() + 'There was an error creating your overlay.\n\nPlease try again later...');
+                    return;
+                }
             })
             .then((guildResult) => {
                 dbGuild = guildResult;
@@ -65,10 +66,12 @@ module.exports = {
             //
             // Get or AddNew Channel
             //
-            .then(() => dbhelper.checkChannel(message.channel, null, (result) => {
-                base.log.logMessage(result.debug_error, 'setup', result.error, message.guild, message.channel, message.author);
-                message.channel.send(message.author.toString() + result.error);
-                return;
+            .then(() => base.db.BaseDataHelper.checkChannel(message.channel, null, (result) => {
+                if (result != null) {
+                    base.log.logMessage('Error checking Channel!', 'setup', result.toString().replace('\'', '"').replace('`', '"').replace('´', '"'), message.guild, message.channel, message.author);
+                    message.channel.send(message.author.toString() + 'There was an error creating your overlay.\n\nPlease try again later...');
+                    return;
+                }
             }))
             .then((channelResult) => {
                 dbChannel = channelResult;
@@ -81,33 +84,39 @@ module.exports = {
             //
             // Get or AddNew User
             //
-            .then(() => dbhelper.checkUser(message.author, () => {
+            .then(() => base.db.BaseDataHelper.checkUser(message.author, () => {
                 newUserCreated = true;
             }, (result) => {
-                base.log.logMessage(result.debug_error, 'setup', null, message.guild, message.channel, message.author);
-                message.channel.send(message.author.toString() + result.error);
-                return;
+                if (result != null) {
+                    base.log.logMessage('Error checking User!', 'setup', result.toString().replace('\'', '"').replace('`', '"').replace('´', '"'), message.guild, message.channel, message.author);
+                    message.channel.send(message.author.toString() + 'There was an error creating your overlay.\n\nPlease try again later...');
+                    return;
+                }
             }))
             .then((userResult) => {
                 dbUser = userResult;
             })
-            .catch(() => {
-                base.log.logMessage('Error checking user...', 'setup', null, message.guild, message.channel, message.author);
+            .catch((error) => {
+                base.log.logMessage('Error checking user...', 'setup', error, message.guild, message.channel, message.author);
                 message.channel.send('There was an error creating your overlay.\n\nPlease try again later...');
                 return;
             })
             //
             // Get or AddNew UserChannel with ChannelProfile
             //
-            .then(() => dbhelper.checkUserChannel(message.author, message.channel, () => {
+            .then(() => base.db.BaseDataHelper.checkUserChannel(message.author, message.channel, () => {
                 newUserChannelCreated = true;
             }, (result) => {
-                base.log.logMessage(result.debug_error, 'setup', result.error, message.guild, message.channel, message.author);
-                message.channel.send(message.author.toString() + result.error);
-                return;
+                if (result != null) {
+                    base.log.logMessage('Error checking UserChannel!', 'setup', result.toString().replace('\'', '"').replace('`', '"').replace('´', '"'), message.guild, message.channel, message.author);
+                    message.channel.send(message.author.toString() + 'There was an error creating your overlay.\n\nPlease try again later...');
+                    return;
+                }
             }))
             .then((userChannelResult) => {
-                dbUserChannel = userChannelResult;
+                if (userChannelResult != null) {
+                    dbUserChannel = userChannelResult;
+                }
             })
             .catch(() => {
                 base.log.logMessage('Error checking user...', 'setup', null, message.guild, message.channel, message.author);
@@ -117,7 +126,7 @@ module.exports = {
             //
             // Check Guild_User connection
             //
-            .then(() => dbhelper.checkGuildUser(message.guild, message.author, null, null))
+            .then(() => base.db.BaseDataHelper.checkGuildUser(message.guild, message.author, null, null))
             .catch(() => base.log.logMessage('Error checking guild_user...', 'setup', null, message.guild, message.channel, message.author))
             //
             // Finish setup

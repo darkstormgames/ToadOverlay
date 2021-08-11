@@ -2,7 +2,6 @@
  * @description required modules
  */
 const base = require('../../Functions/CommandsBase');
-const dbhelper = require('../../Functions/DBDataHelper');
 
 module.exports = {
     /**
@@ -33,16 +32,16 @@ module.exports = {
     */
     execute: (message, args) => {
         base.log.logMessage('Executing command "setname-home"', 'setname-home', message.content, message.guild, message.channel, message.author);
-        dbhelper.checkBaseData(message.guild, message.channel, message.author);
+        base.db.CheckBaseData(message.guild, message.channel, message.author);
         if (args.length > 0) {
             // Write URL from arguments to the db
-            base.query.execute('UPDATE ' + base.query.dbName + '.channel_data SET home_mkc_url = "", home_name = "' + args.join(' ') + '" WHERE channel_id = ' + message.channel.id + ';')
+            base.db.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + '.channel_data SET home_mkc_url = "", home_name = "' + args.join(' ') + '" WHERE channel_id = ' + message.channel.id + ';', 
+            (error) => {
+                message.channel.send('There was an error updating the name for the home team...\n\nPlease try again.');
+                base.log.logMessage('There was an error updating the name for the home team...', 'setname-guest', error, message.guild, message.channel, message.author);
+            })
             .then((result) => {
-                if (result.debug_error != null && result.error != null) {
-                    message.channel.send('There was an error updating the name for the home team...\n\nPlease try again.');
-                    base.log.logMessage(result.debug_error, 'setname-guest', result.error, message.guild, message.channel, message.author);
-                }
-                else {
+                if (result == true) {
                     message.channel.send('Custom name for the home team has been set successfully.');
                 }
             });

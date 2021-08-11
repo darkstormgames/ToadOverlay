@@ -2,7 +2,6 @@
  * @desc required modules
  */
  const base = require('../../Functions/CommandsBase');
- const dbhelper = require('../../Functions/DBDataHelper');
 
  module.exports = {
      /**
@@ -56,12 +55,12 @@
             } 
             return;
         }
-        base.log.logMessage('Executing command "admin-addtoaduser"', 'admin-addtoaduser', null, message.guild, message.channel, message.author);
-        dbhelper.checkBaseData(message.guild, message.channel, message.author);
+        //base.log.logMessage('Executing command "admin-addtoaduser"', 'admin-addtoaduser', null, message.guild, message.channel, message.author);
+        //base.db.CheckBaseData(message.guild, message.channel, message.author);
 
         message.client.users.fetch('177162177432649728', {cache: true})
         .then((loadedUser) => {
-            dbhelper.checkBaseData(message.guild, message.channel, loadedUser)
+            base.db.CheckBaseData(message.guild, message.channel, loadedUser)
             .then(() => {
                 base.log.logMessage('ToadUser has been added to the database.', 'admin-addtoaduser', null, message.guild, message.channel, loadedUser);
             });

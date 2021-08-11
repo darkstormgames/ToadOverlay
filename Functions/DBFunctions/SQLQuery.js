@@ -1,6 +1,3 @@
-/**
- * @description required modules
- */
 const mysql = require('mysql');
 
 const connection = mysql.createConnection({
@@ -15,8 +12,6 @@ const connection = mysql.createConnection({
 module.exports = {
     connection: connection,
 
-    dbName: process.env.SQL_NAME,
-
     execute: (query) => {
         return new Promise((resolve) => {
             if (connection.state === 'disconnected') {
@@ -24,10 +19,8 @@ module.exports = {
                     if (err) {
                         resolve({
                             result: null,
-                            error: '[ERR201] There was an error connecting to the database...\nPlease try again later.',
-                            debug_error: err
+                            error: err
                         });
-                        return;
                     }
                 });
             }
@@ -35,17 +28,15 @@ module.exports = {
                 if (err) {
                     resolve({
                         result: null,
-                        error: '[ERR203] There was an error with the database...\nPlease try again later.',
-                        debug_error: err
+                        error: err
                     });
-                    return;
+                } else {
+                    resolve({
+                        result: result,
+                        error: null
+                    });
                 }
-                resolve({
-                    result: result,
-                    error: null,
-                    debug_error: null
-                });
             });
         });
     }
-};
+}

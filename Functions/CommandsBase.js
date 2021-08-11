@@ -1,6 +1,8 @@
 module.exports = {
     log: require('./Logger'),
-    query: require('./DBQueryHelper'),
+    db: require('./DBFunctions/SQLWrapper'),
+    //query: require('./DBQueryHelper'),
+    help: require('./HelpTexts'),
     CommandTypeEnum: Object.freeze({
         'General': 0, 
         'UserDM': 1,

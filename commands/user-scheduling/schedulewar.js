@@ -2,9 +2,7 @@
  * @desc required modules
  */
  const base = require('../../Functions/CommandsBase');
- const dbhelper = require('../../Functions/DBDataHelper');
  const { getRandomColor } = require('../../Functions/ColorHelper');
- const { getMessage } = require('../../Functions/WarScheduling');
  const fs = require('fs');
 
 module.exports = {
@@ -36,7 +34,7 @@ module.exports = {
     */
     execute: (message, args) => {
         base.log.logMessage('Executing command "schedulewar"', 'schedulewar', message.content, message.guild, message.channel, message.author);
-        dbhelper.checkBaseData(message.guild, message.channel, message.author);
+        base.db.CheckBaseData(message.guild, message.channel, message.author);
         
         if (!fs.existsSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id)) {
             fs.mkdirSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id);
