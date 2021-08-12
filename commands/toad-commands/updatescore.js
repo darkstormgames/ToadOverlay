@@ -31,11 +31,10 @@ module.exports = {
     * @param {string[]} args 
     */
     execute: (message, args) => {
-        let currentHome = message.embeds[0].fields[0].value;
-        let currentGuest = message.embeds[0].fields[1].value;
-        base.log.logMessage('Executing command "update-result"', 'update-result', currentHome + ' - ' + currentGuest, message.guild, message.channel, message.author);
         base.db.CheckBaseData(message.guild, message.channel, message.author);
     
+        let currentHome = message.embeds[0].fields[0].value;
+        let currentGuest = message.embeds[0].fields[1].value;
         base.db.ChannelData.UpdateScores(currentHome, currentGuest, message.channel.id, (error) => {
             message.channel.send('There was an error updating war data...\nPlease try again later... Or not, because it´s already too late...');
             base.log.logMessage('There was an error updating war data...', 'update-result', error, message.guild, message.channel, message.author);
