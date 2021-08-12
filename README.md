@@ -1,4 +1,4 @@
-<img width="140" height="150" align="left" style="float: left; margin: 0 10px 0 0;" alt="ToadOverlay" src="http://toad.darkstormgames.de/images/tip-toad1.png">  
+<img width="140" height="150" align="left" style="float: left; margin: 0 10px 0 0;" alt="ToadOverlay" src="http://toad.darkstormgames.de/images/to_toad.jpg">  
 
 # ToadOverlay
 
