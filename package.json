@@ -1,6 +1,6 @@
 {
   "name": "toadforstreams",
-  "version": "0.8.0",
+  "version": "1.2.0-beta",
   "description": "<img width=\"140\" height=\"150\" align=\"left\" style=\"float: left; margin: 0 10px 0 0;\" alt=\"ToadOverlay\" src=\"http://toad.darkstormgames.de/images/tip-toad1.png\">",
   "main": "entry.js",
   "scripts": {

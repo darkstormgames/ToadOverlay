@@ -56,6 +56,7 @@ module.exports = {
     ExecuteQuery: db.ExecuteQuery,
     CheckBaseData: checkBaseData,
     BaseDataHelper: baseData,
+    sql: db,
 
     Channel: require('./Entity/Channel'),
     ChannelData: require('./Entity/ChannelData'),

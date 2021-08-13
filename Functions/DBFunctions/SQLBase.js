@@ -1,6 +1,8 @@
 const sql = require('./SQLQuery');
 
 module.exports = {
+    connection: sql.connection,
+
     /**
      * Executes the given query string on the database
      * @param {string} query 

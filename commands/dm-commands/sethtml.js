@@ -32,7 +32,7 @@ module.exports = {
     */
     execute: (message, content) => {
         base.log.logDM('Executing command "sethtml"\n' + message.content, message.author);
-        base.db.ExecuteQuery("UPDATE " + process.env.SQL_NAME + ".profile SET html = '" + content + "' WHERE user_id = " + message.author.id, 
+        base.db.ExecuteQuery("UPDATE " + process.env.SQL_NAME + ".profile SET html = '" + base.db.sql.connection.escape(content) + "' WHERE user_id = " + message.author.id, 
         (error) => {
             message.author.send('There was an error updating your html...\nPlease try again later.');
             base.log.logDM(error, message.author);

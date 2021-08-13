@@ -108,7 +108,7 @@ module.exports = {
                     });
                 }
                 else {
-                    base.db.ExecuteQuery('SELECT * FROM ' + process.env.SQL_NAME + '.user WHERE fc_switch IS NOT NULL AND (name LIKE "%' + args[0] + '%" OR (id IN (SELECT user_id FROM ' + process.env.SQL_NAME + '.guild_user WHERE guild_id = ' + message.guild.id + ' AND displayname LIKE "%' + args[0] + '%"))) ORDER BY name', 
+                    base.db.ExecuteQuery('SELECT * FROM ' + process.env.SQL_NAME + '.user WHERE fc_switch IS NOT NULL AND (name LIKE "%' + base.db.sql.connection.escape(args[0]) + '%" OR (id IN (SELECT user_id FROM ' + process.env.SQL_NAME + '.guild_user WHERE guild_id = ' + message.guild.id + ' AND displayname LIKE "%' + base.db.sql.connection.escape(args[0]) + '%"))) ORDER BY name', 
                         (error) => {
                             if (error != null) {
                                 message.channel.send('Failed to get friendcodes!');

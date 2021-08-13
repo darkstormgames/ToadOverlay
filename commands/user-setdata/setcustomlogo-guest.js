@@ -35,7 +35,7 @@ module.exports = {
         if (message.attachments.size > 0) {
             base.log.logMessage('Executing command "setlogo-guest"', 'setlogo-guest', message.content, message.guild, message.channel, message.author);
             // Write first image attached to the db
-            base.db.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + '.channel_data SET guest_mkc_url = "", guest_img = "' + message.attachments.values().next().value.proxyURL + '" WHERE channel_id = ' + message.channel.id + ';', 
+            base.db.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + '.channel_data SET guest_mkc_url = "", guest_img = "' + base.db.sql.connection.escape(message.attachments.values().next().value.proxyURL) + '" WHERE channel_id = ' + message.channel.id + ';', 
             (error) => {
                 message.channel.send('There was an error updating the logo for the guest team...\n\nPlease try again.');
                 base.log.logMessage('There was an error updating the logo for the guest team...', 'setlogo-guest', error, message.guild, message.channel, message.author);
@@ -49,7 +49,7 @@ module.exports = {
         else if (args.length > 0) {
             base.log.logMessage('Executing command "setlogo-guest"', 'setlogo-guest', message.content, message.guild, message.channel, message.author);
             // Write URL from arguments to the db
-            base.db.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + '.channel_data SET guest_mkc_url = "", guest_img = "' + args[0] + '" WHERE channel_id = ' + message.channel.id + ';', 
+            base.db.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + '.channel_data SET guest_mkc_url = "", guest_img = "' + base.db.sql.connection.escape(args[0]) + '" WHERE channel_id = ' + message.channel.id + ';', 
             (error) => {
                 message.channel.send('There was an error updating the logo for the guest team...\n\nPlease try again.');
                 base.log.logMessage('There was an error updating the logo for the guest team...', 'setlogo-guest', error, message.guild, message.channel, message.author);

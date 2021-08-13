@@ -35,7 +35,7 @@ module.exports = {
         base.db.CheckBaseData(message.guild, message.channel, message.author);
         if (args.length > 0) {
             // Write URL from arguments to the db
-            base.db.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + '.channel_data SET home_mkc_url = "", home_name = "' + args.join(' ') + '" WHERE channel_id = ' + message.channel.id + ';', 
+            base.db.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + '.channel_data SET home_mkc_url = "", home_name = "' + base.db.sql.connection.escape(args.join(' ')) + '" WHERE channel_id = ' + message.channel.id + ';', 
             (error) => {
                 message.channel.send('There was an error updating the name for the home team...\n\nPlease try again.');
                 base.log.logMessage('There was an error updating the name for the home team...', 'setname-guest', error, message.guild, message.channel, message.author);

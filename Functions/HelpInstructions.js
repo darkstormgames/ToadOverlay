@@ -48,7 +48,7 @@ module.exports = {
                 },
                 {
                     name: 'Full instructions and basic help',
-                    value: 'Just message this bot "help" to receive some basic guidance or take a look at the readme/wiki in [the github repository](https://github.com/darkstormgames/ToadOverlay) (coming soon™)' // at -- [this thread on MKCentral](https://www.mariokartcentral.com/forums/index.php?forums/game-discussion.6/) or .. the readme/wiki
+                    value: 'Just message this bot "help" to receive some basic guidance or take a look at the readme/wiki in [the github repository](https://github.com/darkstormgames/ToadOverlay) (coming soon™) or at [this thread on MKCentral](https://www.mariokartcentral.com/forums/index.php?threads/toadoverlay-an-extension-bot-to-toad-for-streamers-and-more.10749/)' // or .. the readme/wiki
                 },
                 {
                     name: 'Support',
