@@ -64,7 +64,7 @@ If you want to use this overlay for a subclan that isn't registered on MKC, you 
 
 ## Additional help
 After setting up your overlay, you can just write `help` in the DMs with the bot, to get some basic help on commands.
-For more help on using the commands and editing the overlay, refer to the (still empty) [wiki of this repository](https://github.com/darkstormgames/ToadOverlay/wiki).
+For more help on using the commands and editing the overlay, refer to the [official tutorial post on MKC](https://www.mariokartcentral.com/forums/index.php?threads/toadoverlay-an-extension-bot-to-toad-for-streamers-and-more.10749/).
 
 ----------------------------
 
