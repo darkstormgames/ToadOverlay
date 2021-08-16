@@ -1,21 +1,29 @@
-const base = require('./CommandsBase');
+const Discord = require('discord.js');
+const Data = require('../Modules/Data/SQLWrapper');
+const Log = require('../Modules/Log/Logger');
 const scheduling = require('./WarScheduling');
 
 module.exports = {
     DeletePrivateMessage: (reaction, user) => {
         reaction.message.delete({ reason: 'Message deleted by user reaction.' })
         .then(() => {
-            base.log.logDM(`Message deleted.`, user);
+            Log.logDM(`Message deleted.`, user);
         })
         .catch((err) => {
-            base.log.logDM(err, user);
+            Log.logDM(err, user);
         });
     },
 
+    /**
+     * 
+     * @param {Discord.Client} client 
+     * @param {Discord.MessageReaction} reaction 
+     * @param {Discord.User} user 
+     */
     HandleScheduleReaction: (client, reaction, user) => {
         client.users.fetch(user.id, {cache: true})
         .then((loadedUser) => {
-            base.db.CheckBaseData(reaction.message.guild, reaction.message.channel, loadedUser);
+            Data.CheckBaseData(reaction.message.guild, reaction.message.channel, loadedUser);
 
             switch(reaction.emoji.name)
             {
@@ -44,7 +52,7 @@ module.exports = {
             } catch (error) {
                 console.log('Failed to remove reactions.');
                 console.error(error);
-                base.log.logMessage('Failed to remove reactions.', 'REACTIONS', error, reaction.message.guild, reaction.message.channel, loadedUser);
+                Log.logMessage('Failed to remove reactions.', 'REACTIONS', error, reaction.message.guild, reaction.message.channel, loadedUser);
             }
         });
     }

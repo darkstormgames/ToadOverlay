@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { getRandomColor } = require('./ColorHelper');
-const log = require('./Logger');
+const log = require('../Modules/Log/Logger');
 
 function getData(message) {
     let rawdata = fs.readFileSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + message.channel.id + process.env.DIR_SPLIT 
