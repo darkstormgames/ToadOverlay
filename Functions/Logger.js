@@ -47,7 +47,7 @@ module.exports = {
                 process.env.ENVIRONMENT + '", "' +
                 command + '", "' +
                 message.replaceAll('"', ':') + '", ' +
-                base.db.sql.connection.escape((data ? '"' + data.toString().replaceAll('"', ':').replaceAll('\'', ':').replaceAll('`', ':').replaceAll('´', ':') + '"' : 'NULL')) + ');', 
+                db.connection.escape((data ? '"' + data.toString().replaceAll('"', ':').replaceAll('\'', ':').replaceAll('`', ':').replaceAll('´', ':') + '"' : 'NULL')) + ');', 
                 (error) => {
                     console.log('Couldn\'t write to database! ' + error);
                 });

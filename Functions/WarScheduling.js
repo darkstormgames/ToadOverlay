@@ -217,7 +217,7 @@ module.exports = {
         }
 
         writeData(message, data);
-        message.edit({embed: buildMessage(message, data)});
+        message.edit({embeds: [buildMessage(message, data)]});
     },
 
     addSub: (message, user) => {
@@ -254,7 +254,7 @@ module.exports = {
         }
 
         writeData(message, data);
-        message.edit({embed: buildMessage(message, data)});
+        message.edit({embeds: [buildMessage(message, data)]});
     },
 
     addNotSure: (message, user) => {
@@ -304,7 +304,7 @@ module.exports = {
         }
 
         writeData(message, data);
-        message.edit({embed: buildMessage(message, data)});
+        message.edit({embeds: [buildMessage(message, data)]});
     },
 
     addCant: (message, user) => {
@@ -366,14 +366,14 @@ module.exports = {
         }
 
         writeData(message, data);
-        message.edit({embed: buildMessage(message, data)});
+        message.edit({embeds: [buildMessage(message, data)]});
     },
 
     removeEntry: (message, user) => {
         let data = getData(message);
         data = removeFromData(data, user, ['CAN', 'CANT', 'SUB', 'NOTSURE', 'DROPPED'], message);
         writeData(message, data);
-        message.edit({embed: buildMessage(message, data)});
+        message.edit({embeds: [buildMessage(message, data)]});
         log.logWarData(message.guild, message.channel, user, 'Removed', message.embeds[0].title, message.id);
     }
 }

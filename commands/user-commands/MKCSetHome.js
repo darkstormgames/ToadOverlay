@@ -3,6 +3,7 @@
  */
 const base = require('../../Functions/CommandsBase');
 const search = require('../../Functions/MKCWrapper/SearchEngine');
+const Discord = require('discord.js');
 
 module.exports = {
     /**
@@ -62,7 +63,7 @@ module.exports = {
                 return;
             }
 
-            base.db.ChannelData.UpdateHome(message, value, APIResult,
+            base.db.ChannelData.UpdateHome(message.channel.id, value, APIResult,
                 (error) => {
                     base.log.logMessage('SQL-ERROR', 'setmkc-home', error, message.guild, message.channel, message.author);
                     message.channel.send('There was an error setting the home-team!\nPlease try again.');

@@ -9,7 +9,19 @@ const validation = require('./Functions/DataValidations');
 /**
  * Initializing Discord client and commands collection
  */
-const client = new Discord.Client({ autoReconnect: true, partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'USER'] });
+const client = new Discord.Client(
+    { 
+        autoReconnect: true, 
+        intents: 
+        [
+            Discord.Intents.FLAGS.GUILDS, 
+            Discord.Intents.FLAGS.GUILD_MESSAGES, 
+            Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+            Discord.Intents.FLAGS.DIRECT_MESSAGES,
+            Discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
+        ],
+        partials: [ 'MESSAGE', 'CHANNEL', 'USER', 'REACTION' ]
+    });
 client.commands = new Discord.Collection();
 
 /**
@@ -51,7 +63,12 @@ process.on('unhandledRejection', error => {
 /**
  * Message handling
  */
-client.on('message', (message) => {
+client.on('interactionCreate', async (interaction) => {
+    console.log(`${interaction.user.tag} in '${interaction.channel.name} did something...`);
+    
+});
+
+client.on('messageCreate', (message) => {
     // Handle user commands
     if (validation.isUserCommand(message)) {
         let args = message.content.slice(process.env.PREFIX.length).split(' ');

@@ -63,7 +63,7 @@ module.exports = {
                 return;
             }
 
-            base.db.ChannelData.UpdateGuest(message, value, APIResult, 
+            base.db.ChannelData.UpdateGuest(message.channel.id, value, APIResult, 
                 (error) => {
                     base.log.logMessage('SQL-ERROR', 'setmkc-guest', error, message.guild, message.channel, message.author);
                     message.channel.send('There was an error setting the guest-team!\nPlease try again.');

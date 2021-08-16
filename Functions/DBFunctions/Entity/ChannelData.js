@@ -42,14 +42,14 @@ function AddChannelData(channel, failedCallback = (error) => {}) {
  * @param {(error: any) => void} failedCallback 
  * @returns {Promise<boolean>} Returns true, if the result from the database is valid.
  */
-function UpdateChannelDataGuest(message, teamId, mkcTeamData, failedCallback = (error) => {}) {
+function UpdateChannelDataGuest(channelId, teamId, mkcTeamData, failedCallback = (error) => {}) {
     return new Promise((resolve) => {
         let queryString = 'UPDATE ' + process.env.SQL_NAME + '.channel_data SET ' +
             'guest_mkc_url = "https://www.mariokartcentral.com/mkc/registry/teams/' + teamId +
             '", guest_name = "' + mkcTeamData.team_name +
             '", guest_tag = "' + mkcTeamData.team_tag +
             '", guest_img = "' + (mkcTeamData.team_logo == "" ? '' : ('https://www.mariokartcentral.com/mkc/storage/' + mkcTeamData.team_logo)) +
-            '" WHERE channel_id = ' + message.channel.id + ';';
+            '" WHERE channel_id = ' + channelId + ';';
         db.ExecuteQuery(queryString, failedCallback)
         .then((result) => {
             resolve(result);
@@ -65,14 +65,14 @@ function UpdateChannelDataGuest(message, teamId, mkcTeamData, failedCallback = (
  * @param {(error: any) => void} failedCallback 
  * @returns {Promise<boolean>} Returns true, if the result from the database is valid.
  */
-function UpdateChannelDataHome(message, teamId, mkcTeamData, failedCallback = (error) => {}) {
+function UpdateChannelDataHome(channelId, teamId, mkcTeamData, failedCallback = (error) => {}) {
     return new Promise((resolve) => {
         let queryString = 'UPDATE ' + process.env.SQL_NAME + '.channel_data SET ' +
             'home_mkc_url = "https://www.mariokartcentral.com/mkc/registry/teams/' + teamId +
             '", home_name = "' + mkcTeamData.team_name +
             '", home_tag = "' + mkcTeamData.team_tag +
             '", home_img = "' + (mkcTeamData.team_logo == "" ? '' : ('https://www.mariokartcentral.com/mkc/storage/' + mkcTeamData.team_logo)) +
-            '" WHERE channel_id = ' + message.channel.id + ';';
+            '" WHERE channel_id = ' + channelId + ';';
         db.ExecuteQuery(queryString, failedCallback)
         .then((result) => {
             resolve(result);

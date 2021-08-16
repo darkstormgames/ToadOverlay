@@ -4,6 +4,7 @@
  const base = require('../../Functions/CommandsBase');
  const { getRandomColor } = require('../../Functions/ColorHelper');
  const fs = require('fs');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     /**
@@ -163,12 +164,12 @@ module.exports = {
             }
 
             let colorCode = getRandomColor(((timeFormat == 24 ? (rawTime.replace(/:/g, '.')) : (clockDiscriminator == 'PM' ? (rawTime.replace(/:/g, '.')) * 2 : (rawTime.replace(/:/g, '.')))) + new Date().getDate()), message.guild, message.channel);
-            let scheduleEmbed = {
-                color: colorCode,
-                title: '**War ' + (rawTime + ' ' + clockDiscriminator).trim() + '**'
-            };
+            
+            let scheduleEmbed = new MessageEmbed()
+                .setColor(colorCode)
+                .setTitle('**War ' + (rawTime + ' ' + clockDiscriminator).trim() + '**');
 
-            message.channel.send({ embed: scheduleEmbed })
+            message.channel.send({ embeds: [scheduleEmbed] })
             .then(newMessage => {
                 fs.writeFile(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp' + process.env.DIR_SPLIT + message.guild.id + process.env.DIR_SPLIT + message.channel.id + process.env.DIR_SPLIT 
                     + newMessage.id + '.json', '{ "time": "' + time + '", "rawTime": "' + rawTime + '", "clockDiscriminator": "' + clockDiscriminator + '", "format": "' + timeFormat + '", "CAN": [], "CANT": [], "SUB": [], "NOTSURE": [], "DROPPED": [] }', (err) => { if (err) console.log(err); });

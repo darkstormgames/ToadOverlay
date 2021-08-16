@@ -2,34 +2,24 @@
  * required modules
  */
 const { getRandomColor } = require('./ColorHelper');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     get: (internalId, user, guild, channel) => {
         let colorCode = getRandomColor(internalId, guild, channel);
     
-        let linkEmbed = {
-            color: colorCode,
-            title: 'Overlay-URL for the channel "' + channel.name + '" on "' + guild.name + '"',
-            // author: {
-            //     name: 'ToadOverlay',
-            //     icon_url: 'https://gamesites.nintendo.com.au/paper-mario-color-splash/assets/img/tip-toad1.png',
-            //     url: 'https://github.com/darkstormgames/ToadOverlay',
-            // },
-            fields: [
-                {
-                    name: 'URL',
-                    value: '```http://toad.darkstormgames.de/index.php?c=' + channel.id + '&u=' + user.id + '&auth=' + internalId + '```'
-                }
-            ],
-            timestamp: new Date(),
-            footer: {
-                text: '© darkstormgames'
-            }
-        };
-        let instructEmbed = {
-            color: 14540253,
-            title: 'Using/Editing your overlay',
-            fields: [
+        let linkEmbed = new MessageEmbed()
+            .setColor(colorCode)
+            .setTitle('Overlay-URL for the channel "' + channel.name + '" on "' + guild.name + '"')
+            .addField('URL', '```http://toad.darkstormgames.de/index.php?c=' + channel.id + '&u=' + user.id + '&auth=' + internalId + '```')
+            .setTimestamp()
+            .setFooter('© darkstormgames');
+
+        let instructEmbed = new MessageEmbed()
+            .setColor(14540253)
+            .setTitle('Using/Editing your overlay')
+            .setDescription('To edit your overlay, just write some html how you want it to look like and paste the result in this chat with the following commands.')
+            .addFields(
                 {
                     name: 'Basic instructions',
                     value: 'To use this overlay in obs, (or streamlabs obs) just add a new browser source and paste the corresponding URL in the URL-field in the properties window.'
@@ -48,18 +38,15 @@ module.exports = {
                 },
                 {
                     name: 'Full instructions and basic help',
-                    value: 'Just message this bot "help" to receive some basic guidance or take a look at the readme/wiki in [the github repository](https://github.com/darkstormgames/ToadOverlay) (coming soon™) or at [this thread on MKCentral](https://www.mariokartcentral.com/forums/index.php?threads/toadoverlay-an-extension-bot-to-toad-for-streamers-and-more.10749/)' // or .. the readme/wiki
+                    value: 'Just message this bot "help" to receive some basic guidance or take a look at the readme/wiki in [the github repository](https://github.com/darkstormgames/ToadOverlay) (coming soon™) or at [this thread on MKCentral](https://www.mariokartcentral.com/forums/index.php?threads/toadoverlay-an-extension-bot-to-toad-for-streamers-and-more.10749/)'
                 },
                 {
                     name: 'Support',
                     value: 'If you have any problems, questions or found a bug, feel free to dm me @ Rollo#7568'
                 }
-            ],
-            timestamp: new Date(),
-            footer: {
-                text: '© darkstormgames'
-            }
-        };    
+            )
+            .setTimestamp()
+            .setFooter('© darkstormgames');   
     
         return {
             linkEmbed: linkEmbed,
@@ -70,11 +57,11 @@ module.exports = {
     gethelp: (user) => {
         let colorCode = getRandomColor((user.id % 1024), {id: user.id}, {id: user.id});
     
-        let help1 = {
-            color: colorCode,
-            title: 'Commands Help',
-            description: 'Page 1 of 2 (General commands)',
-            fields: [
+        let help1 = new MessageEmbed()
+            .setColor(colorCode)
+            .setTitle('Commands Help')
+            .setDescription('Page 1 of 2 (General commands)')
+            .addFields(
                 {
                     name: 'Command scope',
                     value: 'These commands are for each channel, where Toad is used, individually.'
@@ -102,18 +89,15 @@ module.exports = {
                     value: 'This command sets the current scores for the channel, this command has been executed in, to zero.' + 
                            '```_reset```'
                 }
-            ],
-            timestamp: new Date(),
-            footer: {
-                text: '© darkstormgames',
-            },
-        };
-    
-        let help2 = {
-            color: colorCode,
-            title: 'Commands Help',
-            description: 'Page 2 of 2 (Editing commands)',
-            fields: [
+            )
+            .setTimestamp()
+            .setFooter('© darkstormgames');
+
+        let help2 = new MessageEmbed()
+            .setColor(colorCode)
+            .setTitle('Commands Help')
+            .setDescription('Page 2 of 2 (Editing commands)')
+            .setFields(
                 {
                     name: 'Command scope',
                     value: 'These commands are executed in this private channel and edit all of your overlays for all channels.'
@@ -144,12 +128,9 @@ module.exports = {
                            '```setimage [http://toad.darkstormgames.de/images/default.png]```' + 
                            ''
                 }
-            ],
-            timestamp: new Date(),
-            footer: {
-                text: '© darkstormgames',
-            },
-        };
+            )
+            .setTimestamp()
+            .setFooter('© darkstormgames');
     
         return {
             page1: help1,

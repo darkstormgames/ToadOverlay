@@ -136,20 +136,20 @@ module.exports = {
                     base.log.logMessage('Executed command "setup-overlay" with new entry.', 'setup', null, message.guild, message.channel, message.author);
                     message.channel.send(message.author.toString() + ' Your overlay for this channel has been created successfully.\nFurther instructions should be in your DMs.');
                     let text = instructions.get(dbUserChannel.id, message.author, message.guild, message.channel);
-                    message.author.send({embed: text.instructEmbed});
-                    message.author.send({embed: text.linkEmbed});
+                    message.author.send({embeds: [text.instructEmbed]});
+                    message.author.send({embeds: [text.linkEmbed]});
                 }
                 else if (!newUserCreated && newUserChannelCreated) {
                     base.log.logMessage('Executed command "setup-overlay" with new entry.', 'setup', null, message.guild, message.channel, message.author);
                     message.channel.send(message.author.toString() + ' Your overlay for this channel has been created successfully.\nFurther instructions should be in your DMs.');
                     var text = instructions.get(dbUserChannel.id, message.author, message.guild, message.channel);
-                    message.author.send({embed: text.linkEmbed});
+                    message.author.send({embeds: [text.linkEmbed]});
                 }
                 else if (!newUserCreated && !newUserChannelCreated) {
                     base.log.logMessage('Executed command "setup-overlay" with existing entry.', 'setup', null, message.guild, message.channel, message.author);
                     message.channel.send(message.author.toString() + ' There already is an overlay for you on this channel!\nThe URL will be sent to you again.');
                     var text = instructions.get(dbUserChannel.id, message.author, message.guild, message.channel);
-                    message.author.send({embed: text.linkEmbed});
+                    message.author.send({embeds: [text.linkEmbed]});
                 }
                 else {
                     base.log.logMessage('Error connecting Channel to User...', 'setup', null, message.guild, message.channel, message.author);

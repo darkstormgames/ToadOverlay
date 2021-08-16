@@ -34,7 +34,7 @@ module.exports = {
     execute: (message, content) => {
         base.log.logDM('Help requested...', message.author)
         var text = instructions.gethelp(message.author);
-        message.author.send({embed: text.page1});
-        message.author.send({embed: text.page2});
+        message.author.send({embeds: [text.page1]});
+        message.author.send({embeds: [text.page2]});
     }
 };
