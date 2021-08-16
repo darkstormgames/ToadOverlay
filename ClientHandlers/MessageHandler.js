@@ -93,7 +93,6 @@ async function handleCommands(message) {
         CommandsToadBot.forEach((value) => {
             if (message.content.startsWith(value.name) ||
                (message.embeds[0] && message.embeds[0].title && message.embeds[0].title.startsWith(value.name))) {
-                Log.Debug.LogMessage('Executing command "' + value.name + '"', value.name, message.content, message.guild, message.channel, message.author);
                 Data.CheckBaseData(message.guild, message.channel, message.author);
                 value.execute(message, null);
             }

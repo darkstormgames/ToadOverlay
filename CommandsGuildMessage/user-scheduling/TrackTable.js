@@ -4,7 +4,7 @@ module.exports = {
     name: 'tracktable',
     alt: ['track'],
     description: '',
-     
+    
     /**
     * @desc execution of the command
     * @param {Discord.Message} message 

@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const Data = require('../../Modules/Data/SQLWrapper');
 const Log = require('../../Modules/Log/Logger');
-const instructions = require('../../Functions/HelpInstructions');
+const instructions = require('../../Modules/Help/HelpInstructions');
 
 module.exports = {
     name: 'setup-overlay',
@@ -16,7 +16,6 @@ module.exports = {
     execute: (message, args) => {
         Data.CheckBaseData(message.guild, message.channel, message.author)
         .then(() => {
-            Log.logMessage('Executing command "setup"', 'setup', message.content, message.guild, message.channel, message.author);
             let dbGuild = null;
             let dbChannel = null;
             let dbUser = null;

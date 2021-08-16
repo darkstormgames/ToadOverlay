@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const Log = require('../../Modules/Log/Logger');
- const { getRandomColor } = require('../../Functions/ColorHelper');
+ const { getRandomColor } = require('../../Modules/ColorHelper');
  const fs = require('fs');
 
 module.exports = {

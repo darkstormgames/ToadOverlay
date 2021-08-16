@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const Data = require('../../Modules/Data/SQLWrapper');
 const Log = require('../../Modules/Log/Logger');
-const base = require('../../Functions/CommandsBase');
+const Help = require('../../Modules/Help/HelpTexts');
 const search = require('../../Modules/MKC/SearchEngine');
 
 module.exports = {
@@ -21,7 +21,7 @@ module.exports = {
         }
         else if (args[0] == 'help') {
             // ToDo: Handling help differently...
-            message.channel.send(base.help.MKCSetGuest);
+            message.channel.send(Help.MKCSetGuest);
             return;
         }
 

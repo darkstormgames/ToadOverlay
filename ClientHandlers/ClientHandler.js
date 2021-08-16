@@ -41,9 +41,11 @@ module.exports = {
 
         process.on('unhandledRejection', error => {
             Log.logMessage('Something went wrong...', 'UNHANDLED', error);
+            if (process.env.ENVIRONMENT == 'DEBUG') throw error;
         });
 
         MessageHandler.Initialize(discordClient);
+        ReactionHandler.Initialize(discordClient);
     },
 
     Login: () => {

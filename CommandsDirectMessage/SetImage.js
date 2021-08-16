@@ -15,7 +15,7 @@ module.exports = {
     */
     execute: (message, content) => {
         // ToDo: Add query to Profile entity
-        Data.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + ".profile SET bg_url = '" + Data.sql.connection.escape(content) + "' WHERE user_id = " + message.author.id, 
+        Data.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + ".profile SET bg_url = '" + Data.sql.connection.escape(content).replaceAll("'", "") + "' WHERE user_id = " + message.author.id, 
         (error) => {
             message.author.send('There was an error updating your background image...\nPlease try again later.');
             Log.logDM(error, message.author);

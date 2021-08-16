@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const Data = require('../../Modules/Data/SQLWrapper');
 const Log = require('../../Modules/Log/Logger');
-const base = require('../../Functions/CommandsBase');
+const Help = require('../../Modules/Help/HelpTexts');
 
 module.exports = {
     name: 'friendcode',
@@ -24,14 +24,14 @@ module.exports = {
                 })
                 .then((result) => {
                     if (!(typeof result == 'boolean') && result[0]) {
-                        message.channel.send((result.result[0].fc_switch.startsWith('SW-') ? '' : 'SW-') + result.result[0].fc_switch);
+                        message.channel.send((result[0].fc_switch.startsWith('SW-') ? '' : 'SW-') + result[0].fc_switch);
                     }
                 });
             }
             else if (args.length == 1) {
                 if (args[0] == 'help') {
                     // ToDo: Handling help texts differently...
-                    message.channel.send(base.help.Friendcode);
+                    message.channel.send(Help.Friendcode);
                 }
                 else if (/^(?:SW-)?[0-9]{4}-?[0-9]{4}-?[0-9]{4}/m.test(args[0])) {
                     Data.User.UpdateFriendcode(message.author, args[0])
@@ -58,7 +58,7 @@ module.exports = {
                             })
                             .then((result) => {
                                 if (!(typeof result == 'boolean') && result[0]) {
-                                    message.channel.send('Friendcode for ' + result.result[0].name + ': ' + (result.result[0].fc_switch.startsWith('SW-') ? '' : 'SW-') + result.result[0].fc_switch);
+                                    message.channel.send('Friendcode for ' + result[0].name + ': ' + (result[0].fc_switch.startsWith('SW-') ? '' : 'SW-') + result[0].fc_switch);
                                 }
                             });
                         });
@@ -82,8 +82,8 @@ module.exports = {
                         }
                         else if (!(typeof result == 'boolean') && result[0]) {
                             let retVal = '**All friendcodes on ' + message.guild.name + ':**\n```css\n';
-                            for (let item in result.result) {
-                                retVal += (result.result[item].fc_switch.startsWith('SW-') ? '' : 'SW-') + result.result[item].fc_switch + ' (' + result.result[item].name + ')\n'
+                            for (let item in result) {
+                                retVal += (result[item].fc_switch.startsWith('SW-') ? '' : 'SW-') + result[item].fc_switch + ' (' + result[item].name + ')\n'
                             }
                             retVal += '```';
                             message.channel.send(retVal);
@@ -92,7 +92,7 @@ module.exports = {
                 }
                 else {
                     // ToDo: Move query to User entity
-                    Data.ExecuteQuery('SELECT * FROM ' + process.env.SQL_NAME + '.user WHERE fc_switch IS NOT NULL AND (name LIKE "%' + Data.sql.connection.escape(args[0]) + '%" OR (id IN (SELECT user_id FROM ' + process.env.SQL_NAME + '.guild_user WHERE guild_id = ' + message.guild.id + ' AND displayname LIKE "%' + Data.sql.connection.escape(args[0]) + '%"))) ORDER BY name', 
+                    Data.ExecuteQuery('SELECT * FROM ' + process.env.SQL_NAME + '.user WHERE fc_switch IS NOT NULL AND (name LIKE "%' + Data.sql.connection.escape(args[0]).replaceAll("'", "") + '%" OR (id IN (SELECT user_id FROM ' + process.env.SQL_NAME + '.guild_user WHERE guild_id = ' + message.guild.id + ' AND displayname LIKE "%' + Data.sql.connection.escape(args[0]).replaceAll("'", "") + '%"))) ORDER BY name', 
                         (error) => {
                             if (error != null) {
                                 message.channel.send('Failed to get friendcodes!');
@@ -105,12 +105,12 @@ module.exports = {
                             message.channel.send('No FC found for ' + args[0]);
                         }
                         else if (!(typeof result == 'boolean') && result.length == 1) {
-                            message.channel.send((result.result[0].fc_switch.startsWith('SW-') ? '' : 'SW-') + result.result[0].fc_switch);
+                            message.channel.send((result[0].fc_switch.startsWith('SW-') ? '' : 'SW-') + result[0].fc_switch);
                         }
                         else {
                             let retVal = '**All friendcodes for ' + args[0] + ':**\n```css\n';
-                            for (let item in result.result) {
-                                retVal += (result.result[item].fc_switch.startsWith('SW-') ? '' : 'SW-') + result.result[item].fc_switch + ' (' + result.result[item].name + ')\n';
+                            for (let item in result) {
+                                retVal += (result[item].fc_switch.startsWith('SW-') ? '' : 'SW-') + result[item].fc_switch + ' (' + result[item].name + ')\n';
                             }
                             retVal += '```';
                             message.channel.send(retVal);
@@ -146,7 +146,7 @@ module.exports = {
                                 return;
                             }
                             else {
-                                message.channel.send('Friendcode set for ' + message.author.username + '.');
+                                message.channel.send('Friendcode set for ' + guildmember.user.username + '.');
                             }
                         });
                     });

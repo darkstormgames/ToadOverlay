@@ -15,7 +15,7 @@ module.exports = {
     execute: (message, args) => {
         if (args.length > 0) {
             // Write URL from arguments to the db
-            Data.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + '.channel_data SET home_mkc_url = "", home_tag = "' + Data.sql.connection.escape(args[0]) + '" WHERE channel_id = ' + message.channel.id + ';', 
+            Data.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + '.channel_data SET home_mkc_url = "", home_tag = "' + Data.sql.connection.escape(args[0]).replaceAll("'", "") + '" WHERE channel_id = ' + message.channel.id + ';', 
             (error) => {
                 message.channel.send('There was an error updating the tag for the home team...\n\nPlease try again.');
                 Log.logMessage('There was an error updating the tag for the home team...', 'setname-guest', error, message.guild, message.channel, message.author);
