@@ -1,8 +1,8 @@
-<img width="140" height="150" align="left" style="float: left; margin: 0 10px 0 0;" alt="ToadOverlay" src="http://toad.darkstormgames.de/images/tip-toad1.png">  
+<img width="140" height="150" align="left" style="float: left; margin: 0 10px 0 0;" alt="ToadOverlay" src="http://toad.darkstormgames.de/images/to_toad.jpg">  
 
 # ToadOverlay
 
-[![Discord.js](https://img.shields.io/badge/discord.js-v12.5.1-blue.svg?logo=npm)](https://github.com/discordjs)
+[![Discord.js](https://img.shields.io/badge/discord.js-v13.1.0-blue.svg?logo=npm)](https://github.com/discordjs)
 [![GitHub license](https://img.shields.io/badge/license-GPL--3.0-blue)](https://github.com/darkstormgames/ToadOverlay/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues-raw/darkstormgames/ToadOverlay)](https://github.com/darkstormgames/ToadOverlay/issues)
 [![CodeFactor](https://www.codefactor.io/repository/github/darkstormgames/toadoverlay/badge)](https://www.codefactor.io/repository/github/darkstormgames/toadoverlay)
@@ -10,7 +10,7 @@
 
 
 ToadOverlay is an extension bot to [Toad](https://www.mariokartcentral.com/forums/index.php?threads/toadv2-a-discord-bot-for-mk8.532/), a MK8 discord bot and is used as a browser source overlay for competitive Mario Kart streamers to show their current scores live on stream.
-The bot is written from scratch in JavaScript based on the [Discord.js](https://github.com/discordjs) framework for Node.js and is currently hosted on a random Windows 8 tablet, I still had lying around, until I can safely afford proper hosting.
+The bot is written from scratch in JavaScript based on the [Discord.js](https://github.com/discordjs) framework for Node.js.
 
 <img height="120" align="left" style="float: left; margin: 0 10px 0 0;" alt="ToadOverlay" src="http://hosting133705.a2f81.netcup.net/toad.darkstormgames/images/overlay_sample.gif"> 
 
@@ -64,7 +64,7 @@ If you want to use this overlay for a subclan that isn't registered on MKC, you 
 
 ## Additional help
 After setting up your overlay, you can just write `help` in the DMs with the bot, to get some basic help on commands.
-For more help on using the commands and editing the overlay, refer to the (still empty) [wiki of this repository](https://github.com/darkstormgames/ToadOverlay/wiki).
+For more help on using the commands and editing the overlay, refer to the [official tutorial post on MKC](https://www.mariokartcentral.com/forums/index.php?threads/toadoverlay-an-extension-bot-to-toad-for-streamers-and-more.10749/).
 
 ----------------------------
 
