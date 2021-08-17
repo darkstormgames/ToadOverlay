@@ -22,8 +22,8 @@ module.exports = {
         client = discordClient;
 
         // Create necessary folder(s)
-        if (!fs.existsSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp_' + process.env.ENVIRONMENT)) {
-            fs.mkdirSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp_' + process.env.ENVIRONMENT);
+        if (!fs.existsSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp')) {
+            fs.mkdirSync(process.env.DIR_WORKING + process.env.DIR_SPLIT + 'scheduleTemp');
         }
 
         // Write to log on successful connection to discord-API
