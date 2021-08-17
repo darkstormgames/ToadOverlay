@@ -345,19 +345,22 @@ function checkGuildUser(guild, user, newEntryCallback = () => {}, failedCallback
                 });
             }
             else if (!(typeof getResult == 'boolean') && getResult[0]) { // An existing guild was found
-                if (!getResult[0].displayname || (getResult[0].displayname && getResult[0].displayname != guildmember.nickname)) {
-                    guildUserEntity.Update(guild, user, failedCallback)
-                    .then((updateResult) => {
-                        if (updateResult === true) {
-                            guildUserEntity.Get(guild.id, user.id)
-                            .then((checkResult) => {
-                                if (!(typeof checkResult == 'boolean') && checkResult[0]) {
-                                    resolve(checkResult[0]);
-                                } else { resolve(null); }
-                            });
-                        } else { resolve(null); }
-                    });
-                } else { resolve(getResult[0]); }
+                guild.members.fetch({user, force: true})
+                .then((guildmember) => {
+                    if (!getResult[0].displayname || (getResult[0].displayname && getResult[0].displayname != guildmember.nickname)) {
+                        guildUserEntity.Update(guild, user, failedCallback)
+                        .then((updateResult) => {
+                            if (updateResult === true) {
+                                guildUserEntity.Get(guild.id, user.id)
+                                .then((checkResult) => {
+                                    if (!(typeof checkResult == 'boolean') && checkResult[0]) {
+                                        resolve(checkResult[0]);
+                                    } else { resolve(null); }
+                                });
+                            } else { resolve(null); }
+                        });
+                    } else { resolve(getResult[0]); }
+                });
             } else { resolve(null); }
         });
     });
