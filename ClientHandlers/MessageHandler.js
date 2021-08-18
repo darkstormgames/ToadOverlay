@@ -60,9 +60,11 @@ async function handleCommands(message) {
     
         CommandsGuildMessage.forEach((value) => {
             if (command == value.name || value.alt.includes(command)) {
-                Log.logMessage('Executing command "' + value.name + '"', value.name, message.content, message.guild, message.channel, message.author);
-                Data.CheckBaseData(message.guild, message.channel, message.author);
-                value.execute(message, args);
+                Data.CheckBaseData(message.guild, message.channel, message.author)
+                .then(() => {
+                    Log.logMessage('Executing command "' + value.name + '"', value.name, message.content, message.guild, message.channel, message.author);
+                    value.execute(message, args);
+                });
             }
         });
     }

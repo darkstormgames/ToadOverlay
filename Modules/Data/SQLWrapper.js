@@ -16,23 +16,23 @@ function checkBaseData(guild, channel, user) {
         baseData.checkGuild(guild, null, (result) => 
         {
             if (result != null)
-            Log.logMessage('Error checking guild...', 'CheckBaseData - Guild', result, guild, channel, user)
+            Log.logMessage('Error checking guild...', 'CheckBaseData - Guild', result)
         })
-        .catch((error) => Log.logMessage('Error checking guild...', 'CheckBaseData - Guild', error, guild, channel, user))
+        .catch((error) => Log.logMessage('Error checking guild...', 'CheckBaseData - Guild', error))
         // Get or AddNew Channel
         .then(() => baseData.checkChannel(channel, null, (result) => 
         { 
             if (result != null)
-            Log.logMessage('Error checking channel...', 'CheckBaseData - Channel', result, guild, channel, user)
+            Log.logMessage('Error checking channel...', 'CheckBaseData - Channel', result, guild)
         }))
-        .catch((error) => Log.logMessage('Error checking channel...', 'CheckBaseData - Channel', error, guild, channel, user))
+        .catch((error) => Log.logMessage('Error checking channel...', 'CheckBaseData - Channel', error, guild))
         // Get or AddNew User
         .then(() => baseData.checkUser(user, null, (result) => 
         {
             if (result != null)
-            Log.logMessage('Error checking user...', 'CheckBaseData - User', result, guild, channel, user)
+            Log.logMessage('Error checking user...', 'CheckBaseData - User', result, guild, channel)
         }, false))
-        .catch((error) => Log.logMessage('Error checking user...', 'CheckBaseData - User', error, guild, channel, user))
+        .catch((error) => Log.logMessage('Error checking user...', 'CheckBaseData - User', error, guild, channel))
         // Get or AddNew UserChannel
         .then(() => baseData.checkUserChannel(user, channel, null, (result) => 
         {
