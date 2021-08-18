@@ -35,7 +35,7 @@ module.exports = {
                 fs.appendFile(process.env.DIR_LOGS + process.env.DIR_SPLIT + 'commands_' + process.env.ENVIRONMENT + '_' + 
                                 logTime.getFullYear().toString() + helper.pad_with_zeroes((logTime.getMonth()+1), 2) + '.log',
                     helper.getDatePrefix() + 'Error writing to database!\n' + error, (err) => {
-                        if (process.env.ENVIRONMENT == 'DEBUG') console.log(helper.getDatePrefix() + 'Couldn\'t write to file!\n' + err);
+                        console.log(helper.getDatePrefix() + 'Couldn\'t write to file!\n' + err);
                     });
                 if (process.env.ENVIRONMENT == 'DEBUG') console.log(helper.getDatePrefix() + 'Couldn\'t write to database!\n' + error);
             });

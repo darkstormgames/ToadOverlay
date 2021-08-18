@@ -129,6 +129,12 @@ module.exports = {
             }
         }
 
+        if(!message.guild.me.permissionsIn(message.channel).has([Discord.Permissions.FLAGS.SEND_MESSAGES, Discord.Permissions.FLAGS.EMBED_LINKS, Discord.Permissions.FLAGS.ADD_REACTIONS, Discord.Permissions.FLAGS.READ_MESSAGE_HISTORY])) {
+            message.channel.send('I don\'t have the permissions, I need for this command!\nPlease make sure to give me at least the following permissions:\n```Required permissions:\n  SEND MESSAGES\n  EMBED LINKS\n  ADD REACTIONS\n  READ MESSAGE HISTORY\n\nOptional, but useful for the full functionality:\n  MANAGE MESSAGES```');
+            Log.logMessage('Aborted scheduling, because of permissions!', 'schedulewar', null, message.guild, message.channel, message.author);
+            return;
+        }
+
         // times.forEach((time) => {
         for (let time of times) {
             let timeFormat = '24';
