@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const Schedule = require('../Scheduling/WarScheduling');
-
+const Log = require('../Log/Logger');
 
 
 module.exports = {

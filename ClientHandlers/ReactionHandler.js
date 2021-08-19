@@ -3,6 +3,7 @@ const Data = require('../Modules/Data/SQLWrapper');
 const Helper = require('../Modules/Reactions/ReactionHelper');
 const DirectMessage = require('../Modules/Reactions/DMReactions');
 const Schedule = require('../Modules/Reactions/ScheduleReactions');
+const Log = require('../Modules/Log/Logger');
 
 let client = null;
 
