@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
-const Data = require('../../Modules/Data/SQLWrapper');
-const Log = require('../../Modules/Log/Logger');
-const search = require('../../Modules/MKC/SearchEngine');
+const Data = require('../Data/SQLWrapper');
+const Log = require('../Log/Logger');
+const search = require('../MKC/SearchEngine');
 
 module.exports = {
     getActiveTeams: search.getActiveTeams,
