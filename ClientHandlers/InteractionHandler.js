@@ -61,8 +61,6 @@ function getCachedObject(interaction) {
 async function handleInteraction(interaction) {
     let cachedInteraction = getCachedObject(interaction);
     
-
-    
     if (interaction.isCommand()) {
         if (cachedInteraction != null) {
             cachedInteraction.baseInteraction.editReply({ content: '❌ Aborted! ❌\n\nPlease finish your other slash commands in this channel, before starting a new one.', embeds: [], components: [] });
@@ -70,12 +68,17 @@ async function handleInteraction(interaction) {
         }
         let command = InteractionCommands.get(interaction.commandName);
         try {
-            if (interaction.guild != null) 
-                Log.logMessage('Starting interaction "' + interaction.commandName + '"', interaction.commandName, null, interaction.guild, interaction.channel, interaction.user);
-            else
+            if (interaction.guild != null) {
+                Data.CheckBaseData(interaction.guild, interaction.channel, interaction.user)
+                .then(() => {
+                    Log.logMessage('Starting interaction "' + interaction.commandName + '"', interaction.commandName, null, interaction.guild, interaction.channel, interaction.user);
+                    await command.execute(interaction);
+                });
+            }
+            else {
                 Log.logMessage('Starting interaction "' + interaction.commandName + '"', interaction.commandName, null, null, null, interaction.user);
-
-            await command.execute(interaction);
+                await command.execute(interaction);
+            }
         } catch (error) {
             if (interaction.guild != null) 
                 Log.logMessage('Something bad happened...', 'interactions-command', error, interaction.guild, interaction.channel, interaction.user);
