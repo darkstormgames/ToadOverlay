@@ -8,7 +8,7 @@ module.exports = {
      * @param {Discord.User} user
      */
     RemoveReaction: (reaction, user) => {
-        if(!message.guild.me.permissionsIn(message.channel).has([Discord.Permissions.FLAGS.MANAGE_MESSAGES, Discord.Permissions.FLAGS.READ_MESSAGE_HISTORY])) {
+        if(!reaction.message.guild.me.permissionsIn(reaction.message.channel).has([Discord.Permissions.FLAGS.MANAGE_MESSAGES, Discord.Permissions.FLAGS.READ_MESSAGE_HISTORY])) {
             return;
         }
         let userReactions = reaction.message.reactions.cache.filter(reaction => reaction.users.cache.has(user.id));
