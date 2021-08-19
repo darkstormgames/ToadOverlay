@@ -72,7 +72,7 @@ async function handleInteraction(interaction) {
                 Data.CheckBaseData(interaction.guild, interaction.channel, interaction.user)
                 .then(() => {
                     Log.logMessage('Starting interaction "' + interaction.commandName + '"', interaction.commandName, null, interaction.guild, interaction.channel, interaction.user);
-                    await command.execute(interaction);
+                    command.execute(interaction);
                 });
             }
             else {
