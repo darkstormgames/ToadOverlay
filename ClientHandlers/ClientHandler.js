@@ -46,6 +46,7 @@ module.exports = {
 
         MessageHandler.Initialize(discordClient);
         ReactionHandler.Initialize(discordClient);
+        InteractionHandler.Initialize(discordClient);
     },
 
     Login: () => {

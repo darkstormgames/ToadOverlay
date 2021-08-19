@@ -44,5 +44,12 @@ module.exports = {
     registryType: registryType,
     registryCategory: registryCategory,
 
-    getTeamById: (id) => { return getData(URLBuilder.buildRegistryTeamsURI(registryCategory['active'], id)); }
+    getTeamById: (id) => { return getData(URLBuilder.buildRegistryTeamsURI(registryCategory['active'], id)); },
+
+
+    getActiveTeams: () => { return getData('https://www.mariokartcentral.com/mkc/api/registry/teams/category/active'); },
+    get150ccTeams: () => { return getData('https://www.mariokartcentral.com/mkc/api/registry/teams/category/150cc'); },
+    get200ccTeams: () => { return getData('https://www.mariokartcentral.com/mkc/api/registry/teams/category/200cc'); },
+    getMKTourTeams: () => { return getData('https://www.mariokartcentral.com/mkc/api/registry/teams/category/mktour_vs'); },
+    getHistoricalTeams: () => { return getData('https://www.mariokartcentral.com/mkc/api/registry/teams/category/historical'); },
 }

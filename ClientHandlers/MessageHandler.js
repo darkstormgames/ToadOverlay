@@ -45,13 +45,11 @@ function loadCommandFiles() {
     }
 }
 
-function initializeCommands() {
-    if (client == null) throw "[COMMANDS] Client could not be loaded!";
-
-    loadCommandFiles();
-
-    client.on('messageCreate', handleCommands);
-}
+// function initializeCommands() {
+//     if (client == null) throw "[COMMANDS] Client could not be loaded!";
+//     loadCommandFiles();
+//     client.on('messageCreate', handleCommands);
+// }
 
 async function handleCommands(message) {
     if (Validation.isUserCommand(message)) {
@@ -105,6 +103,9 @@ async function handleCommands(message) {
 module.exports = {
     Initialize: (discordClient) => {
         client = discordClient;
-        initializeCommands();
+
+        if (client == null) throw "[COMMANDS] Client could not be loaded!";
+        loadCommandFiles();
+        client.on('messageCreate', handleCommands);
     }
 }

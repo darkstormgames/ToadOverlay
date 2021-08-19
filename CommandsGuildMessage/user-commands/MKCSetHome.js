@@ -31,24 +31,26 @@ module.exports = {
             return;
         }
 
-        search.getTeamById(value)
-        .then((APIResult) => {
-            if (!APIResult || APIResult == null) {
-                message.channel.send('There was an error setting the home-team!\nPlease try again with a valid team-id from MKC.');
-                return;
-            }
+        MKC.SetHomeTeam(value, message.guild, message.channel, message.author);
 
-            Data.ChannelData.UpdateHome(message.channel.id, value, APIResult,
-                (error) => {
-                    Log.logMessage('SQL-ERROR', 'setmkc-home', error, message.guild, message.channel, message.author);
-                    message.channel.send('There was an error setting the home-team!\nPlease try again.');
-            })
-            .then((updateResult) => {
-                if (updateResult === true) {
-                    message.channel.send('Home team successfully set to ' + APIResult.team_name + ' (' + APIResult.team_tag + ')');
-                    Log.logMessage('Executed command "setmkc-home"', 'setmkc-home', APIResult.team_name, message.guild, message.channel, message.author);
-                }
-            });
-        });
+        // search.getTeamById(value)
+        // .then((APIResult) => {
+        //     if (!APIResult || APIResult == null) {
+        //         message.channel.send('There was an error setting the home-team!\nPlease try again with a valid team-id from MKC.');
+        //         return;
+        //     }
+
+        //     Data.ChannelData.UpdateHome(message.channel.id, value, APIResult,
+        //         (error) => {
+        //             Log.logMessage('SQL-ERROR', 'setmkc-home', error, message.guild, message.channel, message.author);
+        //             message.channel.send('There was an error setting the home-team!\nPlease try again.');
+        //     })
+        //     .then((updateResult) => {
+        //         if (updateResult === true) {
+        //             message.channel.send('Home team successfully set to ' + APIResult.team_name + ' (' + APIResult.team_tag + ')');
+        //             Log.logMessage('Executed command "setmkc-home"', 'setmkc-home', APIResult.team_name, message.guild, message.channel, message.author);
+        //         }
+        //     });
+        // });
     }
 };

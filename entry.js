@@ -15,14 +15,7 @@ const client = new Discord.Client(
     ],
     partials: [ 'MESSAGE', 'CHANNEL', 'USER', 'REACTION' ]
 });
-ClientHandler.Initialize(client);
 
-/**
- * Interaction handling
- */
-client.on('interactionCreate', async (interaction) => {
-    console.log(`${interaction.user.tag} in '${interaction.channel.name} did something...`);
-    
-});
+ClientHandler.Initialize(client);
 
 ClientHandler.Login();

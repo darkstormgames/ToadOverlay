@@ -3,16 +3,16 @@ const Data = require('../../Modules/Data/SQLWrapper');
 const Log = require('../../Modules/Log/Logger');
 
  module.exports = {
-     name: 'admin-addtoaduser',
-     alt: [],
-     description: '',
-     
-     /**
-     * @desc execution of the command
-     * @param {Discord.Message} message 
-     * @param {string[]} args 
-     */
-     execute: (message, args) => {
+    name: 'admin-addtoaduser',
+    alt: [],
+    description: '',
+    
+    /**
+    * @desc execution of the command
+    * @param {Discord.Message} message 
+    * @param {string[]} args 
+    */
+    execute: (message, args) => {
         if (message.author.id != process.env.ADMIN_ID) {
             let rng = Math.floor(Math.random() * 6);
             switch (rng) {
@@ -46,5 +46,5 @@ const Log = require('../../Modules/Log/Logger');
             });
             
         });
-     }
- }
+    }
+}
