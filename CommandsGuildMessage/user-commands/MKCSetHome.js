@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const Data = require('../../Modules/Data/SQLWrapper');
 const Log = require('../../Modules/Log/Logger');
 const Help = require('../../Modules/Help/HelpTexts');
-const search = require('../../Modules/MKC/SearchEngine');
+const MKC = require('../../Modules/MKCData/SetMKCTeam');
 
 module.exports = {
     name: 'setmkc-home',
