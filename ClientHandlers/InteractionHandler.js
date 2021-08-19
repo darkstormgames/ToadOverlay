@@ -3,6 +3,7 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const fs = require('fs');
 const Cache = require('./InteractionCache');
+const Data = require('../Modules/Data/SQLWrapper');
 const Log = require('../Modules/Log/Logger');
 
 const rest = new REST({ version: '9'}).setToken(process.env.CLIENT_TOKEN);
@@ -59,29 +60,35 @@ function getCachedObject(interaction) {
  */
 async function handleInteraction(interaction) {
     let cachedInteraction = getCachedObject(interaction);
+    
+
+    
     if (interaction.isCommand()) {
         if (cachedInteraction != null) {
             cachedInteraction.baseInteraction.editReply({ content: '❌ Aborted! ❌\n\nPlease finish your other slash commands in this channel, before starting a new one.', embeds: [], components: [] });
             Cache.RemoveById(cachedInteraction.id);
         }
-        let command = InteractionCommands.get(interaction.commandName);
-        try {
-            if (interaction.guild != null) 
-                Log.logMessage('Starting interaction "' + interaction.commandName + '"', interaction.commandName, null, interaction.guild, interaction.channel, interaction.user);
-            else
-                Log.logMessage('Starting interaction "' + interaction.commandName + '"', interaction.commandName, null, null, null, interaction.user);
-
-            await command.execute(interaction);
-        } catch (error) {
-            if (interaction.guild != null) 
-                Log.logMessage('Something bad happened...', 'interactions-command', error, interaction.guild, interaction.channel, interaction.user);
-            else
-                Log.logMessage('Something bad happened...', 'interactions-command', error, null, null, interaction.user);
-            cachedInteraction = getCachedObject(interaction);
-            if (cachedInteraction != null)
-                Cache.RemoveById(cachedInteraction.id);
-            await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-        }
+        Data.CheckBaseData(interaction.guild, interaction.channel, interaction.user)
+        .then(() => {
+            let command = InteractionCommands.get(interaction.commandName);
+            try {
+                if (interaction.guild != null) 
+                    Log.logMessage('Starting interaction "' + interaction.commandName + '"', interaction.commandName, null, interaction.guild, interaction.channel, interaction.user);
+                else
+                    Log.logMessage('Starting interaction "' + interaction.commandName + '"', interaction.commandName, null, null, null, interaction.user);
+    
+                await command.execute(interaction);
+            } catch (error) {
+                if (interaction.guild != null) 
+                    Log.logMessage('Something bad happened...', 'interactions-command', error, interaction.guild, interaction.channel, interaction.user);
+                else
+                    Log.logMessage('Something bad happened...', 'interactions-command', error, null, null, interaction.user);
+                cachedInteraction = getCachedObject(interaction);
+                if (cachedInteraction != null)
+                    Cache.RemoveById(cachedInteraction.id);
+                await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+            }
+        });
     }
     else if (interaction.isButton() || interaction.isSelectMenu()) {
         if (cachedInteraction != null) {
