@@ -36,6 +36,11 @@ module.exports = {
      * @param {Discord.CommandInteraction} interaction 
      */
     async execute(interaction) {
+        if (interaction.guild == null) {
+            interaction.reply({ content: 'This command can\'t be executed in direct messages!' });
+            return;
+        }
+        
         await interaction.deferReply({ ephemeral: true });
 
         let filter = '150cc';
