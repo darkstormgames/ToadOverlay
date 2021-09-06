@@ -23,8 +23,11 @@ module.exports = {
                     return;
                 })
                 .then((result) => {
-                    if (!(typeof result == 'boolean') && result[0]) {
+                    if (!(typeof result == 'boolean') && result[0] && result[0].fc_switch) {
                         message.channel.send((result[0].fc_switch.startsWith('SW-') ? '' : 'SW-') + result[0].fc_switch);
+                    }
+                    else {
+                        message.channel.send('There is no saved friendcode for your account.\nYou can add one by using the command `_fc SW-FR13-NDC0-D309`')
                     }
                 });
             }
@@ -107,13 +110,16 @@ module.exports = {
                         else if (!(typeof result == 'boolean') && result.length == 1) {
                             message.channel.send((result[0].fc_switch.startsWith('SW-') ? '' : 'SW-') + result[0].fc_switch);
                         }
-                        else {
+                        else if (!(typeof result == 'boolean') && result.length > 1) {
                             let retVal = '**All friendcodes for ' + args[0] + ':**\n```css\n';
                             for (let item in result) {
                                 retVal += (result[item].fc_switch.startsWith('SW-') ? '' : 'SW-') + result[item].fc_switch + ' (' + result[item].name + ')\n';
                             }
                             retVal += '```';
                             message.channel.send(retVal);
+                        }
+                        else {
+                            message.channel.send('No FC found for ' + args[0]);
                         }
                     });
                 }
