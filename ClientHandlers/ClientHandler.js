@@ -30,7 +30,7 @@ module.exports = {
         client.once('ready', () => {
             Log.logMessage('[DISCORD] Ready!', 'LOGIN');
             
-            client.user.setActivity(`Toad from a safe distance on ${client.guilds.cache.size} servers. | Type "_setup" to get started.`, { type: 'WATCHING' });
+            client.user.setActivity(`Toad from a safe distance on ${client.guilds.cache.size} servers. | Type "_?" for help on available commands.`, { type: 'WATCHING' });
         });
 
         // Reconnect, if discord-API closes the connection

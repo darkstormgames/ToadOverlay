@@ -65,7 +65,7 @@ module.exports = {
             }
     
             if (discordClient && discordClient.user) {
-                discordClient.user.setActivity(`Toad from a safe distance on ${discordClient.guilds.cache.size} servers. | Type "_setup" to get started.`, { type: 'WATCHING' });
+                discordClient.user.setActivity(`Toad from a safe distance on ${discordClient.guilds.cache.size} servers. | Type "_?" for help on available commands.`, { type: 'WATCHING' });
             }
         }, 2500)
 
