@@ -165,7 +165,8 @@ module.exports = {
                     '_fc all         \n  Print all friendcodes available on your server.\n\n' +
                     '_track          \n  Prints the tracktable image of the given MK8DX track abbreviation.' +
                     '```' + 
-                    'For more help on a specific command, type `_help command` or `_? command`. (Replace the word "command" with the command you want more help on)',
+                    'For more help on a specific command, type `_help command` or `_? command`. (Replace the word "command" with the command you want more help on)\n' +
+                    'You can also review the tutorial on MKC for more specific information:\nhttps://www.mariokartcentral.com/forums/index.php?threads/toadoverlay-an-extension-bot-to-toad-for-streamers-and-more.10749/',
     SlashCommands:  'All available slash-commands:\n' +
                     '```' +
                     '' +

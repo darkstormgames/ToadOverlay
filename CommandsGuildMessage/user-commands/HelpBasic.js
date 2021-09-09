@@ -34,8 +34,8 @@ module.exports = {
                                             'Other commands:\n' +
                                             '  _war\n' +
                                             '  _fc\n' +
-                                            '  _track\n' +
-                                            '```For more help on commands, type `_?` or review the tutorial on MKC:\nhttps://www.mariokartcentral.com/forums/index.php?threads/toadoverlay-an-extension-bot-to-toad-for-streamers-and-more.10749/');
+                                            '  _track\n\n' +
+                                            'For more help on commands, type `_?`.```');
                 }
                 else if (message.content == process.env.PREFIX + '?') {
                     message.channel.send(Help.OverlaySetup);
