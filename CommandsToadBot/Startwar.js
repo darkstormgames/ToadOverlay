@@ -3,7 +3,7 @@ const Data = require('../Modules/Data/SQLWrapper');
 const Log = require('../Modules/Log/Logger');
 
 module.exports = {
-    name: 'Started war between',
+    name: 'Started MK',
     alt: [],
     description: '',
 
