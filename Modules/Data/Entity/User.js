@@ -57,7 +57,7 @@ function AddUser(user, failedCallback = (error) => {}) {
  */
 function UpdateUser(user, failedCallback = (error) => {}) {
     return new Promise((resolve) => {
-        let queryString = 'UPDATE ' + process.env.SQL_NAME + '.user SET name = "' + user.name + '", discriminator = "' + user.discriminator + '" WHERE id = ' + user.id + ';';
+        let queryString = 'UPDATE ' + process.env.SQL_NAME + '.user SET name = "' + user.username + '", discriminator = "' + user.discriminator + '" WHERE id = ' + user.id + ';';
         db.ExecuteQuery(queryString, failedCallback)
         .then((result) => {
             resolve(result);
