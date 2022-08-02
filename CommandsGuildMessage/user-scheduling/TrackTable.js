@@ -182,49 +182,35 @@ module.exports = {
                 case 'dbb':
                     message.channel.send('https://i.imgur.com/S1TDy2w.jpg');
                     break;
-
-                // Bell Cup
-                case 'dnbc':
-                    context.message.channel.send('https://i.imgur.com/CtxKxEt.jpg');
-                    break;
-                case 'drir':
-                    context.message.channel.send('https://i.imgur.com/knfQM1z.jpg');
-                    break;
-                case 'dsbs':
-                    context.message.channel.send('https://i.imgur.com/n9xwWR7.jpg');
-                    break;
-                case 'dbb':
-                    context.message.channel.send('https://i.imgur.com/S1TDy2w.jpg');
-                    break;
                 
                 // Golden Turbo Cup
                 case 'bpp':
-                    context.message.channel.send('http://toad.darkstormgames.de/images/tracktable/49.jpg');
+                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/49.jpg');
                     break;
                 case 'btc':
-                    context.message.channel.send('http://toad.darkstormgames.de/images/tracktable/50.jpg');
+                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/50.jpg');
                     break;
                 case 'bcm64':
                 case 'bcmo':
-                    context.message.channel.send('http://toad.darkstormgames.de/images/tracktable/51.jpg');
+                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/51.jpg');
                     break;
                 case 'bcmw':
                 case 'bcma':
-                    context.message.channel.send('http://toad.darkstormgames.de/images/tracktable/52.jpg');
+                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/52.jpg');
                     break;
 
                 // Glückskatzen-Cup
                 case 'btb':
-                    context.message.channel.send('http://toad.darkstormgames.de/images/tracktable/53.jpg');
+                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/53.jpg');
                     break;
                 case 'bsr':
-                    context.message.channel.send('http://toad.darkstormgames.de/images/tracktable/54.jpg');
+                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/54.jpg');
                     break;
                 case 'bsg':
-                    context.message.channel.send('http://toad.darkstormgames.de/images/tracktable/55.jpg');
+                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/55.jpg');
                     break;
                 case 'bnh':
-                    context.message.channel.send('http://toad.darkstormgames.de/images/tracktable/56.jpg');
+                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/56.jpg');
                     break;
 
 
