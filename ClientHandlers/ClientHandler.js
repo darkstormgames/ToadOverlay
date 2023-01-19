@@ -1,6 +1,7 @@
 const { existsSync, mkdirSync } = require('fs');
 const { Client, Events } = require('discord.js');
 const Data = require('../Data/SQLWrapper');
+const MessageHandler = require('./MessageHandler');
 
 let client = null;
 
@@ -48,9 +49,9 @@ module.exports = {
   
     dirSplit = (process.platform === "win32" ? '\\' : '/');
     appRoot = process.env.DIR_ENV;
-    appData = appRoot + dirSplit + 'app_data';
-    appLogs = appData + dirSplit + 'logs';
-    appSchedule = appData + dirSplit + 'schedule';
+    appData = appRoot + dirSplit + 'app_data' + dirSplit;
+    appLogs = appData + 'logs' + dirSplit;
+    appSchedule = appData + 'schedule' + dirSplit;
   
     // Create necessary data folders
     if (!existsSync(appData)) {
@@ -64,16 +65,12 @@ module.exports = {
     }
   
     // initialize other handlers
-    client.on(Events.MessageCreate, async (message) => {
-      console.log(message.content);
-      console.log('in MessageCreate');
-    });
+    MessageHandler.Initialize(client);
 
     // client.on(Events.InteractionCreate, async (interaction) => {
     //   if (interaction.isChatInputCommand()) {
         
     //   }
-
     // });
   },
 

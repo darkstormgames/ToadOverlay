@@ -92,7 +92,7 @@ module.exports = {
    * @type {ClientContext}
    */
   ClientContext: ClientContext,
-  CheckBaseData: helper.CheckBaseData,
+  CheckBaseData: async (guild, channel, user) => helper.CheckBaseData(guild, channel, user),
   Helper: helper,
   Op: Op
 }

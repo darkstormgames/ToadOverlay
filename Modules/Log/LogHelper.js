@@ -1,23 +1,35 @@
-export function padWithZeroes(number, length) {
-  var my_string = '' + number;
-  while (my_string.length < length) {
-    my_string = '0' + my_string;
+module.exports = {
+  /**
+   * @param {Number} number 
+   * @param {Number} length 
+   * @returns {String}
+   */
+  padWithZeroes: (number, length) => {
+    var str = '' + number;
+    while (str.length < length) {
+      str = '0' + str;
+    }
+    return str;
+  },
+  /**
+   * @returns {String}
+   */
+  getDatePrefix: () => {
+    let logTime = new Date();
+    return '[' +
+      logTime.getFullYear() + '.' +
+      padWithZeroes((logTime.getMonth() + 1), 2) + '.' +
+      padWithZeroes(logTime.getDate(), 2) + ' ' +
+      padWithZeroes(logTime.getHours(), 2) + ':' +
+      padWithZeroes(logTime.getMinutes(), 2) + ':' +
+      padWithZeroes(logTime.getSeconds(), 2) + '] ';
+  },
+  /**
+   * @param {Date} date 
+   * @returns {String}
+   */
+  getFileName: (date) => {
+    return `${appLogs}dberror_${date.getFullYear().toString()}${padWithZeroes((date.getMonth() + 1), 2)}.log`;
+    // return appLogs + dirSplit + 'dberror_' + logTime.getFullYear().toString() + padWithZeroes((logTime.getMonth() + 1), 2) + '.log';
   }
-  return my_string;
-}
-
-export function getDatePrefix() {
-  let logTime = new Date();
-  return '[' +
-    logTime.getFullYear() + '.' +
-    padWithZeroes((logTime.getMonth() + 1), 2) + '.' +
-    padWithZeroes(logTime.getDate(), 2) + ' ' +
-    padWithZeroes(logTime.getHours(), 2) + ':' +
-    padWithZeroes(logTime.getMinutes(), 2) + ':' +
-    padWithZeroes(logTime.getSeconds(), 2) + '] ';
-}
-
-export function getFileName(date) {
-  return appRoot + dirSplit + 'app_data' + dirSplit + 'logs' + dirSplit +
-    'dberror_' + logTime.getFullYear().toString() + padWithZeroes((logTime.getMonth() + 1), 2) + '.log';
 }
