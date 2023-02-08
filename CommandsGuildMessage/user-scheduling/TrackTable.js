@@ -239,6 +239,32 @@ module.exports = {
                 case 'bshs':
                     message.channel.send('http://toad.darkstormgames.de/images/tracktable/64.jpg');
                     break;
+                    
+                case 'bll':
+                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/65.jpg');
+                    break;
+                case 'bbl':
+                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/66.jpg');
+                    break;
+                case 'brrm':
+                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/67.jpg');
+                    break;
+                case 'bmt':
+                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/68.jpg');
+                    break;
+
+                case 'bll':
+                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/69.jpg');
+                    break;
+                case 'bbb':
+                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/70.jpg');
+                    break;
+                case 'bmm':
+                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/71.jpg');
+                    break;
+                case 'brr7':
+                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/72.jpg');
+                    break;
 
                 default:
                     message.channel.send('Invalid track name.')
