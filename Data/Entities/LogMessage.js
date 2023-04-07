@@ -1,7 +1,7 @@
 const db = require('../SQLBase');
 const { DataTypes } = require('sequelize');
 
-const LogDMEntity = db.connection.define('LogDM', {
+const LogMessageEntity = db.connection.define('LogMessage', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
@@ -9,21 +9,22 @@ const LogDMEntity = db.connection.define('LogDM', {
     unique: true,
     primaryKey: true
   },
-  command: DataTypes.STRING(256),
+  level: DataTypes.STRING(256),
   status: DataTypes.STRING(256),
-  details: DataTypes.TEXT,
-  message: DataTypes.TEXT
+  source: DataTypes.STRING(256),
+  message: DataTypes.TEXT,
+  content: DataTypes.TEXT,
 },
 {
-  tableName: 'log_dm',
+  tableName: 'log_message',
   timestamps: true,
   createdAt: 'created',
   updatedAt: false
 });
 
 module.exports = {
-  LogDM: LogDMEntity,
+  LogMessage: LogMessageEntity,
   sync: () => {
-    return LogDMEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTIVE' ? false : true) });
+    return LogMessageEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTION' ? false : true) });
   }
 }

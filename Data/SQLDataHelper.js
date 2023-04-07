@@ -46,7 +46,7 @@ async function CheckBaseData(guild, channel, user) {
         }
       ]
     });
-    if (process.env.ENVIRONMENT == 'DEBUG') console.log(JSON.stringify(userContext, null, 2));
+    if (process.env.ENVIRONMENT == 'DEVELOPMENT') console.log(JSON.stringify(userContext, null, 2));
 
     let guildContext = await Guild.findByPk(guild.id, {
       include: [
@@ -61,7 +61,7 @@ async function CheckBaseData(guild, channel, user) {
         }
       ]
     });
-    if (process.env.ENVIRONMENT == 'DEBUG') console.log(JSON.stringify(guildContext, null, 2));
+    if (process.env.ENVIRONMENT == 'DEVELOPMENT') console.log(JSON.stringify(guildContext, null, 2));
 
     let channelContext = await Channel.findByPk(channel.id, {
       include: [
@@ -78,11 +78,14 @@ async function CheckBaseData(guild, channel, user) {
           model: LogCommand,
           separate: true,
           limit: 10,
-          order: [['created', 'DESC']]
+          order: [['created', 'DESC']],
+          where: {
+            channel_id: channel.id
+          }
         }
       ]
     });
-    if (process.env.ENVIRONMENT == 'DEBUG') console.log(JSON.stringify(channelContext, null, 2));
+    if (process.env.ENVIRONMENT == 'DEVELOPMENT') console.log(JSON.stringify(channelContext, null, 2));
 
     return new DataContext(userContext, guildContext, channelContext);
   }

@@ -1,3 +1,6 @@
+const LogType = require('./LogType');
+const LogLevel = require('./LogLevel');
+
 module.exports = {
   /**
    * @param {Number} number 
@@ -11,25 +14,41 @@ module.exports = {
     }
     return str;
   },
+
   /**
    * @returns {String}
    */
   getDatePrefix: () => {
     let logTime = new Date();
-    return '[' +
-      logTime.getFullYear() + '.' +
+    return logTime.getFullYear() + '.' +
       padWithZeroes((logTime.getMonth() + 1), 2) + '.' +
       padWithZeroes(logTime.getDate(), 2) + ' ' +
       padWithZeroes(logTime.getHours(), 2) + ':' +
       padWithZeroes(logTime.getMinutes(), 2) + ':' +
-      padWithZeroes(logTime.getSeconds(), 2) + '] ';
+      padWithZeroes(logTime.getSeconds(), 2);
   },
+
   /**
-   * @param {Date} date 
+   * @param {LogType} fileType
    * @returns {String}
    */
-  getFileName: (date) => {
-    return `${appLogs}dberror_${date.getFullYear().toString()}${padWithZeroes((date.getMonth() + 1), 2)}.log`;
+  getFileName: (fileType) => {
+    let date = new Date();
+    return `${appLogs}${fileType}_${date.getFullYear().toString()}${padWithZeroes((date.getMonth() + 1), 2)}.log`;
     // return appLogs + dirSplit + 'dberror_' + logTime.getFullYear().toString() + padWithZeroes((logTime.getMonth() + 1), 2) + '.log';
+  },
+
+  /**
+   * @param {LogLevel} logLevel
+   * @returns {boolean} 
+   */
+  isValidLogLevel: (logLevel) => {
+    if (process.env.LOGLEVEL == LogLevel.Trace) return true;
+    else if (process.env.LOGLEVEL == LogLevel.Debug && logLevel != LogLevel.Trace) return true;
+    else if (process.env.LOGLEVEL == LogLevel.Info && logLevel != LogLevel.Trace && logLevel != LogLevel.Debug) return true;
+    else if (process.env.LOGLEVEL == LogLevel.Warn && logLevel != LogLevel.Trace && logLevel != LogLevel.Debug && logLevel != LogLevel.Info) return true;
+    else if (process.env.LOGLEVEL == LogLevel.Error && logLevel != LogLevel.Trace && logLevel != LogLevel.Debug && logLevel != LogLevel.Info && logLevel != LogLevel.Warn) return true;
+    else if (process.env.LOGLEVEL == LogLevel.Fatal && logLevel != LogLevel.Trace && logLevel != LogLevel.Debug && logLevel != LogLevel.Info && logLevel != LogLevel.Warn && logLevel != LogLevel.Error) return true;
+    else return false;
   }
 }

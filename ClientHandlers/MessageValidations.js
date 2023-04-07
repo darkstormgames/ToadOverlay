@@ -6,10 +6,7 @@ module.exports = {
    * @param {Message} message
    */
   isUserCommand: (message) => {
-      if ((message.content.startsWith(process.env.PREFIX) 
-          || message.mentions.has(new User(message.client, { id: process.env.BOT_ID }), { ignoreRoles: true, ignoreEveryone: true })) 
-          && !message.author.bot 
-          && message.guild !== null)
+      if (message.content.startsWith(process.env.PREFIX) && !message.author.bot && message.guild !== null)
               return true;
       else
           return false;

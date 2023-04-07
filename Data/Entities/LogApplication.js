@@ -9,9 +9,11 @@ const LogApplicationEntity = db.connection.define('LogApplication', {
     unique: true,
     primaryKey: true
   },
-  command: DataTypes.STRING(256),
+  level: DataTypes.STRING(256),
   status: DataTypes.STRING(256),
-  details: DataTypes.TEXT
+  source: DataTypes.STRING(256),
+  message: DataTypes.TEXT,
+  stack: DataTypes.TEXT
 },
 {
   tableName: 'log_application',
@@ -23,6 +25,6 @@ const LogApplicationEntity = db.connection.define('LogApplication', {
 module.exports = {
   LogApplication: LogApplicationEntity,
   sync: () => {
-    return LogApplicationEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTIVE' ? false : true) });
+    return LogApplicationEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTION' ? false : true) });
   }
 }

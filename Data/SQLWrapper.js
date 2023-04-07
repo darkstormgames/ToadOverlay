@@ -1,4 +1,4 @@
-const { Op } = require('sequelize');
+const { Op, OpTypes } = require('sequelize');
 const { connection } = require('./SQLBase');
 const { LogApplication, sync: AppSync } = require('./Entities/LogApplication');
 const { User, sync: UserSync } = require('./Entities/User');
@@ -9,8 +9,9 @@ const { ChannelData, sync: ChannelDataSync } = require('./Entities/ChannelData')
 const { UserChannel, sync: UserChannelSync } = require('./Entities/UserChannel');
 const { Profile, sync: ProfileSync } = require('./Entities/Profile');
 const { ChannelProfile, sync: ChannelProfileSync } = require('./Entities/ChannelProfile');
-const { LogCommand, sync: CommandSync } = require('./Entities/LogCommand');
-const { LogDM, sync: DMSync } = require('./Entities/LogDM');
+// const { LogCommand, sync: CommandSync } = require('./Entities/LogCommand');
+// const { LogDM, sync: DMSync } = require('./Entities/LogDM');
+const { LogMessage, sync: MessageSync } = require('./Entities/LogMessage');
 const helper = require('./SQLDataHelper');
 const { ClientContext } = require('../ClientHandlers/ClientContext');
 // const { Client } = require('discord.js');
@@ -22,18 +23,22 @@ User.hasMany(UserChannel, { foreignKey: { name: 'user_id', allowNull: false }, o
 UserChannel.belongsTo(User, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
 User.hasMany(Profile, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
 Profile.belongsTo(User, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
-User.hasMany(LogCommand, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
-LogCommand.belongsTo(User, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
-User.hasMany(LogDM, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
-LogDM.belongsTo(User, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
+User.hasMany(LogMessage, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
+LogMessage.belongsTo(User, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
+// User.hasMany(LogCommand, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
+// LogCommand.belongsTo(User, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
+// User.hasMany(LogDM, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
+// LogDM.belongsTo(User, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
 
 // Set Guild direct associations
 Guild.hasMany(GuildUser, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
 GuildUser.belongsTo(Guild, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
 Guild.hasMany(Channel, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
 Channel.belongsTo(Guild, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
-Guild.hasMany(LogCommand, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
-LogCommand.belongsTo(Guild, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
+Guild.hasMany(LogMessage, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
+LogMessage.belongsTo(Guild, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
+// Guild.hasMany(LogCommand, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
+// LogCommand.belongsTo(Guild, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
 
 // Set Channel direct associations
 Channel.hasMany(UserChannel, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
@@ -42,8 +47,10 @@ Channel.hasOne(ChannelData, { foreignKey: { name: 'channel_id', allowNull: false
 ChannelData.belongsTo(Channel, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT', as: 'ChannelData' });
 Channel.hasMany(ChannelProfile, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
 ChannelProfile.belongsTo(Channel, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
-Channel.hasMany(LogCommand, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
-LogCommand.belongsTo(Channel, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
+Channel.hasMany(LogMessage, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
+LogMessage.belongsTo(Channel, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
+// Channel.hasMany(LogCommand, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
+// LogCommand.belongsTo(Channel, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
 
 // Set remaining Profile direct associations
 Profile.hasMany(ChannelProfile, { foreignKey: { name: 'profile_id', allowNull: false }, onDelete: 'RESTRICT' });
@@ -83,16 +90,27 @@ module.exports = {
 
   LogApplication,
   AppSync,
-  LogCommand,
-  CommandSync,
-  LogDM,
-  DMSync,
+  LogMessage,
+  MessageSync,
+  // LogCommand,
+  // CommandSync,
+  // LogDM,
+  // DMSync,
 
   /**
    * @type {ClientContext}
    */
   ClientContext: ClientContext,
+  /**
+  * @param {Discord.Guild} guild 
+  * @param {Discord.Channel} channel 
+  * @param {Discord.User} user 
+  * @returns {DataContext}
+  */
   CheckBaseData: async (guild, channel, user) => helper.CheckBaseData(guild, channel, user),
   Helper: helper,
+  /**
+   * @type {OpTypes}
+   */
   Op: Op
 }

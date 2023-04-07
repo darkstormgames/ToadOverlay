@@ -6,6 +6,7 @@
  * @property {string} Warn WARN
  * @property {string} Error ERROR
  * @property {string} Fatal FATAL
+ * @property {string} None NONE
  */
 
 /**
@@ -18,5 +19,6 @@ module.exports = {
   Info: 'INFO',
   Warn: 'WARN',
   Error: 'ERROR',
-  Fatal: 'FATAL'
+  Fatal: 'FATAL',
+  None: 'NONE'
 }

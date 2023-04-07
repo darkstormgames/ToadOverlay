@@ -1,7 +1,10 @@
 const { Message } = require('discord.js');
 const { DataContext } = require('./DataContext');
 
-class ClientContext {
+/**
+ * @typedef {Object} MessageContext
+ */
+class MessageContext {
     /**
      * @param {Message} discordMessage 
      * @param {string[]} arguments 
@@ -29,4 +32,9 @@ class ClientContext {
     data;
 }
 
-module.exports.ClientContext = ClientContext;
+module.exports = {
+    /**
+     * @type {MessageContext}
+     */
+    MessageContext: MessageContext
+}
