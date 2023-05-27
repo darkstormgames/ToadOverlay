@@ -47,7 +47,7 @@ module.exports = {
   },
 
   LogCommand: async (source, message, commandContext, status = LogStatus.None, logLevel = LogLevel.Info) => {
-
+    
   },
 
   /**
@@ -58,8 +58,14 @@ module.exports = {
    * @param {LogStatus} status 
    * @param {LogLevel} LogLevel 
    */
-  LogDM: async (source, message, user, status = LogStatus.None, LogLevel = LogLevel.Info) => {
-
+  LogDM: async (source, message, content, user, status = LogStatus.None, logLevel = LogLevel.Info) => {
+    if (process.env.ENVIRONMENT == 'DEVELOPMENT') {
+      LogConsole.LogDM(source, message, content, user, status, logLevel);
+    }
+    if (process.env.LOGLEVEL == 'DEBUG') {
+      LogFile.LogDM(source, message, content, user, status, logLevel);
+    }
+    LogDB.LogDM(source, message, content, user, status, logLevel);
   },
 
   LogModal: async () => {

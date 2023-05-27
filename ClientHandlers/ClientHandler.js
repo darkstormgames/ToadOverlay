@@ -62,8 +62,8 @@ module.exports = {
     await Data.MessageSync();         // LogMessage
     // LogApplication('ClientHandler.Initialize', 'Initialize LogCommand table', LogStatus.Initialize, LogLevel.Trace);
     // await Data.CommandSync();         // LogCommand
-    // LogApplication('ClientHandler.Initialize', 'Initialize LogDM table', LogStatus.Initialize, LogLevel.Trace);
-    // await Data.DMSync();              // LogDM
+    LogApplication('ClientHandler.Initialize', 'Initialize LogDM table', LogStatus.Initialize, LogLevel.Trace);
+    await Data.DMSync();              // LogDM
   
     await LogApplication('ClientHandler.Initialize', 'Initialize global variables', LogStatus.Initialize, LogLevel.Trace);
     dirSplit = (process.platform === "win32" ? '\\' : '/');

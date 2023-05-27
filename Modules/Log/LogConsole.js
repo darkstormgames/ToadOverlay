@@ -35,9 +35,16 @@ module.exports = {
 
   },
 
-  LogDM: async (source, message, user, status, logLevel) => {
+  LogDM: async (source, message, content, user, status, logLevel) => {
     if (!LogHelper.isValidLogLevel(logLevel)) return;
-
+    log(chalk.bgGreen(
+      chalk.yellow('[' + LogHelper.getDatePrefix() + '] ') + 
+      chalk.yellow(logLevel) + ' ' +
+      chalk.magentaBright(source) + '\n' +
+      `[USER: ${user.name} (${user.id})]\n` +
+      chalk.white(message) + ' ' +
+      chalk.blue(status) + ' ' + messageContext.message.content
+    ));
   },
 
   LogModal: async (logLevel) => {

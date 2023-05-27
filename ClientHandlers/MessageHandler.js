@@ -61,14 +61,14 @@ async function handleCommands(message) {
     CommandsGuildMessage.forEach(async (value) => {
       if (command == value.name || value.alt.includes(command)) {
         let messageContext = new MessageContext(message, args, await CheckBaseData(message.guild, message.channel, message.author));
-        await LogMessage(value.name, `Executing ${value.name}`, messageContext, LogStatus.Executing);
+        await LogMessage(value.name, `Executing ${value.name}`, messageContext, LogStatus.Executing, LogLevel.Debug);
         await value.execute(messageContext);
       }
     });
   }
   else if (isPrivateMessage(message)) { // ToDo: Migrate to new Logger
     if (message.content == 'help') {
-      Log.logDM('help', 'STARTED', null, message.content, message.author);
+      await LogDM('MessageHandler.HandleCommands', 'Print Help', message.content, message.author, LogStatus.Executing, LogLevel.Debug);
       await CommandsDirectMessage.get('help').execute(new MessageContext(message, null, null));
       return;
     }
@@ -84,7 +84,7 @@ async function handleCommands(message) {
 
     CommandsDirectMessage.forEach(async (value) => {
       if (message.content.startsWith(value.name) || value.alt.includes(message.content.split(' ')[0])) {
-        await Log.logDM(value.name, 'STARTED', null, message.content, message.author);
+        await LogDM(`MessageHandler.HandleCommands', '[DM] Executing ${value.name}`, message.content, message.author, LogStatus.Executing, LogLevel.Debug);
         await value.execute(new MessageContext(message, content, null));
       }
     });

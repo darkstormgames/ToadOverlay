@@ -10,7 +10,7 @@ const { UserChannel, sync: UserChannelSync } = require('./Entities/UserChannel')
 const { Profile, sync: ProfileSync } = require('./Entities/Profile');
 const { ChannelProfile, sync: ChannelProfileSync } = require('./Entities/ChannelProfile');
 // const { LogCommand, sync: CommandSync } = require('./Entities/LogCommand');
-// const { LogDM, sync: DMSync } = require('./Entities/LogDM');
+const { LogDM, sync: DMSync } = require('./Entities/LogDM');
 const { LogMessage, sync: MessageSync } = require('./Entities/LogMessage');
 const helper = require('./SQLDataHelper');
 const { ClientContext } = require('../ClientHandlers/ClientContext');
@@ -27,8 +27,8 @@ User.hasMany(LogMessage, { foreignKey: { name: 'user_id', allowNull: false }, on
 LogMessage.belongsTo(User, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
 // User.hasMany(LogCommand, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
 // LogCommand.belongsTo(User, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
-// User.hasMany(LogDM, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
-// LogDM.belongsTo(User, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
+User.hasMany(LogDM, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
+LogDM.belongsTo(User, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
 
 // Set Guild direct associations
 Guild.hasMany(GuildUser, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
@@ -94,8 +94,8 @@ module.exports = {
   MessageSync,
   // LogCommand,
   // CommandSync,
-  // LogDM,
-  // DMSync,
+  LogDM,
+  DMSync,
 
   /**
    * @type {ClientContext}

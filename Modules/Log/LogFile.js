@@ -18,8 +18,8 @@ module.exports = {
   LogMessage: async (source, message, messageContext, status, logLevel) => {
     if (!LogHelper.isValidLogLevel(logLevel)) return;
     let content = `\n[${LogHelper.getDatePrefix()}]\t[${logLevel}]\t${source}\n` +
-                  `[GUILD: ${messageContext.data.guild.name} (${messageContext.data.guild.id})] [CHANNEL: ${messageContext.data.channel.name} (${messageContext.data.channel.id})] [USER: ${messageContext.data.user.name} (${messageContext.data.user.id})]\n` +
-                  `[${status}]\t${message}\t${messageContext.message.content}` + '\n';
+                  `\t[GUILD: ${messageContext.data.guild.name} (${messageContext.data.guild.id})] [CHANNEL: ${messageContext.data.channel.name} (${messageContext.data.channel.id})] [USER: ${messageContext.data.user.name} (${messageContext.data.user.id})]\n` +
+                  `\t[${status}]\t${message}\n\t${messageContext.message.content}` + '\n';
     fs.appendFile(LogHelper.getFileName(LogType.Message), content, (err) => {
       if (err) LogConsole.LogMessage('LogFile.LogMessage', err.message, messageContext, LogStatus.Error, LogLevel.Error);
     });
@@ -30,9 +30,14 @@ module.exports = {
 
   },
 
-  LogDM: async (source, message, user, status, LogLevel) => {
+  LogDM: async (source, message, content, user, status, LogLevel) => {
     if (!LogHelper.isValidLogLevel(logLevel)) return;
-
+    let content = `\n[${LogHelper.getDatePrefix()}]\t[${logLevel}]\t${source}\n` +
+                  `\t[USER: ${user.name} (${user.id})]\n` +
+                  `\t[${status}]\t${message}\n\t${content}` + '\n';
+    fs.appendFile(LogHelper.getFileName(LogType.Message), content, (err) => {
+      if (err) LogConsole.LogMessage('LogFile.LogDM', err.message, content, user, LogStatus.Error, LogLevel.Error);
+    });
   },
 
   LogModal: async () => {

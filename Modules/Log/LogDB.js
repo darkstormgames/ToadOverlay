@@ -2,7 +2,7 @@ const LogHelper = require('./LogHelper');
 const LogLevel = require('./LogLevel');
 const LogStatus = require('./LogStatus');
 const LogFile = require('./LogFile');
-const { LogApplication, LogMessage } = require('../../Data/SQLWrapper');
+const { LogApplication, LogDM, LogMessage } = require('../../Data/SQLWrapper');
 
 module.exports = {
   LogApplication: async (source, message, status, logLevel, stack) => {
@@ -43,9 +43,20 @@ module.exports = {
 
   },
 
-  LogDM: async (source, message, user, status, LogLevel) => {
+  LogDM: async (source, message, content, user, status, logLevel) => {
     if (!LogHelper.isValidLogLevel(logLevel)) return;
-
+    let log = LogDM.build({
+      level: logLevel,
+      status: status,
+      source: source,
+      message: message,
+      content: content,
+      user_id: user.id
+    });
+    await log.save()
+    .catch((error) => {
+      LogFile.LogDM('LogDB.LogDM', error, content, user, LogStatus.DBError, LogLevel.Error);
+    });
   },
 
   LogModal: async () => {
