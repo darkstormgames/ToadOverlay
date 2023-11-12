@@ -15,7 +15,7 @@ module.exports = {
     execute: (message, args) => {
         if (message.attachments.size > 0) {
             // Write first image attached to the db
-            Data.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + '.channel_data SET home_mkc_url = "", home_img = "' + Data.sql.connection.escape(message.attachments.values().next().value.proxyURL).replaceAll("'", "") + '" WHERE channel_id = ' + message.channel.id + ';', 
+            Data.ExecuteQuery('UPDATE ' + process.env.SQL_NAME + '.channel_data SET home_mkc_url = "", home_img = "' + Data.sql.connection.escape(message.attachments.values().next().value.proxyURL).split('?')[0].replaceAll("'", "") + '" WHERE channel_id = ' + message.channel.id + ';', 
             (error) => {
                 message.channel.send('There was an error updating the logo for the home team...\n\nPlease try again.');
                 Log.logMessage('There was an error updating the logo for the home team...', 'setlogo-home', error, message.guild, message.channel, message.author);
