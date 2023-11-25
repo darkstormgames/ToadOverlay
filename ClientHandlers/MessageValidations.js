@@ -36,7 +36,7 @@
       * @param {Discord.Message} message
       */
      isToadMessage: (message) => {
-         if (message.author.id == 177162177432649728 
+         if ((message.author.id == 177162177432649728 || message.author.id == 726933780677394532)
              && message.author.bot)
                  return true;
          else

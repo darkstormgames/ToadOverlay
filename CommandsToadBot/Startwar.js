@@ -4,7 +4,7 @@ const Log = require('../Modules/Log/Logger');
 
 module.exports = {
     name: 'Started MK',
-    alt: [],
+    alt: ['started war between'],
     description: '',
 
     /**

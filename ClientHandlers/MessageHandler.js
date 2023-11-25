@@ -91,10 +91,18 @@ async function handleCommands(message) {
     }
     else if (Validation.isToadMessage(message)) {
         CommandsToadBot.forEach((value) => {
-            if (message.content.startsWith(value.name) ||
-               (message.embeds[1] && message.embeds[1].title && message.embeds[1].title.startsWith(value.name))) {
+            if (message.content && message.content.startsWith(value.name)) {
                 Data.CheckBaseData(message.guild, message.channel, message.author);
                 value.execute(message, null);
+            }
+            
+            if (message.embeds && message.embeds.length > 0){
+                message.embeds.forEach(p => {
+                    if (p && p.title && p.title.startsWith(value.name)){
+                        Data.CheckBaseData(message.guild, message.channel, message.author);
+                        value.execute(message, null);
+                    } 
+                });
             }
         });
     }
