@@ -13,7 +13,7 @@ module.exports = {
     */
     execute: (message) => {
         message.embeds.forEach(p =>{
-            if (p && p.title && p.title.startsWith(this.name)){
+            if (p && p.title && p.title.startsWith('Total Score after Race')){
                 let currentHome = p.fields[0].value;
                 let currentGuest = p.fields[1].value;
                 Data.ChannelData.UpdateScores(currentHome, currentGuest, message.channel.id, (error) => {

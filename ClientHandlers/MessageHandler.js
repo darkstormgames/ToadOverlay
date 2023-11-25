@@ -91,7 +91,7 @@ async function handleCommands(message) {
     }
     else if (Validation.isToadMessage(message)) {
         CommandsToadBot.forEach((value) => {
-            if (message.content && message.content.startsWith(value.name)) {
+            if (message.content && message.content.startsWith(value.name) || message.content.startsWith(value.alt[0])) {
                 Data.CheckBaseData(message.guild, message.channel, message.author);
                 value.execute(message, null);
             }
