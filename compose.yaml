@@ -1,0 +1,15 @@
+services:
+  toadoverlay-maintenance:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      PREFIX: _
+      LOGLEVEL: DEBUG
+      ENVIRONMENT: DEVELOPMENT
+      CLIENT_TOKEN: /run/secrets/bot_token
+    secrets:
+      - bot_token
+secrets:
+  bot_token:
+    file: token.env
