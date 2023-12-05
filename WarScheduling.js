@@ -22,10 +22,10 @@ function getData(message) {
     Log('WarScheduling.GetData', `Running failsafe measures for ${message.embeds[0].title} (${message.id}) in ${message.channel.name} (${message.channel.id}) on ${message.guild.name} (${message.guild.id})`, LogStatus.Failed, LogLevel.Warn);
     let msgData = message.embeds[0].title.split(' ');
     Log('WarScheduling.GetData', `${msgData}`, LogStatus.Executing, LogLevel.Trace);
-    let time = msgData[1].replace('*', '') + (msgData[2] && (msgData[2].startsWith('AM') || msgData[2].startsWith('PM')) ?  msgData[2].replace('*', '') : '');
+    let time = msgData[1].replace('*', '').replace('*', '') + (msgData[2] && (msgData[2].startsWith('AM') || msgData[2].startsWith('PM')) ?  msgData[2].replace('*', '').replace('*', '') : '');
     let timeFormat = (msgData[2] && (msgData[2].startsWith('AM') || msgData[2].startsWith('PM')) ?  '12' : '24');
-    let clockDiscriminator = (msgData[2] && (msgData[2].startsWith('AM') || msgData[2].startsWith('PM')) ?  msgData[2].replace('*', '') : '');
-    let rawTime = msgData[1].replace('*', '');
+    let clockDiscriminator = (msgData[2] && (msgData[2].startsWith('AM') || msgData[2].startsWith('PM')) ?  msgData[2].replace('*', '').replace('*', '') : '');
+    let rawTime = msgData[1].replace('*', '').replace('*', '');
     Log('WarScheduling.GetData', `${time}\n${timeFormat}\n${clockDiscriminator}\n${rawTime}`, LogStatus.Executing, LogLevel.Trace);
 
     fs.writeFileSync(appSchedule + message.guild.id + dirSplit + message.channel.id + dirSplit + message.id + '.json', 

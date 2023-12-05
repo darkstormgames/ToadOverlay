@@ -1,8 +1,9 @@
-**/app_data
+**/app_data/**
 
 **/.classpath
 **/.dockerignore
 **/.env
+**/*.env
 **/.git
 **/.gitignore
 **/.project

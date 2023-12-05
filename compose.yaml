@@ -2,14 +2,17 @@ services:
   maintenance:
     build:
       context: .
+    volumes:
+      - /var/toadoverlay:/usr/src/app/app_data
+      - /var/secrets:/run/secrets
     environment:
       NODE_ENV: production
       PREFIX: _
       LOGLEVEL: DEBUG
       ENVIRONMENT: DEVELOPMENT
-      CLIENT_TOKEN: /run/secrets/bot_token
+      CLIENT_TOKEN: /run/secrets/token
     secrets:
-      - bot_token
+      - token
 secrets:
-  bot_token:
-    file: token.env
+  token:
+    external: true
