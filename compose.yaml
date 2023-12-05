@@ -1,5 +1,6 @@
 services:
   maintenance:
+    container_name: toadoverlay_maintenance
     build:
       context: https://github.com/darkstormgames/ToadOverlay.git#maintenance
     volumes:
@@ -13,6 +14,8 @@ services:
       CLIENT_TOKEN: /run/secrets/token
     secrets:
       - token
+    networks:
+      - bridge
 secrets:
   token:
     external: true
