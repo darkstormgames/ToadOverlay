@@ -145,9 +145,17 @@ module.exports = {
       PermissionsBitField.Flags.AddReactions,
       PermissionsBitField.Flags.ReadMessageHistory
     ])) {
-      message.channel.send('I don\'t have the permissions needed for this command!\nPlease make sure to give me at least the following permissions:\n```Required permissions:\n  SEND MESSAGES\n  EMBED LINKS\n  ADD REACTIONS\n  READ MESSAGE HISTORY\n\nOptional, but useful for the full functionality:\n  MANAGE MESSAGES```');
-      Log('ScheduleWar.Permissions', 'Missing permissions...', LogStatus.Failed, LogLevel.Warn);
-      return;
+      if (!message.channel.permissionsFor(message.guild.members.me).has([PermissionsBitField.Flags.SendMessages])) {
+        message.author.send('The channel you tried to execute some command in does not allow me to send messages...\nPlease make sure to give me at least the following permissions for me to function properly:\n```Required permissions:\n  SEND MESSAGES\n  EMBED LINKS\n  ADD REACTIONS\n  READ MESSAGE HISTORY\n\nOptional, but useful for the full functionality of war scheduling:\n  MANAGE MESSAGES```')
+          .catch(() => Log('ScheduleWar.Permissions.SendDM', 'Can\'t send info-DM...', LogStatus.Failed, LogLevel.Warn));
+        Log('ScheduleWar.Permissions.SendMessage', 'Can\'t send messages... Missing permissions...', LogStatus.Failed, LogLevel.Warn);
+        return;
+      }
+      else {
+        message.channel.send('I don\'t have the permissions needed for this command!\nPlease make sure to give me at least the following permissions:\n```Required permissions:\n  SEND MESSAGES\n  EMBED LINKS\n  ADD REACTIONS\n  READ MESSAGE HISTORY\n\nOptional, but useful for the full functionality:\n  MANAGE MESSAGES```');
+        Log('ScheduleWar.Permissions', 'Missing permissions...', LogStatus.Failed, LogLevel.Warn);
+        return;
+      }
     }
 
     for (let time of times) {

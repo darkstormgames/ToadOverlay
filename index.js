@@ -1,4 +1,4 @@
-if (process.env.CLIENT_TOKEN.startsWith('/')) {
+if (process.env.CLIENT_TOKEN && process.env.CLIENT_TOKEN.startsWith('/')) {
   process.env.CLIENT_TOKEN = require('fs').readFileSync(process.env.CLIENT_TOKEN);
 }
 else {
@@ -7,17 +7,17 @@ else {
 
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
 const { initialize, login } = require('./ClientHandler');
-//const { Log } = require('./log/Logger');
+const { Log } = require('./log/Logger');
 
-// process.on('uncaughtException', async (error, source) => {
-//   Log(source, error.message, LogStatus.Error, LogLevel.Error, error.stack);
-//   if (process.env.ENVIRONMENT == 'DEVELOPMENT') process.exit(1);
-// });
+process.on('uncaughtException', async (error, source) => {
+  Log(source, error.message, LogStatus.Error, LogLevel.Error, error.stack);
+  if (process.env.ENVIRONMENT == 'DEVELOPMENT') throw error;
+});
 
-// process.on('unhandledRejection', async (event) => {
-//   Log('UnhandledRejection', event.reason.message, LogStatus.Error, LogLevel.Error, event.reason.stack);
-//   if (process.env.ENVIRONMENT == 'DEVELOPMENT') process.exit(15);
-// });
+process.on('unhandledRejection', async (event) => {
+  Log('UnhandledRejection', event.reason.message, LogStatus.Error, LogLevel.Error, event.reason.stack);
+  if (process.env.ENVIRONMENT == 'DEVELOPMENT') process.exit(15);
+});
 
 const client = new Client({
   intents: [

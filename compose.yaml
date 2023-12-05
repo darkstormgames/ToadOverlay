@@ -1,5 +1,5 @@
 services:
-  toadoverlay-maintenance:
+  maintenance:
     build:
       context: .
     environment:

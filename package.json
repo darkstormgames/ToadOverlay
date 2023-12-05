@@ -1,5 +1,5 @@
 {
-  "name": "toadoverlay_maintenance",
+  "name": "toadoverlay",
   "version": "0.8.0",
   "description": "Fallback bot for ToadOverlay",
   "main": "index.js",

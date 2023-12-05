@@ -1,5 +1,5 @@
 const { existsSync, mkdirSync, readdirSync } = require('fs');
-const { ActivityType, Client, Collection, Events, Message, MessageReaction, User } = require('discord.js');
+const { ActivityType, Client, Collection, Events, Message, MessageReaction, PermissionsBitField, User } = require('discord.js');
 const { Log, LogStatus, LogLevel } = require('./log/Logger');
 const { addCan, addCant, addNotSure, addSub, removeEntry } = require('./WarScheduling');
 
@@ -73,6 +73,19 @@ async function handleReactions(reaction, user) {
           case '♿':
             removeEntry(reaction.message, guildMember);
             break;
+        }
+
+        if (reaction.message.channel.permissionsFor(reaction.message.guild.members.me).has([ PermissionsBitField.Flags.ManageMessages ])) {
+          reaction.users.cache.forEach(reactionUser => {
+            if (reactionUser.id != reaction.message.client.user.id) {
+              try {
+                reaction.users.remove(reactionUser.id);
+              }
+              catch {
+                Log('ClientHandler.HandleReactions', `Failed to remove ${reactionUser.displayName} (${reactionUser.id}) from ${reaction.message.embeds[0].title} (${reaction.message.id}) in ${reaction.message.channel.name} (${reaction.message.channel.id})`, LogStatus.Failed, LogLevel.Warn);
+              }
+            }
+          });
         }
       }
     }
