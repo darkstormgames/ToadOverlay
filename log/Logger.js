@@ -68,7 +68,7 @@ function getDatePrefix() {
  */
 function getFileName() {
   let date = new Date();
-  return `${appLogs}APPLICATION_${date.getFullYear().toString()}${padWithZeroes((date.getMonth() + 1), 2)}.log`;
+  return `${appLogs}APPLICATION_${date.getFullYear().toString()}${padWithZeroes((date.getMonth() + 1), 2)}${padWithZeroes(date.getDay(), 2)}.log`;
 }
 
 /**
