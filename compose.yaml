@@ -1,7 +1,7 @@
 services:
   maintenance:
     build:
-      context: .
+      context: https://github.com/darkstormgames/ToadOverlay.git#maintenance
     volumes:
       - /var/toadoverlay:/usr/src/app/app_data
       - /var/secrets:/run/secrets:ro
