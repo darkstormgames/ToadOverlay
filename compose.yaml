@@ -14,8 +14,6 @@ services:
       CLIENT_TOKEN: /run/secrets/token
     secrets:
       - token
-    networks:
-      - bridge
 secrets:
   token:
     external: true
