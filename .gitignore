@@ -11,6 +11,7 @@ toadoverlay.tar
 config.json
 scheduleTemp
 *.env
+token
 
 # Batch files
 *.bat
