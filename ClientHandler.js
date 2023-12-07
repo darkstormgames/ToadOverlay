@@ -127,11 +127,17 @@ module.exports = {
     client.on(Events.MessageReactionAdd, handleReactions);
 
     client.on(Events.ClientReady, () => {
+      Log('ClientHandler.ClientReady', 'Client started.', LogStatus.Executed, LogLevel.Info);
       client.user.setActivity({
         type: ActivityType.Custom,
         name: 'somestatus',
         state: '🛠️ under maintenance... type `_help` for more info.'
       })
+    });
+    
+    client.on(Events.Invalidated, () => {
+      Log('ClientHandler.Invalidated', 'Client invalidated!', LogStatus.Error, LogLevel.Warn);
+      client.login(process.env.CLIENT_TOKEN);
     });
   },
 
