@@ -38,6 +38,10 @@ async function handleCommands(message) {
   }
 }
 
+async function onDebug(message) {
+  Log('ClientHandler.OnDebug', message, LogStatus.None, LogLevel.Debug);
+}
+
 /**
  * 
  * @param {MessageReaction} reaction 
@@ -139,6 +143,8 @@ module.exports = {
       Log('ClientHandler.Invalidated', 'Client invalidated!', LogStatus.Error, LogLevel.Warn);
       client.login(process.env.CLIENT_TOKEN);
     });
+
+    client.on(Events.Debug, onDebug);
   },
 
   login: () => {
