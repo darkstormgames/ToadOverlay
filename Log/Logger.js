@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { MessageContext } = require('../../ClientHandlers/MessageContext');
+const { MessageContext } = require('../ClientHandlers/MessageContext');
 
 const LogLevel = require('./LogLevel');
 const LogStatus = require('./LogStatus');

@@ -3,12 +3,12 @@ const { DataContext } = require('../ClientHandlers/DataContext');
 const { Guild } = require('./Entities/Guild');
 const { User } = require('./Entities/User');
 const { Channel } = require('./Entities/Channel');
-const { ChannelData } = require('./Entities/ChannelData');
+//const { ChannelData } = require('./Entities/ChannelData');
 const { Profile } = require('./Entities/Profile');
 const { ChannelProfile } = require('./Entities/ChannelProfile');
 const { GuildUser } = require('./Entities/GuildUser');
 const { UserChannel } = require('./Entities/UserChannel');
-const { LogCommand } = require('./Entities/LogCommand');
+const { LogMessage } = require('./Entities/LogMessage');
 const { LogDM } = require('./Entities/LogDM');
 
 /**
@@ -33,7 +33,7 @@ async function CheckBaseData(guild, channel, user) {
         Profile,
         UserChannel,
         {
-          model: LogCommand,
+          model: LogMessage,
           separate: true,
           limit: 10,
           order: [['created', 'DESC']]
@@ -54,7 +54,7 @@ async function CheckBaseData(guild, channel, user) {
         GuildUser,
         User,
         {
-          model: LogCommand,
+          model: LogMessage,
           separate: true,
           limit: 10,
           order: [['created', 'DESC']]
@@ -65,17 +65,17 @@ async function CheckBaseData(guild, channel, user) {
 
     let channelContext = await Channel.findByPk(channel.id, {
       include: [
-        {
-          model: ChannelData,
-          as: 'ChannelData'
-        },
+        // {
+        //   model: ChannelData,
+        //   as: 'ChannelData'
+        // },
         ChannelProfile,
         Guild,
         Profile,
         User,
         UserChannel,
         {
-          model: LogCommand,
+          model: LogMessage,
           separate: true,
           limit: 10,
           order: [['created', 'DESC']],
@@ -131,12 +131,12 @@ async function checkChannel(channel) {
       name: channel.name
     }
   });
-  await ChannelData.findOrCreate({
-    where: { channel_id: result.id },
-    defaults: {
-      channel_id: result.id
-    }
-  });
+  // await ChannelData.findOrCreate({
+  //   where: { channel_id: result.id },
+  //   defaults: {
+  //     channel_id: result.id
+  //   }
+  // });
   if (result.name != channel.name) {
     result.name = channel.name;
     result = await result.save();

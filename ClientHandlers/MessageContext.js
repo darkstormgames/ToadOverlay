@@ -1,9 +1,9 @@
-const { Message } = require('discord.js');
+const { Message, MessagePayload, MessageCreateOptions } = require('discord.js');
 const { DataContext } = require('./DataContext');
 
-/**
- * @typedef {Object} MessageContext
- */
+///**
+// * @typedef {Object} MessageContext
+// */
 class MessageContext {
     /**
      * @param {Message} discordMessage 
@@ -30,11 +30,21 @@ class MessageContext {
      * @type {DataContext}
      */
     data;
+
+    /**
+     * 
+     * @param {string | MessagePayload | MessageCreateOptions} data 
+     */
+    reply(data) {
+        return this.message.channel.send(data);
+    }
 }
 
-module.exports = {
-    /**
-     * @type {MessageContext}
-     */
-    MessageContext: MessageContext
-}
+module.exports.MessageContext = MessageContext;
+
+// module.exports = {
+//     /**
+//      * @type {MessageContext}
+//      */
+//     MessageContext: MessageContext
+// }

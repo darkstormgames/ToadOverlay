@@ -1,8 +1,10 @@
 const { existsSync, mkdirSync } = require('fs');
-const { Client, Events } = require('discord.js');
+const { Client, Events, ActivityType } = require('discord.js');
 const Data = require('../Data/SQLWrapper');
+const EventHandler = require('./ClientEventHandler');
 const MessageHandler = require('./MessageHandler');
-const { LogApplication, LogLevel, LogStatus } = require('../Modules/Log/Logger');
+const ReactionHandler = require('./ReactionHandler');
+const { LogApplication, LogLevel, LogStatus } = require('../Log/Logger');
 
 let client = null;
 
@@ -12,31 +14,12 @@ module.exports = {
   */
   initialize: async (discordClient) => {
     await LogApplication('ClientHandler.Initialize', 'Initialize ClientHandler', LogStatus.Initialize, LogLevel.Debug, '', false);
+    console.log('initializing...');
     client = discordClient;
 
     if (!client) {
       await LogApplication('ClientHandler.Initialize', 'DiscordClient is null!', LogStatus.Error, LogLevel.Fatal, new Error().stack, false);
       process.exit(3);
-    }
-  
-    // Register client-related events
-    await LogApplication('ClientHandler.Initialize', 'Initialize Discord.ClientReady-event', LogStatus.Initialize, LogLevel.Trace);
-    client.on(Events.ClientReady, () => {
-      LogApplication('ClientHandler.Initialize', 'Client ready.', LogStatus.Initialize, LogLevel.Info);
-      client.user.setActivity(`Toad from a safe distance on ${client.guilds.cache.size} servers. | Type "_?" for help on available commands.`, { type: 'WATCHING' });
-    });
-  
-    await LogApplication('ClientHandler.Initialize', 'Initialize Discord.Invalidated-event', LogStatus.Initialize, LogLevel.Trace);
-    client.on(Events.Invalidated, () => {
-      LogApplication('ClientHandler.Initialize', 'Client invalidated!', LogStatus.None, LogLevel.Warn);
-      client.login(process.env.CLIENT_TOKEN);
-    });
-  
-    if (process.env.ENVIRONMENT == 'DEVELOPMENT') {
-      await LogApplication('ClientHandler.Initialize', 'Initialize Discord.Debug-event', LogStatus.Initialize, LogLevel.Trace);
-      client.on(Events.Debug, (message) => {
-        LogApplication('ClientHandler.Initialize', message, LogStatus.Executing, LogLevel.Debug, '', false);
-      });
     }
   
     // Sync DB-tables - order matters...
@@ -54,8 +37,8 @@ module.exports = {
     await Data.GuildUserSync();       // GuildUser
     await LogApplication('ClientHandler.Initialize', 'Initialize Profile table', LogStatus.Initialize, LogLevel.Trace);
     await Data.ProfileSync();         // Profile
-    await LogApplication('ClientHandler.Initialize', 'Initialize ChannelData table', LogStatus.Initialize, LogLevel.Trace);
-    await Data.ChannelDataSync();     // ChannelData
+    // await LogApplication('ClientHandler.Initialize', 'Initialize ChannelData table', LogStatus.Initialize, LogLevel.Trace);
+    // await Data.ChannelDataSync();     // ChannelData
     await LogApplication('ClientHandler.Initialize', 'Initialize ChannelProfile table', LogStatus.Initialize, LogLevel.Trace);
     await Data.ChannelProfileSync();  // ChannelProfile
     await LogApplication('ClientHandler.Initialize', 'Initialize LogMessage table', LogStatus.Initialize, LogLevel.Trace);
@@ -65,39 +48,55 @@ module.exports = {
     LogApplication('ClientHandler.Initialize', 'Initialize LogDM table', LogStatus.Initialize, LogLevel.Trace);
     await Data.DMSync();              // LogDM
   
-    await LogApplication('ClientHandler.Initialize', 'Initialize global variables', LogStatus.Initialize, LogLevel.Trace);
-    dirSplit = (process.platform === "win32" ? '\\' : '/');
-    appRoot = process.env.DIR_ENV;
-    appData = appRoot + dirSplit + 'app_data' + dirSplit;
-    appLogs = appData + 'logs' + dirSplit;
-    appSchedule = appData + 'schedule' + dirSplit;
-  
     // Create necessary data folders
     if (!existsSync(appData)) {
       await LogApplication('ClientHandler.Initialize', 'Create app_data folder', LogStatus.Initialize, LogLevel.Trace);
       mkdirSync(appData);
     }
     if (!existsSync(appLogs)) {
-      await LogApplication('ClientHandler.Initialize', 'Create app_data.logs folder', LogStatus.Initialize, LogLevel.Trace);
+      await LogApplication('ClientHandler.Initialize', 'Create app_data/logs folder', LogStatus.Initialize, LogLevel.Trace);
       mkdirSync(appLogs);
     }
     if (!existsSync(appSchedule)) {
-      await LogApplication('ClientHandler.Initialize', 'Create app_data.schedule folder', LogStatus.Initialize, LogLevel.Trace);
+      await LogApplication('ClientHandler.Initialize', 'Create app_data/schedule folder', LogStatus.Initialize, LogLevel.Trace);
       mkdirSync(appSchedule);
     }
-    // initialize other handlers
+
+    // Initialize EventHandler for Discord Client Events
+    await EventHandler.initialize(client);
+
+    // Initialize MessageHandler for legacy message handling
     await MessageHandler.Initialize(client);
 
-    // client.on(Events.InteractionCreate, async (interaction) => {
-    //   if (interaction.isChatInputCommand()) {
-        
-    //   }
-    // });
+    // Initialize ReactionHandler
+    await ReactionHandler.Initialize(client);
+
+    // Initialize CommandHandler
+
+    // Keepalive, to prevent random discord timeouts...
+    let channel = client.channels.cache.find(channel => channel.id == 750752718267613205n);
+    setInterval(() => {
+      if (!channel) {
+        LogApplication('ClientHandler.Keepalive', 'Keepalive channel not found!', LogStatus.Error, LogLevel.Error);
+      }
+      else {
+        channel.send('keepalive...');
+      }
+
+      if (client.user) {
+        client.user.setActivity({
+          type: ActivityType.Watching,
+          name: 'liveStatus',
+          state: `Toad from a safe distance on ${discordClient.guilds.cache.size} servers. | Type "_?" for help on available commands.`
+        });
+      }
+    }, 300000);
+
   },
 
   login: () => {
     if (client) {
-      LogApplication('ClientHandler.Login', 'Starting Login', LogStatus.Initialize, LogLevel.Debug);
+      LogApplication('ClientHandler.Login', 'Trying to log in.', LogStatus.Initialize, LogLevel.Debug);
       client.login(process.env.CLIENT_TOKEN);
     }
   }

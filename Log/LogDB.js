@@ -2,7 +2,7 @@ const LogHelper = require('./LogHelper');
 const LogLevel = require('./LogLevel');
 const LogStatus = require('./LogStatus');
 const LogFile = require('./LogFile');
-const { LogApplication, LogDM, LogMessage } = require('../../Data/SQLWrapper');
+const { LogApplication, LogDM, LogMessage } = require('../Data/SQLWrapper');
 
 module.exports = {
   LogApplication: async (source, message, status, logLevel, stack) => {

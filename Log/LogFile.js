@@ -32,11 +32,11 @@ module.exports = {
 
   LogDM: async (source, message, content, user, status, LogLevel) => {
     if (!LogHelper.isValidLogLevel(logLevel)) return;
-    let content = `\n[${LogHelper.getDatePrefix()}]\t[${logLevel}]\t${source}\n` +
+    let contentDM = `\n[${LogHelper.getDatePrefix()}]\t[${logLevel}]\t${source}\n` +
                   `\t[USER: ${user.name} (${user.id})]\n` +
                   `\t[${status}]\t${message}\n\t${content}` + '\n';
-    fs.appendFile(LogHelper.getFileName(LogType.Message), content, (err) => {
-      if (err) LogConsole.LogMessage('LogFile.LogDM', err.message, content, user, LogStatus.Error, LogLevel.Error);
+    fs.appendFile(LogHelper.getFileName(LogType.Message), contentDM, (err) => {
+      if (err) LogConsole.LogMessage('LogFile.LogDM', err.message, contentDM, user, LogStatus.Error, LogLevel.Error);
     });
   },
 

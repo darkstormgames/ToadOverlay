@@ -1,3 +1,10 @@
+# temporary exclusions
+app_backend
+backend.php
+defaults.php
+config.php
+test.css
+test.html
 
 # Config file
 config.json

@@ -5,7 +5,7 @@ const { User, sync: UserSync } = require('./Entities/User');
 const { Guild, sync: GuildSync } = require('./Entities/Guild');
 const { GuildUser, sync: GuildUserSync } = require('./Entities/GuildUser');
 const { Channel, sync: ChannelSync } = require('./Entities/Channel');
-const { ChannelData, sync: ChannelDataSync } = require('./Entities/ChannelData');
+//const { ChannelData, sync: ChannelDataSync } = require('./Entities/ChannelData');
 const { UserChannel, sync: UserChannelSync } = require('./Entities/UserChannel');
 const { Profile, sync: ProfileSync } = require('./Entities/Profile');
 const { ChannelProfile, sync: ChannelProfileSync } = require('./Entities/ChannelProfile');
@@ -13,7 +13,7 @@ const { ChannelProfile, sync: ChannelProfileSync } = require('./Entities/Channel
 const { LogDM, sync: DMSync } = require('./Entities/LogDM');
 const { LogMessage, sync: MessageSync } = require('./Entities/LogMessage');
 const helper = require('./SQLDataHelper');
-const { ClientContext } = require('../ClientHandlers/ClientContext');
+const { MessageContext } = require('../ClientHandlers/MessageContext');
 // const { Client } = require('discord.js');
 
 // Set User direct associations
@@ -43,8 +43,8 @@ LogMessage.belongsTo(Guild, { foreignKey: { name: 'guild_id', allowNull: false }
 // Set Channel direct associations
 Channel.hasMany(UserChannel, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
 UserChannel.belongsTo(Channel, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
-Channel.hasOne(ChannelData, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT', as: 'ChannelData' });
-ChannelData.belongsTo(Channel, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT', as: 'ChannelData' });
+//Channel.hasOne(ChannelData, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT', as: 'ChannelData' });
+//ChannelData.belongsTo(Channel, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT', as: 'ChannelData' });
 Channel.hasMany(ChannelProfile, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
 ChannelProfile.belongsTo(Channel, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
 Channel.hasMany(LogMessage, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
@@ -73,8 +73,8 @@ module.exports = {
   connection,
   Channel,
   ChannelSync,
-  ChannelData,
-  ChannelDataSync,
+//  ChannelData,
+//  ChannelDataSync,
   ChannelProfile,
   ChannelProfileSync,
   Guild,
@@ -98,9 +98,9 @@ module.exports = {
   DMSync,
 
   /**
-   * @type {ClientContext}
+   * @type {MessageContext}
    */
-  ClientContext: ClientContext,
+  MessageContext: MessageContext,
   /**
   * @param {Discord.Guild} guild 
   * @param {Discord.Channel} channel 

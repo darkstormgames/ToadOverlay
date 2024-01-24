@@ -30,7 +30,7 @@ module.exports = {
    * @param {Message} message
    */
   isToadMessage: (message) => {
-      if (message.author.id == 177162177432649728n 
+      if ((message.author.id == 177162177432649728n || message.author.id == 726933780677394532n)
           && message.author.bot)
               return true;
       else

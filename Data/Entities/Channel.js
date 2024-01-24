@@ -9,17 +9,31 @@ const ChannelEntity = db.connection.define('Channel', {
     unique: true,
     primaryKey: true
   },
-  // guild_id: {
-  //   type: DataTypes.BIGINT(20),
-  //   allowNull: false,
-  //   references: {
-  //     model: Guild,
-  //     key: 'id'
-  //   }
-  // },
   name: {
     type: DataTypes.STRING(100)
-  }
+  },
+
+  guest_current: {
+    type: DataTypes.INTEGER(4),
+    defaultValue: 0,
+    allowNull: false
+  },
+  guest_penalties: DataTypes.TEXT,
+  guest_mkc_url: DataTypes.STRING(256),
+  guest_tag: DataTypes.STRING(7),
+  guest_name: DataTypes.STRING(255),
+  guest_img: DataTypes.STRING(255),
+
+  home_current: {
+    type: DataTypes.INTEGER(4),
+    defaultValue: 0,
+    allowNull: false
+  },
+  home_penalties: DataTypes.TEXT,
+  home_mkc_url: DataTypes.STRING(256),
+  home_tag: DataTypes.STRING(7),
+  home_name: DataTypes.STRING(255),
+  home_img: DataTypes.STRING(255)
 },
 {
   tableName: 'channel',

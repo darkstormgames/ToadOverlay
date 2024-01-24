@@ -1,19 +1,21 @@
 const LogType = require('./LogType');
 const LogLevel = require('./LogLevel');
 
+function padWithZeroes(number, length) {
+  let str = '' + number;
+    while (str.length < length) {
+      str = '0' + str;
+    }
+    return str;
+}
+
 module.exports = {
   /**
    * @param {Number} number 
    * @param {Number} length 
    * @returns {String}
    */
-  padWithZeroes: (number, length) => {
-    var str = '' + number;
-    while (str.length < length) {
-      str = '0' + str;
-    }
-    return str;
-  },
+  padWithZeroes: padWithZeroes,
 
   /**
    * @returns {String}

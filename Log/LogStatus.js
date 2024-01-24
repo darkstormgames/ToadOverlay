@@ -7,6 +7,7 @@
  * @property {string} Error ERROR
  * @property {string} Initialize INIT
  * @property {string} DBError DB_ERROR
+ * @property {string} DiscordWarn DISCORD_WARNING
  */
 
 /**
@@ -20,5 +21,6 @@ module.exports = {
   Failed: 'FAILED',
   Error: 'ERROR',
   Initialize: 'INIT',
-  DBError: 'DB_ERROR'
+  DBError: 'DB_ERROR',
+  DiscordWarn: 'DISCORD_WARNING'
 }

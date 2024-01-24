@@ -1,0 +1,33 @@
+services:
+  server:
+    container_name: toadoverlay
+    build:
+      context: https://github.com/darkstormgames/ToadOverlay.git#master
+    volumes:
+      - /var/toadoverlay:/usr/src/app/app_data
+      - /var/secrets:/run/secrets:ro
+    environment:
+      NODE_ENV: production
+      PREFIX: _
+      LOGLEVEL: DEBUG
+      ENVIRONMENT: PRODUCTION
+      ADMIN_ID: 329925485796524053
+      CLIENT_TOKEN: /run/secrets/token
+      SQL_HOST: /run/secrets/host
+      SQL_USER: /run/secrets/user
+      SQL_PASS: /run/secrets/pass
+      SQL_NAME: toadoverlay
+    secrets:
+      - token
+      - host
+      - user
+      - pass
+secrets:
+  token:
+    external: true
+  host:
+    external: true
+  user:
+    external: true
+  pass:
+    external: true

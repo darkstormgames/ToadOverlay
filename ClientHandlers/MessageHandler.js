@@ -3,45 +3,44 @@ const { readdirSync } = require('fs');
 const { MessageContext } = require('./MessageContext');
 const { isUserCommand, isPrivateMessage, isToadMessage, isKeepaliveMessage } = require('./MessageValidations');
 const { CheckBaseData } = require('../Data/SQLWrapper');
-const { LogApplication, LogMessage, LogDM, LogLevel, LogStatus } = require('../Modules/Log/Logger');
+const { LogApplication, LogMessage, LogDM, LogLevel, LogStatus } = require('../Log/Logger');
 
 const CommandsDirectMessage = new Collection();
 const CommandsGuildMessage = new Collection();
 const CommandsToadBot = new Collection();
-
-let client = null;
 
 /**
  * Loads all guild commands from the respective folder(s)
  */
 async function loadCommandFiles() {
   await LogApplication('MessageHandler.LoadCommandFiles', 'Load CommandMessage files', LogStatus.Initialize, LogLevel.Debug);
-  let dmCommandsFiles = readdirSync(process.env.DIR_ENV + process.env.DIR_SPLIT + 'CommandsDirectMessage')
+
+  let dmCommandsFiles = readdirSync(appRoot + dirSplit + 'CommandsMessage' + dirSplit + 'DirectMessage')
     .filter(file => file.endsWith('.js'));
   for (let file of dmCommandsFiles) {
-    let filePath = process.env.DIR_ENV + process.env.DIR_SPLIT + 'CommandsDirectMessage' + process.env.DIR_SPLIT + `${file}`;
+    let filePath = appRoot + dirSplit + 'CommandsMessage' + dirSplit + 'DirectMessage' + dirSplit + `${file}`;
     await LogApplication('MessageHandler.LoadCommandFiles', `[DirectMessage] File ${file} loaded.`, LogStatus.Initialize, LogLevel.Trace);
     let command = require(filePath);
     CommandsDirectMessage.set(command.name, command);
   }
 
-  let guildCommandsFolders = readdirSync(process.env.DIR_ENV + process.env.DIR_SPLIT + 'CommandsGuildMessage');
+  let guildCommandsFolders = readdirSync(appRoot + dirSplit + 'CommandsMessage' + dirSplit + 'GuildMessage');
   for (let folder of guildCommandsFolders) {
-    let commandFiles = readdirSync(process.env.DIR_ENV + process.env.DIR_SPLIT + 'CommandsGuildMessage' + process.env.DIR_SPLIT + `${folder}`)
+    let commandFiles = readdirSync(appRoot + dirSplit + 'CommandsMessage' + dirSplit + 'GuildMessage' + dirSplit + `${folder}`)
       .filter(file => file.endsWith('.js'));
     for (let file of commandFiles) {
-      let filePath = process.env.DIR_ENV + process.env.DIR_SPLIT + 'CommandsGuildMessage' + process.env.DIR_SPLIT + `${folder}` + process.env.DIR_SPLIT + `${file}`;
+      let filePath = appRoot + dirSplit + 'CommandsMessage' + dirSplit + 'GuildMessage' + dirSplit + `${folder}` + dirSplit + `${file}`;
       await LogApplication('MessageHandler.LoadCommandFiles', `[GuildMessage] File ${file} loaded.`, LogStatus.Initialize, LogLevel.Trace);
       let command = require(filePath);
       CommandsGuildMessage.set(command.name, command);
     }
   }
 
-  let toadCommandsFiles = readdirSync(process.env.DIR_ENV + process.env.DIR_SPLIT + 'CommandsToadBot')
+  let toadCommandsFiles = readdirSync(appRoot + dirSplit + 'CommandsMessage' + dirSplit + 'ScoreBot')
     .filter(file => file.endsWith('.js'));
   for (let file of toadCommandsFiles) {
-    let filePath = process.env.DIR_ENV + process.env.DIR_SPLIT + 'CommandsToadBot' + process.env.DIR_SPLIT + `${file}`;
-    await LogApplication('MessageHandler.LoadCommandFiles', `[ToadBot] File ${file} loaded.`, LogStatus.Initialize, LogLevel.Trace);
+    let filePath = appRoot + dirSplit + 'CommandsMessage' + dirSplit + 'ScoreBot' + dirSplit + `${file}`;
+    await LogApplication('MessageHandler.LoadCommandFiles', `[ScoreBot] File ${file} loaded.`, LogStatus.Initialize, LogLevel.Trace);
     let command = require(filePath);
     CommandsToadBot.set(command.name, command);
   }
@@ -91,16 +90,16 @@ async function handleCommands(message) {
   }
   else if (isToadMessage(message)) {
     CommandsToadBot.forEach(async (value) => {
-      if (message.content.startsWith(value.name)) {
+      if (message.content.startsWith(value.name) || message.content.startsWith(value.alt[0])) {
         let messageContext = new MessageContext(message, null, await CheckBaseData(message.guild, message.channel, message.author));
-        await LogMessage(value.name, `[Toad] Executing ${value.name}`, messageContext, LogStatus.Executing, LogLevel.Debug);
+        await LogMessage(value.name, `[Scores] Executing ${value.name}`, messageContext, LogStatus.Executing, LogLevel.Debug);
         await value.execute(messageContext);
       }
       if (message.embeds && message.embeds.length > 0) {
         message.embeds.forEach(async (embedValue) => {
           if (embedValue.title && embedValue.title.startsWith(value.name)) {
             let messageContext = new MessageContext(message, null, await CheckBaseData(message.guild, message.channel, message.author));
-            await LogMessage(value.name, `[Toad] Executing ${value.name}`, messageContext, LogStatus.Executing, LogLevel.Debug);
+            await LogMessage(value.name, `[Scores] Executing ${value.name}`, messageContext, LogStatus.Executing, LogLevel.Debug);
             await value.execute(messageContext);
           }
         });
@@ -112,14 +111,13 @@ async function handleCommands(message) {
 module.exports = {
   Initialize: async (discordClient) => {
     await LogApplication('ClientHandler.Initialize', 'Initialize MessageHandler', LogStatus.Initialize, LogLevel.Trace);
-    client = discordClient;
 
-    if (client == null) {
-      await Log.logApplication('ClientHandler.Initialize', 'DiscordClient is null!', LogStatus.Error, LogLevel.Fatal, new Error().stack, false);
+    if (discordClient == null) {
+      await LogApplication('ClientHandler.Initialize', 'DiscordClient is null!', LogStatus.Error, LogLevel.Fatal, new Error().stack, false);
       process.exit(1)
     }
 
     await loadCommandFiles();
-    client.on(Events.MessageCreate, handleCommands);
+    discordClient.on(Events.MessageCreate, handleCommands);
   }
 }
