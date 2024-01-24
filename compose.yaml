@@ -4,8 +4,10 @@ services:
     build:
       context: https://github.com/darkstormgames/ToadOverlay.git#master
     volumes:
-      - /var/toadoverlay:/usr/src/app/app_data
-      - /var/secrets:/run/secrets:ro
+      - type: bind
+        source: /var/toadoverlay/app_data
+        target: /usr/src/app/app_data
+      - /run/secrets:/var/secrets:ro
     environment:
       NODE_ENV: production
       PREFIX: _
@@ -25,12 +27,12 @@ services:
       - name
 secrets:
   token:
-    external: true
+    file: /run/secrets/token
   host:
-    external: true
+    file: /run/secrets/host
   user:
-    external: true
+    file: /run/secrets/user
   pass:
-    external: true
+    file: /run/secrets/pass
   name:
-    external: true
+    file: /run/secrets/name

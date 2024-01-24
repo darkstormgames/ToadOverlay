@@ -15,7 +15,7 @@ scheduleTemp
 *.bat
 
 # Application Data Folders
-app_data
+
 schedule
 
 # Logs
