@@ -2,12 +2,14 @@ services:
   server:
     container_name: toadoverlay
     build:
-      context: https://github.com/darkstormgames/ToadOverlay.git#master
+      context: https://github.com/darkstormgames/ToadOverlay.git#celebration_update
     volumes:
       - type: bind
-        source: /var/toadoverlay/app_data
-        target: /usr/src/app/app_data
-      - /run/secrets:/var/secrets:ro
+        source: /usr/src/app/app_data
+        target: /var/toadoverlay/app_data
+      - type: bind
+        source: /run/secrets
+        target: /var/secrets
     environment:
       NODE_ENV: production
       PREFIX: _
