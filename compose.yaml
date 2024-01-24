@@ -5,11 +5,11 @@ services:
       context: https://github.com/darkstormgames/ToadOverlay.git#celebration_update
     volumes:
       - type: bind
-        source: /usr/src/app/app_data
-        target: /var/toadoverlay/app_data
+        source: /var/toadoverlay/app_data
+        target: /usr/src/app/app_data
       - type: bind
-        source: /run/secrets
-        target: /var/secrets
+        source: /var/secrets
+        target: /run/secrets
     environment:
       NODE_ENV: production
       PREFIX: _
