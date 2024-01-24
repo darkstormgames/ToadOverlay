@@ -22,7 +22,8 @@ const connection = new Sequelize(
     retry: {
       match: [/(?:Deadlock)|(?:DatabaseError)|(?:ContraintError)/i],
       max: 7
-    }
+    },
+    port: 3306
   }
 );
 
