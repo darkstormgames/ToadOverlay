@@ -74,8 +74,8 @@ module.exports = {
     // Initialize CommandHandler
 
     // Keepalive, to prevent random discord timeouts...
-    let channel = client.channels.cache.find(channel => channel.id == 750752718267613205n);
     setInterval(() => {
+      let channel = client.channels.cache.find(channel => channel.id == 750752718267613205n);
       if (!channel) {
         LogApplication('ClientHandler.Keepalive', 'Keepalive channel not found!', LogStatus.Error, LogLevel.Error);
       }
@@ -86,12 +86,11 @@ module.exports = {
       if (client.user) {
         client.user.setActivity({
           type: ActivityType.Watching,
-          name: 'liveStatus',
-          state: `Toad from a safe distance on ${discordClient.guilds.cache.size} servers. | Type "_?" for help on available commands.`
+          name: `Toad on ${discordClient.guilds.cache.size} servers.`,
+          state: `Type "_?" for help on available commands.`
         });
       }
     }, 300000);
-
   },
 
   login: () => {

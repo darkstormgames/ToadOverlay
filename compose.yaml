@@ -16,12 +16,13 @@ services:
       SQL_HOST: /run/secrets/host
       SQL_USER: /run/secrets/user
       SQL_PASS: /run/secrets/pass
-      SQL_NAME: toadoverlay
+      SQL_NAME: /run/secrets/name
     secrets:
       - token
       - host
       - user
       - pass
+      - name
 secrets:
   token:
     external: true
@@ -30,4 +31,6 @@ secrets:
   user:
     external: true
   pass:
+    external: true
+  name:
     external: true

@@ -5,6 +5,7 @@ if (process.env.CLIENT_TOKEN && process.env.CLIENT_TOKEN.startsWith('/')) {
   process.env.SQL_HOST = fs.readFileSync(process.env.SQL_HOST);
   process.env.SQL_USER = fs.readFileSync(process.env.SQL_USER);
   process.env.SQL_PASS = fs.readFileSync(process.env.SQL_PASS);
+  process.env.SQL_NAME = fs.readFileSync(process.env.SQL_NAME);
 }
 else {
   require('dotenv').config();

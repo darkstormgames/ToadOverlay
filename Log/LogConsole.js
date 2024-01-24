@@ -3,13 +3,11 @@ const LogLevel = require('./LogLevel');
 const LogStatus = require('./LogStatus');
 //import chalk;
 //const chalk = require('chalk');
-const log = console.log;
+
 
 module.exports = {
   LogApplication: async (source, message, status, logLevel, stack = '') => {
     if (!LogHelper.isValidLogLevel(logLevel)) return;
-    
-    console.log('attempt to log')
     console.log('[' + LogHelper.getDatePrefix() + '] ' + 
           logLevel + ' ' +
           source + '\n' +
@@ -20,7 +18,7 @@ module.exports = {
 
   LogMessage: async (source, message, messageContext, status, logLevel) => {
     if (!LogHelper.isValidLogLevel(logLevel)) return;
-    log('[' + LogHelper.getDatePrefix() + '] ' + 
+    console.log('[' + LogHelper.getDatePrefix() + '] ' + 
           logLevel + ' ' +
           source + '\n' +
           `[GUILD: ${messageContext.data.guild.name} (${messageContext.data.guild.id})] [CHANNEL: ${messageContext.data.channel.name} (${messageContext.data.channel.id})] [USER: ${messageContext.data.user.name} (${messageContext.data.user.id})]\n` +
@@ -35,7 +33,7 @@ module.exports = {
 
   LogDM: async (source, message, content, user, status, logLevel) => {
     if (!LogHelper.isValidLogLevel(logLevel)) return;
-    log('[' + LogHelper.getDatePrefix() + '] ' + 
+    console.log('[' + LogHelper.getDatePrefix() + '] ' + 
       logLevel + ' ' +
       source + '\n' +
       `[USER: ${user.name} (${user.id})]\n` +
