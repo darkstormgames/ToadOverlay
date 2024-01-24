@@ -47,20 +47,6 @@ module.exports = {
     // await Data.CommandSync();         // LogCommand
     LogApplication('ClientHandler.Initialize', 'Initialize LogDM table', LogStatus.Initialize, LogLevel.Trace);
     await Data.DMSync();              // LogDM
-  
-    // Create necessary data folders
-    if (!existsSync(appData)) {
-      await LogApplication('ClientHandler.Initialize', 'Create app_data folder', LogStatus.Initialize, LogLevel.Trace);
-      mkdirSync(appData);
-    }
-    if (!existsSync(appLogs)) {
-      await LogApplication('ClientHandler.Initialize', 'Create app_data/logs folder', LogStatus.Initialize, LogLevel.Trace);
-      mkdirSync(appLogs);
-    }
-    if (!existsSync(appSchedule)) {
-      await LogApplication('ClientHandler.Initialize', 'Create app_data/schedule folder', LogStatus.Initialize, LogLevel.Trace);
-      mkdirSync(appSchedule);
-    }
 
     // Initialize EventHandler for Discord Client Events
     await EventHandler.initialize(client);
