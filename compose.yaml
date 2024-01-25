@@ -10,7 +10,7 @@ services:
       NODE_ENV: production
       PREFIX: _
       LOGLEVEL: DEBUG
-      ENVIRONMENT: PRODUCTION
+      ENVIRONMENT: DEVELOPMENT
       ADMIN_ID: 329925485796524053
       CLIENT_TOKEN: /run/secrets/token
       SQL_HOST: /run/secrets/host
