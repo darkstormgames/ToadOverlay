@@ -26,64 +26,46 @@ async function CheckBaseData(guild, channel, user) {
     if (!(await checkGuildUser(guild, user))) throw new Error('GuildUser');
 
     let userContext = await User.findByPk(user.id, {
-      include: [
-        Channel,
-        Guild,
-        GuildUser,
-        Profile,
-        UserChannel,
-        {
-          model: LogMessage,
-          separate: true,
-          limit: 10,
-          order: [['created', 'DESC']]
-        },
-        {
-          model: LogDM,
-          separate: true,
-          limit: 10,
-          order: [['created', 'DESC']]
-        }
-      ]
+      //  include: [
+      //    Channel,
+      //   // Guild,
+      //   // GuildUser,
+      //   // Profile,
+      //   // UserChannel
+      //  ]
     });
     if (process.env.ENVIRONMENT == 'DEVELOPMENT') console.log(JSON.stringify(userContext, null, 2));
 
     let guildContext = await Guild.findByPk(guild.id, {
-      include: [
-        Channel,
-        GuildUser,
-        User,
-        {
-          model: LogMessage,
-          separate: true,
-          limit: 10,
-          order: [['created', 'DESC']]
-        }
-      ]
+      // include: [
+        // Channel,
+        // GuildUser,
+        // User
+      // ]
     });
     if (process.env.ENVIRONMENT == 'DEVELOPMENT') console.log(JSON.stringify(guildContext, null, 2));
 
     let channelContext = await Channel.findByPk(channel.id, {
-      include: [
+      // include: [
         // {
         //   model: ChannelData,
         //   as: 'ChannelData'
         // },
-        ChannelProfile,
-        Guild,
-        Profile,
-        User,
-        UserChannel,
-        {
-          model: LogMessage,
-          separate: true,
-          limit: 10,
-          order: [['created', 'DESC']],
-          where: {
-            channel_id: channel.id
-          }
-        }
-      ]
+        // ChannelProfile,
+        // Guild,
+        // Profile,
+        // User,
+        // UserChannel,
+        // {
+        //   model: LogMessage,
+        //   separate: true,
+        //   limit: 10,
+        //   order: [['created', 'DESC']],
+        //   where: {
+        //     channel_id: channel.id
+        //   }
+        // }
+      // ]
     });
     if (process.env.ENVIRONMENT == 'DEVELOPMENT') console.log(JSON.stringify(channelContext, null, 2));
 

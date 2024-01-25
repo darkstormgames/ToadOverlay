@@ -1,6 +1,6 @@
 const { MessageContext } = require('../../../ClientHandlers/MessageContext');
 const { LogApplication, LogMessage, LogStatus, LogLevel } = require('../../../Log/Logger');
-const { Helper } = require('../../../Data/SQLWrapper');
+const { Helper, UserChannel } = require('../../../Data/SQLWrapper');
 const { SetupOverlay } = require('../../../Help/HelpTexts');
 const Instructions = require('../../../Help/HelpInstructions');
 
@@ -19,8 +19,11 @@ module.exports = {
       return;
     }
 
-    let hasOverlay = (context.data.user.UserChannels.find(element => element.isActive == true) !== undefined);
-    let userChannel = context.data.user.UserChannels.find(element => element.channel_id == context.data.channel.id);
+    let userChannel = await Helper.checkUserChannel(context.message.author, context.message.channel, false);
+    if (userChannel == null) {
+      userChannel = await Helper.checkUserChannel(context.message.author, context.message.channel, false);
+    }
+    let hasOverlay = userChannel.isActive;
 
     if (!userChannel) {
       await LogMessage('Setup.Execute', 'Unable to find UserChannel', context, LogStatus.Failed, LogLevel.Warn);

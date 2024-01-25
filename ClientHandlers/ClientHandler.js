@@ -73,7 +73,8 @@ module.exports = {
         client.user.setActivity({
           type: ActivityType.Watching,
           name: `Toad on ${discordClient.guilds.cache.size} servers.`,
-          state: `Type "_?" for help on available commands.`
+          //state: `Type "_?" for help on available commands.`
+          state: 'Type "_status" for information on the current state of the bot.'
         });
       }
     }, 300000);
