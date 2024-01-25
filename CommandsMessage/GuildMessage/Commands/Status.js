@@ -51,7 +51,7 @@ module.exports = {
         },
         {
           name: 'Support',
-          value: 'To get some basic help for the commands, type `_?` for more information.\nIf you have any problems, feel free to DM me @ rollo_dev'
+          value: 'To get some basic help for the commands, type `_?` for more information.\nIf you have any problems, feel free to DM me what went wrong @ rollo_dev'
         }
       )
       .setTimestamp()
