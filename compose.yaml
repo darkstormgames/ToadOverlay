@@ -4,7 +4,7 @@ services:
     build:
       context: https://github.com/darkstormgames/ToadOverlay.git#celebration_update
     volumes:
-      - /data/toadoverlay/app_data:/usr/src/app/app_data
+      - /data/ToadOverlay/app_data:/usr/src/app/app_data
       - /var/secrets:/run/secrets:ro
     environment:
       NODE_ENV: production

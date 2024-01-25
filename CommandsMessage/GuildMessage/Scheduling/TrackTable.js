@@ -11,8 +11,8 @@ module.exports = {
     */
     execute: async (context) => {
         // ToDo: Download images and move them to my own server.
-        if (args.length == 1) {
-            switch (args[0].toLowerCase())
+        if (context.args.length == 1) {
+            switch (context.args[0].toLowerCase())
             {
                 // Mushroom Cup
                 case 'mks':
@@ -184,85 +184,85 @@ module.exports = {
                 
                 // Golden Turbo Cup
                 case 'bpp':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/49.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/49.jpg');
                     break;
                 case 'btc':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/50.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/50.jpg');
                     break;
                 case 'bcm64':
                 case 'bcmo':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/51.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/51.jpg');
                     break;
                 case 'bcmw':
                 case 'bcma':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/52.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/52.jpg');
                     break;
 
                 // Glückskatzen-Cup
                 case 'btb':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/53.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/53.jpg');
                     break;
                 case 'bsr':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/54.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/54.jpg');
                     break;
                 case 'bsg':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/55.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/55.jpg');
                     break;
                 case 'bnh':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/56.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/56.jpg');
                     break;
                     
                 // 
                 case 'bnym':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/57.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/57.jpg');
                     break;
                 case 'bmc3':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/58.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/58.jpg');
                     break;
                 case 'bkd':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/59.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/59.jpg');
                     break;
                 case 'bwp':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/60.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/60.jpg');
                     break;
                     
                 case 'bss':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/61.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/61.jpg');
                     break;
                 case 'bsl':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/62.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/62.jpg');
                     break;
                 case 'bmg':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/63.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/63.jpg');
                     break;
                 case 'bshs':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/64.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/64.jpg');
                     break;
                     
                 case 'bll':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/65.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/65.jpg');
                     break;
                 case 'bbl':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/66.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/66.jpg');
                     break;
                 case 'brrm':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/67.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/67.jpg');
                     break;
                 case 'bmt':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/68.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/68.jpg');
                     break;
 
                 case 'bll':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/69.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/69.jpg');
                     break;
                 case 'bbb':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/70.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/70.jpg');
                     break;
                 case 'bmm':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/71.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/71.jpg');
                     break;
                 case 'brr7':
-                    message.channel.send('http://toad.darkstormgames.de/images/tracktable/72.jpg');
+                    context.reply('http://toad.darkstormgames.de/images/tracktable/72.jpg');
                     break;
 
                 default:
