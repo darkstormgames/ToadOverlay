@@ -46,7 +46,7 @@ module.exports = {
           name: 'Not yet implemented',
           value: '```' + 
             'Slash commands (/home and /guest)\n' +
-            'Friendcode stuff (it was pretty bad, anyways...)' +
+            'Friendcode stuff (tbh, it was pretty bad...)' +
             '```'
         },
         {

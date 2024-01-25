@@ -121,45 +121,45 @@ function removeFromData(data, user, para, message) {
     let index = getIndex(data.CAN, user.id);
     if (index > -1) {
       data.CAN.splice(index, 1);
-      LogApplication('WarScheduling.Remove',
-        `[${message.channel.name} (${message.channel.id})] Removed ${user.displayName} (${user.id}) from CAN on ${message.embeds[0].title}`,
-        LogStatus.Executing, LogLevel.Debug);
+      // LogApplication('WarScheduling.Remove',
+      //   `[${message.channel.name} (${message.channel.id})] Removed ${user.displayName} (${user.id}) from CAN on ${message.embeds[0].title}`,
+      //   LogStatus.Executing, LogLevel.Debug);
     }
   }
   if (para.includes('CANT')) {
     let index = getIndex(data.CANT, user.id);
     if (index > -1) {
       data.CANT.splice(index, 1);
-      LogApplication('WarScheduling.Remove',
-        `[${message.channel.name} (${message.channel.id})] Removed ${user.displayName} (${user.id}) from CANT on ${message.embeds[0].title}`,
-        LogStatus.Executing, LogLevel.Debug);
+      // LogApplication('WarScheduling.Remove',
+      //   `[${message.channel.name} (${message.channel.id})] Removed ${user.displayName} (${user.id}) from CANT on ${message.embeds[0].title}`,
+      //   LogStatus.Executing, LogLevel.Debug);
     }
   }
   if (para.includes('SUB')) {
     let index = getIndex(data.SUB, user.id);
     if (index > -1) {
       data.SUB.splice(index, 1);
-      LogApplication('WarScheduling.Remove',
-        `[${message.channel.name} (${message.channel.id})] Removed ${user.displayName} (${user.id}) from SUB on ${message.embeds[0].title}`,
-        LogStatus.Executing, LogLevel.Debug);
+      // LogApplication('WarScheduling.Remove',
+      //   `[${message.channel.name} (${message.channel.id})] Removed ${user.displayName} (${user.id}) from SUB on ${message.embeds[0].title}`,
+      //   LogStatus.Executing, LogLevel.Debug);
     }
   }
   if (para.includes('NOTSURE')) {
     let index = getIndex(data.NOTSURE, user.id);
     if (index > -1) {
       data.NOTSURE.splice(index, 1);
-      LogApplication('WarScheduling.Remove',
-        `[${message.channel.name} (${message.channel.id})] Removed ${user.displayName} (${user.id}) from NOTSURE on ${message.embeds[0].title}`,
-        LogStatus.Executing, LogLevel.Debug);
+      // LogApplication('WarScheduling.Remove',
+      //   `[${message.channel.name} (${message.channel.id})] Removed ${user.displayName} (${user.id}) from NOTSURE on ${message.embeds[0].title}`,
+      //   LogStatus.Executing, LogLevel.Debug);
     }
   }
   if (para.includes('DROPPED')) {
     let index = getIndex(data.DROPPED, user.id);
     if (index > -1) {
       data.DROPPED.splice(index, 1);
-      LogApplication('WarScheduling.Remove',
-        `[${message.channel.name} (${message.channel.id})] Removed ${user.displayName} (${user.id}) from DROPPED on ${message.embeds[0].title}`,
-        LogStatus.Executing, LogLevel.Debug);
+      // LogApplication('WarScheduling.Remove',
+      //   `[${message.channel.name} (${message.channel.id})] Removed ${user.displayName} (${user.id}) from DROPPED on ${message.embeds[0].title}`,
+      //   LogStatus.Executing, LogLevel.Debug);
     }
   }
 
@@ -239,9 +239,9 @@ module.exports = {
         created: (new Date()).toString(),
         changed: (new Date()).toString()
       });
-      LogApplication('WarScheduling.CAN',
-        `[${message.channel.name} (${message.channel.id})] Added new ${user.displayName} (${user.id}) to CAN on ${message.embeds[0].title} (${message.id})`,
-        LogStatus.Executing, LogLevel.Debug);
+      // LogApplication('WarScheduling.CAN',
+      //   `[${message.channel.name} (${message.channel.id})] Added new ${user.displayName} (${user.id}) to CAN on ${message.embeds[0].title} (${message.id})`,
+      //   LogStatus.Executing, LogLevel.Debug);
     }
     else {
       let oldEntry = getExistingEntry(data, user.id);
@@ -254,9 +254,9 @@ module.exports = {
         created: oldEntry.created,
         changed: (new Date()).toString()
       });
-      LogApplication('WarScheduling.CAN',
-        `[${message.channel.name} (${message.channel.id})] Added ${user.displayName} (${user.id}) to CAN on ${message.embeds[0].title} (${message.id})`,
-        LogStatus.Executing, LogLevel.Debug);
+      // LogApplication('WarScheduling.CAN',
+      //   `[${message.channel.name} (${message.channel.id})] Added ${user.displayName} (${user.id}) to CAN on ${message.embeds[0].title} (${message.id})`,
+      //   LogStatus.Executing, LogLevel.Debug);
     }
 
     writeData(message, data);
@@ -280,9 +280,9 @@ module.exports = {
         created: (new Date()).toString(),
         changed: (new Date()).toString()
       });
-      LogApplication('WarScheduling.SUB',
-        `[${message.channel.name} (${message.channel.id})] Added new ${user.displayName} (${user.id}) to SUB on ${message.embeds[0].title} (${message.id})`,
-        LogStatus.Executing, LogLevel.Debug);
+      // LogApplication('WarScheduling.SUB',
+      //   `[${message.channel.name} (${message.channel.id})] Added new ${user.displayName} (${user.id}) to SUB on ${message.embeds[0].title} (${message.id})`,
+      //   LogStatus.Executing, LogLevel.Debug);
     }
     else {
       let oldEntry = getExistingEntry(data, user.id);
@@ -295,9 +295,9 @@ module.exports = {
         created: oldEntry.created,
         changed: (new Date()).toString()
       });
-      LogApplication('WarScheduling.SUB',
-        `[${message.channel.name} (${message.channel.id})] Added ${user.displayName} (${user.id}) to SUB on ${message.embeds[0].title} (${message.id})`,
-        LogStatus.Executing, LogLevel.Debug);
+      // LogApplication('WarScheduling.SUB',
+      //   `[${message.channel.name} (${message.channel.id})] Added ${user.displayName} (${user.id}) to SUB on ${message.embeds[0].title} (${message.id})`,
+      //   LogStatus.Executing, LogLevel.Debug);
     }
 
     writeData(message, data);
@@ -322,9 +322,9 @@ module.exports = {
         created: (new Date()).toString(),
         changed: (new Date()).toString()
       });
-      LogApplication('WarScheduling.NOTSURE',
-        `[${message.channel.name} (${message.channel.id})] Added new ${user.displayName} (${user.id}) to NOTSURE on ${message.embeds[0].title} (${message.id})`,
-        LogStatus.Executing, LogLevel.Debug);
+      // LogApplication('WarScheduling.NOTSURE',
+      //   `[${message.channel.name} (${message.channel.id})] Added new ${user.displayName} (${user.id}) to NOTSURE on ${message.embeds[0].title} (${message.id})`,
+      //   LogStatus.Executing, LogLevel.Debug);
     }
     else {
       let oldEntry = getExistingEntry(data, user.id);
@@ -338,9 +338,9 @@ module.exports = {
           created: oldEntry.created,
           changed: (new Date()).toString()
         });
-        LogApplication('WarScheduling.NOTSURE',
-          `[${message.channel.name} (${message.channel.id})] Added ${user.displayName} (${user.id}) to NOTSURE on ${message.embeds[0].title} (${message.id})`,
-          LogStatus.Executing, LogLevel.Debug);
+        // LogApplication('WarScheduling.NOTSURE',
+        //   `[${message.channel.name} (${message.channel.id})] Added ${user.displayName} (${user.id}) to NOTSURE on ${message.embeds[0].title} (${message.id})`,
+        //   LogStatus.Executing, LogLevel.Debug);
       }
       else {
         data.NOTSURE.push({
@@ -350,9 +350,9 @@ module.exports = {
           created: oldEntry.created,
           changed: (new Date()).toString()
         });
-        LogApplication('WarScheduling.NOTSURE',
-          `[${message.channel.name} (${message.channel.id})] Added ${user.displayName} (${user.id}) to NOTSURE on ${message.embeds[0].title} (${message.id})`,
-          LogStatus.Executing, LogLevel.Debug);
+        // LogApplication('WarScheduling.NOTSURE',
+        //   `[${message.channel.name} (${message.channel.id})] Added ${user.displayName} (${user.id}) to NOTSURE on ${message.embeds[0].title} (${message.id})`,
+        //   LogStatus.Executing, LogLevel.Debug);
       }
     }
 
@@ -378,9 +378,9 @@ module.exports = {
         created: (new Date()).toString(),
         changed: (new Date()).toString()
       });
-      LogApplication('WarScheduling.CANT',
-        `[${message.channel.name} (${message.channel.id})] Added new ${user.displayName} (${user.id}) to CANT on ${message.embeds[0].title} (${message.id})`,
-        LogStatus.Executing, LogLevel.Debug);
+      // LogApplication('WarScheduling.CANT',
+      //   `[${message.channel.name} (${message.channel.id})] Added new ${user.displayName} (${user.id}) to CANT on ${message.embeds[0].title} (${message.id})`,
+      //   LogStatus.Executing, LogLevel.Debug);
     }
     else {
       let oldEntry = getExistingEntry(data, user.id);
@@ -395,9 +395,9 @@ module.exports = {
             created: oldEntry.created,
             changed: (new Date()).toString()
           });
-          LogApplication('WarScheduling.CANT',
-            `[${message.channel.name} (${message.channel.id})] Added ${user.displayName} (${user.id}) to DROPPED on ${message.embeds[0].title} (${message.id})`,
-            LogStatus.Executing, LogLevel.Debug);
+          // LogApplication('WarScheduling.CANT',
+          //   `[${message.channel.name} (${message.channel.id})] Added ${user.displayName} (${user.id}) to DROPPED on ${message.embeds[0].title} (${message.id})`,
+          //   LogStatus.Executing, LogLevel.Debug);
         }
         else {
           data.CANT.push({
@@ -407,9 +407,9 @@ module.exports = {
             created: oldEntry.created,
             changed: (new Date()).toString()
           });
-          LogApplication('WarScheduling.CANT',
-            `[${message.channel.name} (${message.channel.id})] Added ${user.displayName} (${user.id}) to CANT on ${message.embeds[0].title} (${message.id})`,
-            LogStatus.Executing, LogLevel.Debug);
+          // LogApplication('WarScheduling.CANT',
+          //   `[${message.channel.name} (${message.channel.id})] Added ${user.displayName} (${user.id}) to CANT on ${message.embeds[0].title} (${message.id})`,
+          //   LogStatus.Executing, LogLevel.Debug);
         }
       }
       else {
@@ -420,9 +420,9 @@ module.exports = {
           created: oldEntry.created,
           changed: (new Date()).toString()
         });
-        LogApplication('WarScheduling.CANT',
-          `[${message.channel.name} (${message.channel.id})] Added ${user.displayName} (${user.id}) to CANT on ${message.embeds[0].title} (${message.id})`,
-          LogStatus.Executing, LogLevel.Debug);
+        // LogApplication('WarScheduling.CANT',
+        //   `[${message.channel.name} (${message.channel.id})] Added ${user.displayName} (${user.id}) to CANT on ${message.embeds[0].title} (${message.id})`,
+        //   LogStatus.Executing, LogLevel.Debug);
       }
     }
 
@@ -435,8 +435,8 @@ module.exports = {
     data = removeFromData(data, user, ['CAN', 'CANT', 'SUB', 'NOTSURE', 'DROPPED'], message);
     writeData(message, data);
     message.edit({ embeds: [buildMessage(message, data)] });
-    LogApplication('WarScheduling.RemoveEntry',
-      `[${message.channel.name} (${message.channel.id})] Removed ${user.displayName} (${user.id}) from ${message.embeds[0].title} (${message.id})`,
-      LogStatus.Executing, LogLevel.Debug);
+    // LogApplication('WarScheduling.RemoveEntry',
+    //   `[${message.channel.name} (${message.channel.id})] Removed ${user.displayName} (${user.id}) from ${message.embeds[0].title} (${message.id})`,
+    //   LogStatus.Executing, LogLevel.Debug);
   }
 }
