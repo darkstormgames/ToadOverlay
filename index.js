@@ -1,11 +1,11 @@
 const fs = require('fs');
 // load environment variables, depending on if bot is running in docker, or locally
 if (process.env.CLIENT_TOKEN && process.env.CLIENT_TOKEN.startsWith('/')) {
-  process.env.CLIENT_TOKEN = fs.readFileSync(process.env.CLIENT_TOKEN);
-  process.env.SQL_HOST = fs.readFileSync(process.env.SQL_HOST);
-  process.env.SQL_USER = fs.readFileSync(process.env.SQL_USER);
-  process.env.SQL_PASS = fs.readFileSync(process.env.SQL_PASS);
-  process.env.SQL_NAME = fs.readFileSync(process.env.SQL_NAME);
+  process.env.CLIENT_TOKEN = fs.readFileSync(process.env.CLIENT_TOKEN).toString().trim();
+  process.env.SQL_HOST = fs.readFileSync(process.env.SQL_HOST).toString().trim();
+  process.env.SQL_USER = fs.readFileSync(process.env.SQL_USER).toString().trim();
+  process.env.SQL_PASS = fs.readFileSync(process.env.SQL_PASS).toString().trim();
+  process.env.SQL_NAME = fs.readFileSync(process.env.SQL_NAME).toString().trim();
 }
 else {
   require('dotenv').config();
