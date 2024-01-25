@@ -19,17 +19,14 @@ appLogs = appData + 'logs' + dirSplit;
 appSchedule = appData + 'schedule' + dirSplit;
 
 // create necessary folders to prevent failed logging on database initialization
-if (!existsSync(appData)) {
-  //await LogApplication('ClientHandler.Initialize', 'Create app_data folder', LogStatus.Initialize, LogLevel.Trace);
-  mkdirSync(appData);
+if (!fs.existsSync(appData)) {
+  fs.mkdirSync(appData);
 }
-if (!existsSync(appLogs)) {
-  //await LogApplication('ClientHandler.Initialize', 'Create app_data/logs folder', LogStatus.Initialize, LogLevel.Trace);
-  mkdirSync(appLogs);
+if (!fs.existsSync(appLogs)) {
+  fs.mkdirSync(appLogs);
 }
-if (!existsSync(appSchedule)) {
-  //await LogApplication('ClientHandler.Initialize', 'Create app_data/schedule folder', LogStatus.Initialize, LogLevel.Trace);
-  mkdirSync(appSchedule);
+if (!fs.existsSync(appSchedule)) {
+  fs.mkdirSync(appSchedule);
 }
 
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
