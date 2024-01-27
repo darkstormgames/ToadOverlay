@@ -39,7 +39,7 @@ function getData(message) {
     return JSON.parse(rawdata);
   }
   catch {
-    LogApplication('WarScheduling', `Something went wrong for ${message.user.id} in ${message.channel.id} on ${message.guild.id}.`, LogStatus.Failed, LogLevel.Error);
+    LogApplication('WarScheduling', `Something went wrong for ${message.author.id} in ${message.channel.id} on ${message.guild.id}.`, LogStatus.Failed, LogLevel.Error);
   }
 }
 
