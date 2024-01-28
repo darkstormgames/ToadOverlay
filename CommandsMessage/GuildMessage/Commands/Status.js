@@ -35,13 +35,18 @@ module.exports = {
             '_war\n' +
             '_help (alt: _?)\n' +
             '\n' +
+            'Customizing your overlay in DMs:\n' +
+            '`html [html body]`\n' +
+            '`style [css styles]`\n' +
+            '`img [background image URL]`\n' +
+            '\n' +
             'Any updates to the overlay from Toad and Quaxly' +
             '```'
         },
-        {
-          name: 'Implemented, but untested',
-          value: '```Any command to customize your overlay in DMs\n html [html body]\n style [css styles]\n img [background image URL]```'
-        },
+        // {
+        //   name: 'Implemented, but untested',
+        //   value: '```Any command to customize your overlay in DMs\n html [html body]\n style [css styles]\n img [background image URL]```'
+        // },
         {
           name: 'Not yet implemented',
           value: '```' + 
