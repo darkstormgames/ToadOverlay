@@ -14,6 +14,6 @@ const GuildUserEntity = db.connection.define('GuildUser', {
 module.exports = {
   GuildUser: GuildUserEntity,
   sync: () => {
-    return GuildUserEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTIVE' ? false : true) });
+    return GuildUserEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTION' ? false : true) });
   }
 }

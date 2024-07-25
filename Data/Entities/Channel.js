@@ -45,6 +45,6 @@ const ChannelEntity = db.connection.define('Channel', {
 module.exports = {
   Channel: ChannelEntity,
   sync: () => {
-    return ChannelEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTIVE' ? false : true) });
+    return ChannelEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTION' ? false : true) });
   }
 }

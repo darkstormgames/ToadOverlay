@@ -41,6 +41,6 @@ const UserEntity = db.connection.define('User', {
 module.exports = {
   User: UserEntity,
   sync: () => {
-    return UserEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTIVE' ? false : true) });
+    return UserEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTION' ? false : true) });
   }
 }

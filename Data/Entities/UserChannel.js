@@ -18,6 +18,6 @@ const UserChannelEntity = db.connection.define('UserChannel', {
 module.exports = {
   UserChannel: UserChannelEntity,
   sync: () => {
-    return UserChannelEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTIVE' ? false : true) });
+    return UserChannelEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTION' ? false : true) });
   }
 }

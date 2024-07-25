@@ -13,6 +13,6 @@ const ChannelProfileEntity = db.connection.define('ChannelProfile', {
 module.exports = {
   ChannelProfile: ChannelProfileEntity,
   sync: () => {
-    return ChannelProfileEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTIVE' ? false : true) });
+    return ChannelProfileEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTION' ? false : true) });
   }
 }

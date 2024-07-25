@@ -18,7 +18,7 @@ const connection = new Sequelize(
         collate: 'utf8mb4_general_ci'
       }
     },
-    logging: (process.env.ENVIRONMENT == 'PRODUCTIVE' ? false : console.log),
+    logging: (process.env.ENVIRONMENT == 'PRODUCTION' ? false : console.log),
     retry: {
       match: [/(?:Deadlock)|(?:DatabaseError)|(?:ContraintError)/i],
       max: 7

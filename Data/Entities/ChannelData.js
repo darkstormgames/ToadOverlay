@@ -50,6 +50,6 @@
 // module.exports = {
 //   ChannelData: ChannelDataEntity,
 //   sync: () => {
-//     return ChannelDataEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTIVE' ? false : true) });
+//     return ChannelDataEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTION' ? false : true) });
 //   }
 // }

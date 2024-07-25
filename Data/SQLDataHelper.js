@@ -72,7 +72,7 @@ async function CheckBaseData(guild, channel, user) {
     return new DataContext(userContext, guildContext, channelContext);
   }
   catch (error) {
-    if (process.env.ENVIRONMENT != 'PRODUCTIVE') {
+    if (process.env.ENVIRONMENT != 'PRODUCTION') {
       console.log('Unexpected error while checking ' + error);
     }
     throw error;

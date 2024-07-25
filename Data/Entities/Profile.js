@@ -46,6 +46,6 @@ const ProfileEntity = db.connection.define('Profile', {
 module.exports = {
   Profile: ProfileEntity,
   sync: () => {
-    return ProfileEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTIVE' ? false : true) });
+    return ProfileEntity.sync({ alter: (process.env.ENVIRONMENT == 'PRODUCTION' ? false : true) });
   }
 }
