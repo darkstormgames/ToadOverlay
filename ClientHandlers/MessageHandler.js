@@ -48,8 +48,8 @@ async function loadCommandFiles() {
 }
 
 /**
- * 
- * @param {Message} message 
+ *
+ * @param {Message} message
  */
 async function handleCommands(message) {
   await LogApplication('MessageHandler.HandleCommands', 'Handling command', LogStatus.Executing, LogLevel.Trace);
@@ -65,7 +65,8 @@ async function handleCommands(message) {
       }
     });
   }
-  else if (isPrivateMessage(message)) { // ToDo: Migrate to new Logger
+  else if (isPrivateMessage(message)) {
+    // ToDo: Migrate to new Logger
     if (message.content == 'help') {
       await LogDM('MessageHandler.HandleCommands', 'Print Help', message.content, message.author, LogStatus.Executing, LogLevel.Debug);
       await CommandsDirectMessage.get('help').execute(new MessageContext(message, null, null));
@@ -78,8 +79,12 @@ async function handleCommands(message) {
       return;
     }
     content = content.split(']')[0];
-    content = content.split('\r').join('');
-    content = content.split('\n').join('');
+    // Clean up HTML content to prevent SQL parsing issues
+    // Replace line breaks with spaces to preserve comment structure
+    content = content.split('\r').join(' ');
+    content = content.split('\n').join(' ');
+    // Remove extra whitespace that might have been created
+    content = content.replace(/\s+/g, ' ').trim();
 
     CommandsDirectMessage.forEach(async (value) => {
       if (message.content.startsWith(value.name) || value.alt.includes(message.content.split(' ')[0])) {
@@ -114,10 +119,10 @@ module.exports = {
 
     if (discordClient == null) {
       await LogApplication('ClientHandler.Initialize', 'DiscordClient is null!', LogStatus.Error, LogLevel.Fatal, new Error().stack, false);
-      process.exit(1)
+      process.exit(1);
     }
 
     await loadCommandFiles();
     discordClient.on(Events.MessageCreate, handleCommands);
-  }
-}
+  },
+};
