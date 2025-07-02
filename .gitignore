@@ -10,6 +10,9 @@ test.html
 config.json
 scheduleTemp
 *.env
+mcp.json
+.github/
+.vscode/
 
 # Batch files
 *.bat

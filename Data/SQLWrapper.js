@@ -12,6 +12,7 @@ const { ChannelProfile, sync: ChannelProfileSync } = require('./Entities/Channel
 // const { LogCommand, sync: CommandSync } = require('./Entities/LogCommand');
 const { LogDM, sync: DMSync } = require('./Entities/LogDM');
 const { LogMessage, sync: MessageSync } = require('./Entities/LogMessage');
+const { LogReaction, sync: ReactionSync } = require('./Entities/LogReaction');
 const helper = require('./SQLDataHelper');
 const { MessageContext } = require('../ClientHandlers/MessageContext');
 // const { Client } = require('discord.js');
@@ -29,6 +30,8 @@ LogMessage.belongsTo(User, { foreignKey: { name: 'user_id', allowNull: false }, 
 // LogCommand.belongsTo(User, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
 User.hasMany(LogDM, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
 LogDM.belongsTo(User, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
+User.hasMany(LogReaction, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
+LogReaction.belongsTo(User, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'RESTRICT' });
 
 // Set Guild direct associations
 Guild.hasMany(GuildUser, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
@@ -37,6 +40,8 @@ Guild.hasMany(Channel, { foreignKey: { name: 'guild_id', allowNull: false }, onD
 Channel.belongsTo(Guild, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
 Guild.hasMany(LogMessage, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
 LogMessage.belongsTo(Guild, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
+Guild.hasMany(LogReaction, { foreignKey: { name: 'guild_id', allowNull: true }, onDelete: 'RESTRICT' });
+LogReaction.belongsTo(Guild, { foreignKey: { name: 'guild_id', allowNull: true }, onDelete: 'RESTRICT' });
 // Guild.hasMany(LogCommand, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
 // LogCommand.belongsTo(Guild, { foreignKey: { name: 'guild_id', allowNull: false }, onDelete: 'RESTRICT' });
 
@@ -49,6 +54,8 @@ Channel.hasMany(ChannelProfile, { foreignKey: { name: 'channel_id', allowNull: f
 ChannelProfile.belongsTo(Channel, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
 Channel.hasMany(LogMessage, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
 LogMessage.belongsTo(Channel, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
+Channel.hasMany(LogReaction, { foreignKey: { name: 'channel_id', allowNull: true }, onDelete: 'RESTRICT' });
+LogReaction.belongsTo(Channel, { foreignKey: { name: 'channel_id', allowNull: true }, onDelete: 'RESTRICT' });
 // Channel.hasMany(LogCommand, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
 // LogCommand.belongsTo(Channel, { foreignKey: { name: 'channel_id', allowNull: false }, onDelete: 'RESTRICT' });
 
@@ -96,6 +103,8 @@ module.exports = {
   // CommandSync,
   LogDM,
   DMSync,
+  LogReaction,
+  ReactionSync,
 
   /**
    * @type {MessageContext}

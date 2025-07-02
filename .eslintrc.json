@@ -46,6 +46,7 @@
 		"space-infix-ops": "error",
 		"space-unary-ops": "error",
 		"spaced-comment": "error",
+		"eslint-plugin-vue/comma-dangle": [],
 		"yoda": "error"
 	}
 }

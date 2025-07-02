@@ -45,9 +45,14 @@ module.exports = {
 
   },
 
-  LogReaction: async () => {
+  LogReaction: async (source, message, reactionData, status, logLevel) => {
     if (!LogHelper.isValidLogLevel(logLevel)) return;
-
+    let content = `\n[${LogHelper.getDatePrefix()}]\t[${logLevel}]\t${source}\n` +
+                  `\t[${reactionData.guildId ? `GUILD: ${reactionData.guildId}] [` : ''}CHANNEL: ${reactionData.channelId}] [USER: ${reactionData.userId}]\n` +
+                  `\t[${status}]\t${message}\n\tEmoji: ${reactionData.emoji} | Message: ${reactionData.messageId}` + '\n';
+    fs.appendFile(LogHelper.getFileName(LogType.Reaction), content, (err) => {
+      if (err) LogConsole.LogReaction('LogFile.LogReaction', err.message, reactionData, LogStatus.Error, LogLevel.Error);
+    });
   },
 
   LogButton: async () => {

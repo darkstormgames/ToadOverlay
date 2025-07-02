@@ -47,6 +47,8 @@ module.exports = {
     // await Data.CommandSync();         // LogCommand
     LogApplication('ClientHandler.Initialize', 'Initialize LogDM table', LogStatus.Initialize, LogLevel.Trace);
     await Data.DMSync();              // LogDM
+    LogApplication('ClientHandler.Initialize', 'Initialize LogReaction table', LogStatus.Initialize, LogLevel.Trace);
+    await Data.ReactionSync();              // LogDM
 
     // Initialize EventHandler for Discord Client Events
     await EventHandler.initialize(client);

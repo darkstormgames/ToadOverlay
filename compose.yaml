@@ -9,7 +9,7 @@ services:
     environment:
       NODE_ENV: production
       PREFIX: _
-      LOGLEVEL: DEBUG
+      LOGLEVEL: INFO
       ENVIRONMENT: PRODUCTION
       ADMIN_ID: 329925485796524053
       CLIENT_TOKEN: /run/secrets/token

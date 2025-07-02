@@ -72,8 +72,14 @@ module.exports = {
 
   },
 
-  LogReaction: async () => {
-
+  LogReaction: async (source, message, reactionData, status = LogStatus.None, logLevel = LogLevel.Info) => {
+    if (process.env.ENVIRONMENT == 'DEVELOPMENT') {
+      LogConsole.LogReaction(source, message, reactionData, status, logLevel);
+    }
+    if (process.env.LOGLEVEL == 'DEBUG') {
+      LogFile.LogReaction(source, message, reactionData, status, logLevel);
+    }
+    LogDB.LogReaction(source, message, reactionData, status, logLevel);
   },
 
   LogButton: async () => {

@@ -131,6 +131,11 @@ module.exports = {
                            'Example and Default:' + 
                            '```setimage [http://toad.darkstormgames.de/images/default.png]```' + 
                            ''
+                },
+                {
+                    name: 'Delete bot messages',
+                    value: 'You can delete any message from the bot in this private channel by reacting with ❌ to it.\n' + 
+                           'This helps keep your DM conversation clean and organized.'
                 }
             )
             .setTimestamp()
