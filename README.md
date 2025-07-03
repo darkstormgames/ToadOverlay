@@ -7,8 +7,6 @@
 [![GitHub issues](https://img.shields.io/github/issues-raw/darkstormgames/ToadOverlay)](https://github.com/darkstormgames/ToadOverlay/issues)
 [![CodeFactor](https://www.codefactor.io/repository/github/darkstormgames/toadoverlay/badge)](https://www.codefactor.io/repository/github/darkstormgames/toadoverlay)
 
-
-
 ToadOverlay is an extension bot to [Toad](https://www.mariokartcentral.com/forums/index.php?threads/toadv2-a-discord-bot-for-mk8.532/), a MK8 discord bot and is used as a browser source overlay for competitive Mario Kart streamers to show their current scores live on stream.
 The bot is written from scratch in JavaScript based on the [Discord.js](https://github.com/discordjs) framework for Node.js.
 
@@ -19,6 +17,13 @@ The bot is written from scratch in JavaScript based on the [Discord.js](https://
 * Fully customizable streaming overlay to keep track of scores in competitive Mario Kart matches
 * Works as an extension to [Toad bot](https://www.mariokartcentral.com/forums/index.php?threads/toadv2-a-discord-bot-for-mk8.532/)
 * Supports multiple instances per server (just like Toad bot)
+* Interactive war scheduling with reaction-based signup system
+* Real-time score updates via Toad bot integration
+* Custom HTML/CSS overlay styling and branding
+
+## 📚 Documentation
+
+For complete command reference and advanced usage, see **[COMMANDS.md](COMMANDS.md)** - our comprehensive documentation covering all bot features, commands, and tutorials.
 
 ## Basic Installation
 [![](https://img.shields.io/badge/ToadOverlay-invite-success?logo=discord&colorB=7289DA)](https://discord.com/api/oauth2/authorize?client_id=710403066213433385&permissions=0&scope=bot)
@@ -64,7 +69,7 @@ If you want to use this overlay for a subclan that isn't registered on MKC, you 
 
 ## Additional help
 After setting up your overlay, you can just write `help` in the DMs with the bot, to get some basic help on commands.
-For more help on using the commands and editing the overlay, refer to the [official tutorial post on MKC](https://www.mariokartcentral.com/forums/index.php?threads/toadoverlay-an-extension-bot-to-toad-for-streamers-and-more.10749/).
+For more help on using the commands and editing the overlay, refer to **[COMMANDS.md](COMMANDS.md)** for complete documentation or the **[official tutorial post on MKC](https://www.mariokartcentral.com/forums/index.php?threads/toadoverlay-an-extension-bot-to-toad-for-streamers-and-more.10749/)**.
 
 ----------------------------
 
