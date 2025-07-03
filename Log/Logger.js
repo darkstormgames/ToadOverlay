@@ -4,7 +4,7 @@ const { MessageContext } = require('../ClientHandlers/MessageContext');
 const LogLevel = require('./LogLevel');
 const LogStatus = require('./LogStatus');
 const LogConsole = require('./LogConsole');
-const LogDB = require('./LogDB');
+const LogNoSQL = require('./LogNoSQL');
 const LogFile = require('./LogFile');
 
 module.exports = {
@@ -25,7 +25,7 @@ module.exports = {
       LogFile.LogApplication(source, message, status, logLevel, stack);
     }
     if (useDB == true && logLevel != LogLevel.Trace) {
-      LogDB.LogApplication(source, message, status, logLevel, stack);
+      LogNoSQL.LogApplication(source, message, status, logLevel, stack);
     }
   },
  /**
@@ -43,7 +43,7 @@ module.exports = {
     if (process.env.LOGLEVEL == 'DEBUG') {
       LogFile.LogMessage(source, message, messageContext, status, logLevel);
     }
-    LogDB.LogMessage(source, message, messageContext, status, logLevel);
+    LogNoSQL.LogMessage(source, message, messageContext, status, logLevel);
   },
 
   LogCommand: async (source, message, commandContext, status = LogStatus.None, logLevel = LogLevel.Info) => {
@@ -65,7 +65,7 @@ module.exports = {
     if (process.env.LOGLEVEL == 'DEBUG') {
       LogFile.LogDM(source, message, content, user, status, logLevel);
     }
-    LogDB.LogDM(source, message, content, user, status, logLevel);
+    LogNoSQL.LogDM(source, message, content, user, status, logLevel);
   },
 
   LogModal: async () => {
@@ -79,7 +79,7 @@ module.exports = {
     if (process.env.LOGLEVEL == 'DEBUG') {
       LogFile.LogReaction(source, message, reactionData, status, logLevel);
     }
-    LogDB.LogReaction(source, message, reactionData, status, logLevel);
+    LogNoSQL.LogReaction(source, message, reactionData, status, logLevel);
   },
 
   LogButton: async () => {

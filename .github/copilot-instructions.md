@@ -76,7 +76,8 @@ For development and testing of Discord integrations, use:
 ├── Data/                   # Database models and SQL operations
 ├── Help/                   # Help text and instruction content
 ├── Log/                    # Logging system implementation
-└── Modules/                # Additional feature modules
+├── Modules/                # Additional feature modules
+└── Test/                   # Test utilities and mock data
 ```
 
 ### Key Source Directories
@@ -109,7 +110,7 @@ Database layer with Sequelize ORM:
 #### Log/
 Comprehensive logging system:
 - `Logger.js` - Main logging interface
-- `LogConsole.js`, `LogFile.js`, `LogDB.js` - Output-specific loggers
+- `LogConsole.js`, `LogFile.js`, `LogNoSQL.js` - Output-specific loggers
 - `LogLevel.js`, `LogStatus.js`, `LogType.js` - Logging enumerations
 
 ### Discord.js Bot System Architecture

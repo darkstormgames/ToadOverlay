@@ -5,6 +5,7 @@ const EventHandler = require('./ClientEventHandler');
 const MessageHandler = require('./MessageHandler');
 const ReactionHandler = require('./ReactionHandler');
 const { LogApplication, LogLevel, LogStatus } = require('../Log/Logger');
+const LogNoSQL = require('../Log/LogNoSQL');
 
 let client = null;
 
@@ -22,9 +23,17 @@ module.exports = {
       process.exit(3);
     }
   
-    // Sync DB-tables - order matters...
-    await LogApplication('ClientHandler.Initialize', 'Initialize LogApplication table', LogStatus.Initialize, LogLevel.Trace);
-    await Data.AppSync();             // LogApplication
+    // Initialize NoSQL logging system
+    await LogApplication('ClientHandler.Initialize', 'Initialize NoSQL logging system', LogStatus.Initialize, LogLevel.Debug, '', false);
+    try {
+      await LogNoSQL.Initialize();
+      await LogApplication('ClientHandler.Initialize', 'NoSQL logging system initialized successfully', LogStatus.Executed, LogLevel.Info);
+    } catch (error) {
+      await LogApplication('ClientHandler.Initialize', 'Failed to initialize NoSQL logging system', LogStatus.Error, LogLevel.Error, error.stack, false);
+      console.error('NoSQL initialization failed, falling back to file-only logging:', error);
+    }
+
+    // Sync MySQL DB-tables for core data (excluding log tables) - order matters...
     await LogApplication('ClientHandler.Initialize', 'Initialize User table', LogStatus.Initialize, LogLevel.Trace);
     await Data.UserSync();            // User
     await LogApplication('ClientHandler.Initialize', 'Initialize Guild table', LogStatus.Initialize, LogLevel.Trace);
@@ -41,14 +50,8 @@ module.exports = {
     // await Data.ChannelDataSync();     // ChannelData
     await LogApplication('ClientHandler.Initialize', 'Initialize ChannelProfile table', LogStatus.Initialize, LogLevel.Trace);
     await Data.ChannelProfileSync();  // ChannelProfile
-    await LogApplication('ClientHandler.Initialize', 'Initialize LogMessage table', LogStatus.Initialize, LogLevel.Trace);
-    await Data.MessageSync();         // LogMessage
-    // LogApplication('ClientHandler.Initialize', 'Initialize LogCommand table', LogStatus.Initialize, LogLevel.Trace);
-    // await Data.CommandSync();         // LogCommand
-    LogApplication('ClientHandler.Initialize', 'Initialize LogDM table', LogStatus.Initialize, LogLevel.Trace);
-    await Data.DMSync();              // LogDM
-    LogApplication('ClientHandler.Initialize', 'Initialize LogReaction table', LogStatus.Initialize, LogLevel.Trace);
-    await Data.ReactionSync();              // LogDM
+    
+    // Note: Log tables (LogMessage, LogDM, LogReaction, LogApplication) now use NoSQL instead of MySQL
 
     // Initialize EventHandler for Discord Client Events
     await EventHandler.initialize(client);
