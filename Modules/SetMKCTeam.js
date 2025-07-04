@@ -1,7 +1,7 @@
 const { Team, Teams } = require('mkcentral-api');
 const { MessageContext } = require('../ClientHandlers/MessageContext');
 const { LogMessage, LogStatus, LogLevel } = require('../Log/Logger');
-const { Channel } = require('../Data/SQLWrapper');
+const { Channel, invalidateChannelCache } = require('../Data/SQLWrapper');
 
 
 module.exports = {
@@ -30,6 +30,7 @@ module.exports = {
     context.data.channel.guest_img = team.Logo ? team.Logo.href : '';
     try {
       await context.data.channel.save();
+      await invalidateChannelCache(context.data.channel.id);
       context.reply('Guest team successfully set to ' + team.Name + ' (' + team.Tag + ')');
       LogMessage('SetMKC.Guest', `Set guest team ${team.Name}`, context, LogStatus.Executed, LogLevel.Info);
     }
@@ -58,6 +59,7 @@ module.exports = {
     context.data.channel.home_img = team.Logo ? team.Logo.href : '';
     try {
       await context.data.channel.save();
+      await invalidateChannelCache(context.data.channel.id);
       context.reply('Home team successfully set to ' + team.Name + ' (' + team.Tag + ')');
       LogMessage('SetMKC.Home', `Set home team ${team.Name}`, context, LogStatus.Executed, LogLevel.Info);
     }

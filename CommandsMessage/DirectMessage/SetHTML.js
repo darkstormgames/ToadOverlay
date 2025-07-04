@@ -1,5 +1,5 @@
 const { MessageContext } = require('../../ClientHandlers/MessageContext');
-const Data = require('../../Data/SQLWrapper');
+const { Profile, invalidateUserCache } = require('../../Data/SQLWrapper');
 const { LogDM, LogLevel, LogStatus } = require('../../Log/Logger');
 
 /**
@@ -32,24 +32,20 @@ module.exports = {
     // Sanitize HTML content to prevent SQL errors with quotes
     const sanitizedHtml = sanitizeHtmlContent(context.args);
 
-    Data.Profile.update({
-      html: sanitizedHtml,
-    }, {
-      where: {
-        user_id: context.message.author.id,
-      },
-    })
-      .catch(() => {
-        context.reply('There was an error updating your html...\nPlease try again later.');
-        LogDM('SetHTML.Execute', 'Failed to update database entry.', context.args, context.message.author, LogStatus.DBError, LogLevel.Warn);
-        return;
-      })
-      .then(() => {
-        context.reply('Your HTML body has been updated. Refresh your overlay to see the changes.');
-      })
-      .catch(() => {
-        context.reply('There was an error updating your html...\nPlease try again later.');
-        LogDM('SetHTML.Execute', 'Failed to reply.', context.args, context.message.author, LogStatus.DiscordWarn, LogLevel.Warn);
+    try {
+      await Profile.update({
+        html: sanitizedHtml,
+      }, {
+        where: {
+          user_id: context.message.author.id,
+        },
       });
+
+      await invalidateUserCache(context.message.author.id);
+      await context.reply('Your HTML body has been updated. Refresh your overlay to see the changes.');
+    } catch (err) {
+      await context.reply('There was an error updating your html...\nPlease try again later.');
+      LogDM('SetHTML.Execute', 'Failed to update or reply.', { error: err, args: context.args }, context.message.author, LogStatus.DBError, LogLevel.Warn);
+    }
   },
 };

@@ -1,5 +1,5 @@
 const { MessageContext } = require('../../../ClientHandlers/MessageContext');
-const { Channel } = require('../../../Data/SQLWrapper');
+const { Channel, invalidateChannelCache } = require('../../../Data/SQLWrapper');
 const { LogMessage, LogLevel, LogStatus } = require('../../../Log/Logger');
 
 module.exports = {
@@ -13,27 +13,21 @@ module.exports = {
    */
   execute: async (context) => {
     if (context.args && context.args.length > 0) {
-      Channel.update({
-        home_mkc_url: '',
-        home_name: context.args[0]
-      }, {
-        where: {
-          id: context.data.channel.id
-        }
-      })
-      .catch((err) => {
+      try {
+        await Channel.update({
+          home_mkc_url: '',
+          home_name: context.args[0]
+        }, {
+          where: {
+            id: context.data.channel.id
+          }
+        });
+        await invalidateChannelCache(context.data.channel.id);
+        await context.reply('Custom name for the home team has been set successfully.');
+      } catch (err) {
         context.reply('There was an error setting the name for the home-team!\nPlease try again.');
         LogMessage('HomeName.Execute', err, context, LogStatus.DBError, LogLevel.Error);
-        return;
-      })
-      .then(() => {
-        context.reply('Custom name for the home team has been set successfully.');
-        LogMessage('HomeName.Execute', 'Home name set.', context, LogStatus.Executed, LogLevel.Info);
-      })
-      .catch((err) => {
-        context.reply('There was an error setting the name for the home-team!\nPlease try again.');
-        LogMessage('HomeName.Execute', err, context, LogStatus.DiscordWarn, LogLevel.Warn);
-      });
+      }
     }
     else {
       context.reply('No valid name given!\n```Example:\n  _setname-home N/A```');

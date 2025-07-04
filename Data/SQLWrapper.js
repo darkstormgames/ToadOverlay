@@ -1,5 +1,5 @@
 const { Op, OpTypes } = require('sequelize');
-const { connection } = require('./SQLBase');
+const { connection, cachedQuery, getCache } = require('./SQLBase');
 const { User, sync: UserSync } = require('./Entities/User');
 const { Guild, sync: GuildSync } = require('./Entities/Guild');
 const { GuildUser, sync: GuildUserSync } = require('./Entities/GuildUser');
@@ -87,7 +87,21 @@ module.exports = {
   * @returns {DataContext}
   */
   CheckBaseData: async (guild, channel, user) => helper.CheckBaseData(guild, channel, user),
+  
+  // Cached version of CheckBaseData for improved performance
+  CheckBaseDataCached: async (guild, channel, user, ttl) => helper.CheckBaseDataCached(guild, channel, user, ttl),
+  
   Helper: helper,
+  
+  // Cache management functions
+  cachedQuery,
+  getCache,
+  getCacheStatistics: () => helper.getCacheStatistics(),
+  clearAllCache: () => helper.clearAllCache(),
+  invalidateUserCache: (userId) => helper.invalidateUserCache(userId),
+  invalidateGuildCache: (guildId) => helper.invalidateGuildCache(guildId),
+  invalidateChannelCache: (channelId) => helper.invalidateChannelCache(channelId),
+  
   /**
    * @type {OpTypes}
    */
