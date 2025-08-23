@@ -101,7 +101,8 @@ module.exports = {
   invalidateUserCache: (userId) => helper.invalidateUserCache(userId),
   invalidateGuildCache: (guildId) => helper.invalidateGuildCache(guildId),
   invalidateChannelCache: (channelId) => helper.invalidateChannelCache(channelId),
-  
+  invalidateUserChannelCache: (userId, channelId) => helper.invalidateUserChannelCache(userId, channelId),
+
   /**
    * @type {OpTypes}
    */

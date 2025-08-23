@@ -61,6 +61,9 @@ class CacheManager {
     if (process.env.ENVIRONMENT === 'DEVELOPMENT') {
       console.log('CacheManager initialized with config:', this.config);
     }
+
+    // Known entities for hydration and alias resolution
+    this.knownEntities = ['User', 'Guild', 'Channel', 'Profile', 'GuildUser', 'UserChannel', 'ChannelProfile'];
   }
 
   /**
@@ -281,6 +284,137 @@ class CacheManager {
     return key;
   }
 
+  // --- NEW: hydration helpers ---
+
+  /**
+   * Determine if a value needs hydration (plain object/array without Sequelize methods)
+   * @param {any} value
+   * @returns {boolean}
+   */
+  needsHydration(value) {
+    if (!value) return false;
+    const isSequelizeInstance = (v) => v && typeof v === 'object' && typeof v.save === 'function' && typeof v.toJSON === 'function';
+    if (Array.isArray(value)) {
+      if (value.length === 0) return false;
+      return !isSequelizeInstance(value[0]);
+    }
+    return !isSequelizeInstance(value);
+  }
+
+  /**
+   * Hydrate cached plain data back into Sequelize instances (handles arrays and includes)
+   * @param {string} entityType
+   * @param {any} data
+   * @returns {any} hydrated data
+   */
+  hydrate(entityType, data) {
+    if (!data) return data;
+    if (Array.isArray(data)) {
+      return data.map(item => this.hydrateObject(entityType, item));
+    }
+    return this.hydrateObject(entityType, data);
+  }
+
+  /**
+   * Hydrate a single POJO into a Sequelize instance and recursively hydrate known includes
+   * @param {string} entityType
+   * @param {object} obj
+   * @returns {object} Sequelize model instance or original object on failure
+   */
+  hydrateObject(entityType, obj) {
+    try {
+      if (!obj || typeof obj !== 'object') return obj;
+
+      const ModelCtor = this.resolveModel(entityType);
+      if (!ModelCtor) return obj;
+
+      // Shallow copy to avoid mutating original object
+      const dataValues = { ...obj };
+
+      // Recursively hydrate known included associations when keys look like model names or simple plurals
+      for (const [key, value] of Object.entries(dataValues)) {
+        if (!value || (typeof value !== 'object' && !Array.isArray(value))) continue;
+        const inferredType = this.inferEntityTypeFromKey(key);
+        if (inferredType) {
+          dataValues[key] = this.hydrate(inferredType, value);
+        }
+      }
+
+      // Coerce common timestamp fields to Date
+      this.normalizeTimestamps(dataValues);
+
+      // Build a non-new record instance so .save() issues UPDATE
+      const instance = ModelCtor.build(dataValues, { isNewRecord: false });
+
+      // Ensure previousDataValues exists to make change tracking sensible
+      if (instance && instance._previousDataValues) {
+        instance._previousDataValues = { ...instance.dataValues };
+      }
+
+      return instance;
+    } catch {
+      return obj;
+    }
+  }
+
+  /**
+   * Normalize common timestamp fields from strings to Date
+   * @param {object} values
+   */
+  normalizeTimestamps(values) {
+    const tsFields = ['created', 'updated', 'createdAt', 'updatedAt', 'deletedAt'];
+    for (const f of tsFields) {
+      if (values[f] && typeof values[f] === 'string') {
+        const d = new Date(values[f]);
+        if (!isNaN(d.getTime())) values[f] = d;
+      }
+    }
+  }
+
+  /**
+   * Infer entity type from an association key (supports simple pluralization)
+   * @param {string} key
+   * @returns {string|null}
+   */
+  inferEntityTypeFromKey(key) {
+    if (!key || typeof key !== 'string') return null;
+    // Exact match
+    const exact = this.knownEntities.find(k => k.toLowerCase() === key.toLowerCase());
+    if (exact) return exact;
+    // Simple plurals: Users -> User, Profiles -> Profile, Channels -> Channel, GuildUsers -> GuildUser, etc.
+    const singularCandidates = [
+      key.replace(/s$/i, ''),               // Users -> User
+      key.replace(/ies$/i, 'y'),            // Profiles -> Profily (we will match against Profile below)
+    ];
+    for (const cand of singularCandidates) {
+      const match = this.knownEntities.find(k => k.toLowerCase() === cand.toLowerCase());
+      if (match) return match;
+    }
+    return null;
+  }
+
+  /**
+   * Resolve a Sequelize model constructor from entityType via the central connection
+   * Lazy-loads to avoid circular dependencies.
+   * @param {string} entityType
+   * @returns {import('sequelize').ModelStatic|undefined}
+   */
+  resolveModel(entityType) {
+    if (!entityType) return undefined;
+    try {
+      const { connection } = require('./SQLBase');
+      const models = connection && connection.models ? connection.models : {};
+      // Direct match
+      if (models[entityType]) return models[entityType];
+      // Case-insensitive match
+      const key = Object.keys(models).find(k => k.toLowerCase() === String(entityType).toLowerCase());
+      if (key) return models[key];
+    } catch {
+      // Ignore resolution errors; fallback to returning POJOs
+    }
+    return undefined;
+  }
+
   /**
    * Get cached data with multi-layer fallback
    * @param {string} cacheKey - Cache key
@@ -296,6 +430,13 @@ class CacheManager {
       let result = this.memoryCache.get(cacheKey);
       if (result) {
         this.stats.memoryHits++;
+        // Hydrate stale plain objects in memory if needed
+        if (entityType && this.needsHydration(result)) {
+          const hydrated = this.hydrate(entityType, result);
+          this.memoryCache.set(cacheKey, hydrated, ttl);
+          if (this.config.debug) console.log('Memory cache rehydrated:', cacheKey);
+          return hydrated;
+        }
         if (this.config.debug) {
           console.log('Memory cache hit:', cacheKey);
         }
@@ -309,41 +450,44 @@ class CacheManager {
         const row = this.statements.get.get(cacheKey, now);
         if (row) {
           this.stats.persistentHits++;
-          result = JSON.parse(row.data);
-          
+          let parsed = JSON.parse(row.data);
+
+          // Hydrate from POJO -> Sequelize model(s) using entityType hint
+          if (entityType && this.needsHydration(parsed)) {
+            parsed = this.hydrate(entityType, parsed);
+          }
+
           // Update access count
           this.statements.updateAccess.run(cacheKey);
-          
-          // Store in memory cache for faster access
-          this.memoryCache.set(cacheKey, result, ttl);
-          
+
+          // Store hydrated value in memory cache
+          this.memoryCache.set(cacheKey, parsed, ttl);
+
           if (this.config.debug) {
             console.log('Persistent cache hit:', cacheKey, 'Access count:', row.access_count + 1);
           }
-          return result;
+          return parsed;
         }
         this.stats.persistentMisses++;
       }
 
       // Cache miss - execute query function
       this.stats.dbQueries++;
-      result = await queryFn();
-      
-      if (result) {
-        // Store in both caches
-        await this.set(cacheKey, result, ttl, entityType, entityId);
+      const fresh = await queryFn();
+
+      if (fresh) {
+        // Store in both caches (Sequelize instance is fine in memory; JSON in persistent)
+        await this.set(cacheKey, fresh, ttl, entityType, entityId);
       }
 
       if (this.config.debug) {
         console.log('Cache miss - data retrieved from database:', cacheKey);
       }
 
-      return result;
+      return fresh;
     } catch (error) {
       this.stats.errors++;
       LogApplication('CacheManager.Get', `Cache get operation failed for key ${cacheKey}: ${error.message}`, LogStatus.Error, LogLevel.Error, error.stack, false);
-      
-      // Fallback to direct query
       try {
         return await queryFn();
       } catch (queryError) {
@@ -363,14 +507,14 @@ class CacheManager {
    */
   async set(cacheKey, data, ttl = 300, entityType = null, entityId = null) {
     try {
-      // Store in memory cache
+      // Store in memory cache (may be Sequelize instances)
       this.memoryCache.set(cacheKey, data, ttl);
 
-      // Store in persistent cache if enabled
+      // Store in persistent cache as JSON if enabled
       if (this.persistentCache && data) {
         const expiresAt = Math.floor(Date.now() / 1000) + ttl;
         const version = this.generateVersion(data);
-        
+
         this.statements.set.run(
           cacheKey,
           entityType || 'unknown',
@@ -383,10 +527,10 @@ class CacheManager {
 
       if (this.config.debug) {
         console.log('Data cached successfully:', {
-          key: cacheKey, 
-          ttl, 
-          entityType, 
-          entityId 
+          key: cacheKey,
+          ttl,
+          entityType,
+          entityId
         });
       }
     } catch (error) {
@@ -401,16 +545,40 @@ class CacheManager {
    * @returns {string} Version string
    */
   generateVersion(data) {
-    if (data && typeof data === 'object') {
-      // Use updatedAt timestamp if available, otherwise use current timestamp
-      if (data.updatedAt) {
-        return data.updatedAt.toISOString();
+    // If array, use the latest updatedAt among items
+    if (Array.isArray(data)) {
+      let latest = null;
+      for (const item of data) {
+        const v = this.extractUpdatedAt(item);
+        if (v && (!latest || v > latest)) latest = v;
       }
-      if (data.updated_at) {
-        return new Date(data.updated_at).toISOString();
-      }
+      return (latest || new Date()).toISOString();
     }
-    return new Date().toISOString();
+    const v = this.extractUpdatedAt(data);
+    return (v || new Date()).toISOString();
+  }
+
+  /**
+   * Extract updatedAt-like date from a record or instance
+   * @param {any} rec
+   * @returns {Date|null}
+   */
+  extractUpdatedAt(rec) {
+    try {
+      const obj = typeof rec?.toJSON === 'function' ? rec.toJSON() : rec;
+      if (obj?.updatedAt instanceof Date) return obj.updatedAt;
+      if (typeof obj?.updatedAt === 'string') {
+        const d = new Date(obj.updatedAt);
+        if (!isNaN(d.getTime())) return d;
+      }
+      if (typeof obj?.updated_at === 'string') {
+        const d = new Date(obj.updated_at);
+        if (!isNaN(d.getTime())) return d;
+      }
+    } catch {
+      // ignore
+    }
+    return null;
   }
 
   /**

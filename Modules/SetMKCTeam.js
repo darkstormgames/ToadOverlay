@@ -5,11 +5,11 @@ const { Channel, invalidateChannelCache } = require('../Data/SQLWrapper');
 
 
 module.exports = {
-  getActiveTeams: Teams.Get(new Teams.Options({ Category: Teams.Options.Category.ACTIVE })),
-  get150ccTeams: Teams.Get(new Teams.Options({ Category: Teams.Options.Category['150CC'] })),
-  get200ccTeams: Teams.Get(new Teams.Options({ Category: Teams.Options.Category['200CC'] })),
-  getMKTourTeams: Teams.Get(new Teams.Options({ Category: Teams.Options.Category.MKTOUR })),
-  getHistoricalTeams: Teams.Get(new Teams.Options({ Category: Teams.Options.Category.HISTORICAL })),
+  getActiveTeams: Teams.Get(new Teams.Filter({ IsActive: true })),
+  get150ccTeams: Teams.Get(new Teams.Filter({ Mode: Teams.GameMode.CC150 })),
+  get200ccTeams: Teams.Get(new Teams.Filter({ Mode: Teams.GameMode.CC200 })),
+  getMKTourTeams: Teams.Get(new Teams.Filter({ Game: Teams.Game.MKT })),
+  getHistoricalTeams: Teams.Get(new Teams.Filter({ IsHistorical: true })),
 
   /**
    * 
@@ -27,7 +27,7 @@ module.exports = {
     context.data.channel.guest_mkc_url = `https://www.mariokartcentral.com/mkc/registry/teams/${team.Id}`;
     context.data.channel.guest_name = team.Name;
     context.data.channel.guest_tag = team.Tag;
-    context.data.channel.guest_img = team.Logo ? team.Logo.href : '';
+    context.data.channel.guest_img = team.Logo;
     try {
       await context.data.channel.save();
       await invalidateChannelCache(context.data.channel.id);
@@ -56,7 +56,7 @@ module.exports = {
     context.data.channel.home_mkc_url = `https://www.mariokartcentral.com/mkc/registry/teams/${team.Id}`;
     context.data.channel.home_name = team.Name;
     context.data.channel.home_tag = team.Tag;
-    context.data.channel.home_img = team.Logo ? team.Logo.href : '';
+    context.data.channel.home_img = team.Logo;
     try {
       await context.data.channel.save();
       await invalidateChannelCache(context.data.channel.id);
