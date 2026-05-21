@@ -41,7 +41,7 @@ For complete command reference and advanced usage, see **[COMMANDS.md](COMMANDS.
 ### Setting up the home and guest team
 #### Set home team (for each channel separately)
 
-1. Go to the [registry on mariokartcentral](https://www.mariokartcentral.com/mkc/registry/teams/category/150cc) and look for your own team.
+1. Go to the [registry on mariokartcentral]((https://mkcentral.com/en-us/registry/teams)) and look for your own team.
 2. Copy the URL to your team or note the id (the number at the end of the URL).
 3. Go to the discord channel you have executed the `_setup` command in and use one of the following commands:
   * `_home mkc-url` (replace "mkc-url" with the copied URL) **Example:** `_home https://www.mariokartcentral.com/mkc/registry/teams/1064`
