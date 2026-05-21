@@ -45,12 +45,14 @@ module.exports = {
    * @returns {boolean} 
    */
   isValidLogLevel: (logLevel) => {
-    if (process.env.LOGLEVEL == LogLevel.Trace) return true;
-    else if (process.env.LOGLEVEL == LogLevel.Debug && logLevel != LogLevel.Trace) return true;
-    else if (process.env.LOGLEVEL == LogLevel.Info && logLevel != LogLevel.Trace && logLevel != LogLevel.Debug) return true;
-    else if (process.env.LOGLEVEL == LogLevel.Warn && logLevel != LogLevel.Trace && logLevel != LogLevel.Debug && logLevel != LogLevel.Info) return true;
-    else if (process.env.LOGLEVEL == LogLevel.Error && logLevel != LogLevel.Trace && logLevel != LogLevel.Debug && logLevel != LogLevel.Info && logLevel != LogLevel.Warn) return true;
-    else if (process.env.LOGLEVEL == LogLevel.Fatal && logLevel != LogLevel.Trace && logLevel != LogLevel.Debug && logLevel != LogLevel.Info && logLevel != LogLevel.Warn && logLevel != LogLevel.Error) return true;
+    const configuredLogLevel = process.env.LOGLEVEL || LogLevel.Info;
+
+    if (configuredLogLevel == LogLevel.Trace) return true;
+    else if (configuredLogLevel == LogLevel.Debug && logLevel != LogLevel.Trace) return true;
+    else if (configuredLogLevel == LogLevel.Info && logLevel != LogLevel.Trace && logLevel != LogLevel.Debug) return true;
+    else if (configuredLogLevel == LogLevel.Warn && logLevel != LogLevel.Trace && logLevel != LogLevel.Debug && logLevel != LogLevel.Info) return true;
+    else if (configuredLogLevel == LogLevel.Error && logLevel != LogLevel.Trace && logLevel != LogLevel.Debug && logLevel != LogLevel.Info && logLevel != LogLevel.Warn) return true;
+    else if (configuredLogLevel == LogLevel.Fatal && logLevel != LogLevel.Trace && logLevel != LogLevel.Debug && logLevel != LogLevel.Info && logLevel != LogLevel.Warn && logLevel != LogLevel.Error) return true;
     else return false;
   }
 }

@@ -1,6 +1,5 @@
 const fs = require('fs');
-const http = require('http');
-const https = require('https');
+const { startHealthKeepalive, startHealthServer } = require('./ClientHandlers/HealthHandler');
 
 // define directories globally
 dirSplit = (process.platform === 'win32' ? '\\' : '/');
@@ -58,45 +57,38 @@ process.on('unhandledRejection', (reason) => {
 // Simple health endpoint for monitoring and uptime checks.
 // process.env.PORT is set by Phusion Passenger when running under Plesk.
 const healthPort = process.env.PORT || process.env.HEALTH_PORT || 13001;
-http.createServer((req, res) => {
-  if (req.method === 'GET' && (req.url === '/' || req.url === '/health')) {
-    const statusCode = startupError ? 503 : 200;
-    res.writeHead(statusCode, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
-    res.end(JSON.stringify({
-      status: startupError ? 'error' : 'ok',
-      bot: botStatus,
-      uptime: Math.floor((Date.now() - startTime) / 1000),
-      discord: client?.isReady() ? 'connected' : 'connecting',
-      startupLog: 'app_data/logs/startup.log',
-      error: startupError,
-      timestamp: new Date().toISOString()
-    }));
-  } else {
-    res.writeHead(404);
-    res.end();
-  }
-}).listen(healthPort, () => {
-  startupLog(`Health server listening on ${healthPort}`);
-}).on('error', (error) => {
-  startupError = `Health server failed to listen on ${healthPort}`;
-  botStatus = 'error';
-  startupLog(startupError, error);
+startHealthServer({
+  appDb,
+  getBotStatus: () => botStatus,
+  getClient: () => client,
+  getStartupError: () => startupError,
+  healthPort,
+  setBotStatus: (status) => {
+    botStatus = status;
+  },
+  setStartupError: (error) => {
+    startupError = error;
+  },
+  startTime,
+  startupLog
 });
 
 // load environment variables:
+// - Always load app-root .env first. dotenv does not override existing env vars by default.
 // - Docker: CLIENT_TOKEN is a file path (starts with '/') → read from Docker secrets
-// - Plesk/hosting: CLIENT_TOKEN is set directly as an environment variable
-// - Local: fall back to .env file via dotenv
+// - Plesk/hosting: CLIENT_TOKEN can be set directly as an environment variable
 try {
+  const envPath = appRoot + '.env';
+  if (fs.existsSync(envPath)) {
+    require('dotenv').config({ path: envPath });
+  }
+
   if (process.env.CLIENT_TOKEN && process.env.CLIENT_TOKEN.startsWith('/')) {
     process.env.CLIENT_TOKEN = fs.readFileSync(process.env.CLIENT_TOKEN).toString().trim();
     process.env.SQL_HOST = fs.readFileSync(process.env.SQL_HOST).toString().trim();
     process.env.SQL_USER = fs.readFileSync(process.env.SQL_USER).toString().trim();
     process.env.SQL_PASS = fs.readFileSync(process.env.SQL_PASS).toString().trim();
     process.env.SQL_NAME = fs.readFileSync(process.env.SQL_NAME).toString().trim();
-  }
-  else if (!process.env.CLIENT_TOKEN) {
-    require('dotenv').config();
   }
 } catch (error) {
   startupError = 'Failed to load environment variables';
@@ -113,57 +105,12 @@ if (missingEnvVars.length > 0) {
   startupLog(startupError);
 }
 
-const startKeepalive = () => {
-  if (process.env.KEEPALIVE_ENABLED === 'false') {
-    startupLog('Health keepalive disabled');
-    return;
-  }
+if (!process.env.LOGLEVEL) {
+  process.env.LOGLEVEL = 'DEBUG';
+  startupLog('LOGLEVEL not set, defaulting to DEBUG');
+}
 
-  const keepaliveIntervalMs = Number.parseInt(process.env.KEEPALIVE_INTERVAL_MS || '240000', 10);
-  const keepaliveUrl = process.env.KEEPALIVE_URL || `http://127.0.0.1:${healthPort}/health`;
-
-  if (!Number.isFinite(keepaliveIntervalMs) || keepaliveIntervalMs < 10000) {
-    startupLog(`Health keepalive not started: invalid interval "${process.env.KEEPALIVE_INTERVAL_MS}"`);
-    return;
-  }
-
-  let url;
-  try {
-    url = new URL(keepaliveUrl);
-  } catch (error) {
-    startupLog(`Health keepalive not started: invalid URL "${keepaliveUrl}"`, error);
-    return;
-  }
-
-  if (url.protocol !== 'http:' && url.protocol !== 'https:') {
-    startupLog(`Health keepalive not started: unsupported URL protocol "${url.protocol}"`);
-    return;
-  }
-
-  const callHealthEndpoint = () => {
-    const transport = url.protocol === 'https:' ? https : http;
-    const req = transport.get(url, { timeout: 10000 }, (res) => {
-      res.resume();
-      if (res.statusCode >= 500) {
-        startupLog(`Health keepalive returned HTTP ${res.statusCode}`);
-      }
-    });
-
-    req.on('timeout', () => {
-      req.destroy(new Error('Health keepalive timed out'));
-    });
-
-    req.on('error', (error) => {
-      startupLog(`Health keepalive failed for ${keepaliveUrl}`, error);
-    });
-  };
-
-  setInterval(callHealthEndpoint, keepaliveIntervalMs);
-  setTimeout(callHealthEndpoint, 5000);
-  startupLog(`Health keepalive started for ${keepaliveUrl} every ${keepaliveIntervalMs}ms`);
-};
-
-startKeepalive();
+startHealthKeepalive({ healthPort, startupLog });
 
 // create NoSQL database directory structure
 const nosqlDirs = [
