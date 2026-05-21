@@ -8,7 +8,9 @@
     "test": "cross-env NODE_ENV=test jest",
     "test:watch": "cross-env NODE_ENV=test jest --watch",
     "test:coverage": "cross-env NODE_ENV=test jest --coverage",
-    "dev": "node index.js"
+    "dev": "node index.js",
+    "stop": "pkill -f 'node index.js' || true",
+    "restart": "mkdir -p tmp && touch tmp/restart.txt"
   },
   "repository": {
     "type": "git",

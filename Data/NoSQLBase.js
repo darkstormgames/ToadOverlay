@@ -2,21 +2,12 @@ const Database = require('better-sqlite3');
 const fs = require('fs');
 const path = require('path');
 
-// Calculate paths relative to the main module
-const dirSplit = (process.platform === 'win32' ? '\\' : '/');
-const getAppRoot = () => {
-  // If running from a test, use the test directory's parent
-  const mainPath = require.main ? require.main.path : __dirname;
-  if (mainPath.includes('Test')) {
-    return path.join(mainPath, '..') + dirSplit;
-  }
-  return mainPath + dirSplit;
-};
-
-const appRoot = getAppRoot();
-const appData = appRoot + 'app_data' + dirSplit;
-const appDbLogs = appData + 'db' + dirSplit + 'logs' + dirSplit;
-const appDbConfig = appData + 'db' + dirSplit + 'config' + dirSplit;
+// Passenger can set require.main.path to its own helper-scripts directory.
+// Resolve paths from this file instead, so app_data stays inside the app root.
+const appRoot = global.appRoot || path.resolve(__dirname, '..');
+const appData = path.join(appRoot, 'app_data');
+const appDbLogs = path.join(appData, 'db', 'logs');
+const appDbConfig = path.join(appData, 'db', 'config');
 
 /**
  * SQLite connection manager for NoSQL logging operations
@@ -34,13 +25,13 @@ class NoSQLBase {
    */
   ensureDirectories() {
     const directories = [
-      appData + 'db',
+      path.join(appData, 'db'),
       appDbLogs,
       appDbConfig,
-      appDbLogs + 'application',
-      appDbLogs + 'messages', 
-      appDbLogs + 'reactions',
-      appDbLogs + 'dm'
+      path.join(appDbLogs, 'application'),
+      path.join(appDbLogs, 'messages'),
+      path.join(appDbLogs, 'reactions'),
+      path.join(appDbLogs, 'dm')
     ];
 
     directories.forEach(dir => {

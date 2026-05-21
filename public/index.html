@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToadOverlay</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f1117;
+      color: #c9d1d9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 2.5rem 3rem;
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 1.25rem;
+      border: 2px solid #30363d;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.35rem;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #8b949e;
+      margin-bottom: 2rem;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #30363d;
+      margin: 1.75rem 0;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+    }
+
+    .info-label {
+      color: #8b949e;
+    }
+
+    .info-value {
+      color: #e6edf3;
+      font-weight: 500;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      border-radius: 20px;
+      padding: 0.2rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .badge.online {
+      background: #1a2f1a;
+      color: #3fb950;
+      border: 1px solid #2ea043;
+    }
+
+    .badge.offline {
+      background: #2f1a1a;
+      color: #f85149;
+      border: 1px solid #da3633;
+    }
+
+    .badge.checking {
+      background: #1f2a1a;
+      color: #8b949e;
+      border: 1px solid #30363d;
+    }
+
+    .badge::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .badge.online::before  { background: #3fb950; }
+    .badge.offline::before { background: #f85149; }
+    .badge.checking::before { background: #8b949e; }
+
+    .links {
+      display: flex;
+      justify-content: center;
+      gap: 1.25rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .links a {
+      color: #58a6ff;
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 2rem;
+      font-size: 0.78rem;
+      color: #484f58;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img class="logo" src="https://toad.darkstormgames.de/images/to_toad.jpg" alt="ToadOverlay logo" onerror="this.style.display='none'">
+    <h1>ToadOverlay</h1>
+    <p class="subtitle">Browser source overlay bot for competitive Mario Kart 8 streamers</p>
+
+    <span id="badge" class="badge checking">Checking&hellip;</span>
+
+    <hr class="divider">
+
+    <div class="info-row">
+      <span class="info-label">Platform</span>
+      <span class="info-value">Discord (discord.js)</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Integration</span>
+      <span class="info-value">Toad Bot &amp; MarioKartCentral</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Use</span>
+      <span class="info-value">OBS / Streamlabs Browser Source</span>
+    </div>
+    <div class="info-row" id="row-discord" style="display:none">
+      <span class="info-label">Discord</span>
+      <span class="info-value" id="val-discord"></span>
+    </div>
+    <div class="info-row" id="row-uptime" style="display:none">
+      <span class="info-label">Uptime</span>
+      <span class="info-value" id="val-uptime"></span>
+    </div>
+    <div class="info-row" id="row-checked" style="display:none">
+      <span class="info-label">Last checked</span>
+      <span class="info-value" id="val-checked"></span>
+    </div>
+
+    <hr class="divider">
+
+    <div class="links">
+      <a href="https://github.com/darkstormgames/ToadOverlay" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://discord.com/api/oauth2/authorize?client_id=710403066213433385&permissions=0&scope=bot" target="_blank" rel="noopener">Invite Bot</a>
+      <a href="https://www.mariokartcentral.com/mkc/registry/teams/category/150cc" target="_blank" rel="noopener">MKC Registry</a>
+    </div>
+  </div>
+
+  <footer>This is a public informational page. No user data is collected or stored here.</footer>
+
+  <script>
+    function formatUptime(seconds) {
+      const d = Math.floor(seconds / 86400);
+      const h = Math.floor((seconds % 86400) / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = seconds % 60;
+      if (d > 0) return d + 'd ' + h + 'h ' + m + 'm';
+      if (h > 0) return h + 'h ' + m + 'm ' + s + 's';
+      if (m > 0) return m + 'm ' + s + 's';
+      return s + 's';
+    }
+
+    function setStatus(online, label) {
+      const badge = document.getElementById('badge');
+      badge.className = 'badge ' + (online ? 'online' : 'offline');
+      badge.textContent = label;
+    }
+
+    async function checkHealth() {
+      try {
+        const res = await fetch('/health', { cache: 'no-store' });
+        if (!res.ok) throw new Error('non-ok');
+        const data = await res.json();
+
+        setStatus(true, 'Operational');
+
+        document.getElementById('val-discord').textContent =
+          data.discord === 'connected' ? 'Connected' : 'Connecting…';
+        document.getElementById('val-uptime').textContent = formatUptime(data.uptime);
+        document.getElementById('val-checked').textContent =
+          new Date().toLocaleTimeString();
+
+        document.getElementById('row-discord').style.display = '';
+        document.getElementById('row-uptime').style.display = '';
+        document.getElementById('row-checked').style.display = '';
+      } catch {
+        setStatus(false, 'Unavailable');
+        document.getElementById('row-discord').style.display = 'none';
+        document.getElementById('row-uptime').style.display = 'none';
+        document.getElementById('row-checked').style.display = 'none';
+      }
+    }
+
+    checkHealth();
+    setInterval(checkHealth, 30000);
+  </script>
+</body>
+</html>

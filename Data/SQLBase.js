@@ -69,17 +69,18 @@ const connection = new Sequelize(
   }
 );
 
-connection.authenticate()
+const connectionReady = connection.authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
   })
   .catch((error) => {
     console.error('Unable to connect to the database:', error);
-    process.exit(2);
-  })
+    throw error;
+  });
 
 module.exports = {
   connection: connection,
+  connectionReady,
   cachedQuery,
   getCache
 }

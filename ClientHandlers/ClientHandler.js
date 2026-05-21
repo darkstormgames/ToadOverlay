@@ -33,6 +33,8 @@ module.exports = {
       console.error('NoSQL initialization failed, falling back to file-only logging:', error);
     }
 
+    await Data.connectionReady;
+
     // Sync MySQL DB-tables for core data (excluding log tables) - order matters...
     await LogApplication('ClientHandler.Initialize', 'Initialize User table', LogStatus.Initialize, LogLevel.Trace);
     await Data.UserSync();            // User
