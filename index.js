@@ -1,5 +1,8 @@
 const fs = require('fs');
-// load environment variables, depending on if bot is running in docker, or locally
+// load environment variables:
+// - Docker: CLIENT_TOKEN is a file path (starts with '/') → read from Docker secrets
+// - Plesk/hosting: CLIENT_TOKEN is set directly as an environment variable
+// - Local: fall back to .env file via dotenv
 if (process.env.CLIENT_TOKEN && process.env.CLIENT_TOKEN.startsWith('/')) {
   process.env.CLIENT_TOKEN = fs.readFileSync(process.env.CLIENT_TOKEN).toString().trim();
   process.env.SQL_HOST = fs.readFileSync(process.env.SQL_HOST).toString().trim();
@@ -7,8 +10,16 @@ if (process.env.CLIENT_TOKEN && process.env.CLIENT_TOKEN.startsWith('/')) {
   process.env.SQL_PASS = fs.readFileSync(process.env.SQL_PASS).toString().trim();
   process.env.SQL_NAME = fs.readFileSync(process.env.SQL_NAME).toString().trim();
 }
-else {
+else if (!process.env.CLIENT_TOKEN) {
   require('dotenv').config();
+}
+
+// Validate required environment variables are present
+const requiredEnvVars = ['CLIENT_TOKEN', 'SQL_HOST', 'SQL_USER', 'SQL_PASS', 'SQL_NAME'];
+const missingEnvVars = requiredEnvVars.filter(key => !process.env[key]);
+if (missingEnvVars.length > 0) {
+  console.error(`Missing required environment variables: ${missingEnvVars.join(', ')}`);
+  process.exit(2);
 }
 
 // define directories globally
@@ -119,8 +130,27 @@ if (!fs.existsSync(configPath)) {
   fs.writeFileSync(configPath, JSON.stringify(configContent, null, 2));
 }
 
+const http = require('http');
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
 const { initialize, login } = require('./ClientHandlers/ClientHandler');
+
+// Simple health endpoint for monitoring and uptime checks
+const healthPort = process.env.HEALTH_PORT || 3000;
+const startTime = Date.now();
+http.createServer((req, res) => {
+  if (req.method === 'GET' && req.url === '/health') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      status: 'ok',
+      uptime: Math.floor((Date.now() - startTime) / 1000),
+      discord: client?.isReady() ? 'connected' : 'connecting',
+      timestamp: new Date().toISOString()
+    }));
+  } else {
+    res.writeHead(404);
+    res.end();
+  }
+}).listen(healthPort);
 //const { LogApplication, LogLevel, LogStatus } = require('./Log/Logger');
 
 // process.on('uncaughtException', async (error, source) => {
